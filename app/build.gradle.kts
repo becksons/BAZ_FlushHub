@@ -74,7 +74,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
 
     val version = "0.50.6"
-    implementation("com.tomtom.sdk.maps:map-display:0.50.6")
+    implementation("com.tomtom.sdk.maps:map-display:$version")
     implementation("com.tomtom.sdk.location:provider-android:$version")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

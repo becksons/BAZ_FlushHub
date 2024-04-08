@@ -3,6 +3,7 @@ package com.example.flushhubproto.ui.home
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +19,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.camera.CameraOptions
+import com.tomtom.sdk.map.display.image.ImageFactory
+import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import kotlinx.coroutines.launch
 
@@ -61,26 +66,38 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
+    private val mapFragment = MapFragment.newInstance(mapOptions)
+
     private fun initializeMapWithLocation() {
-        val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
-        val mapFragment = MapFragment.newInstance(mapOptions)
         childFragmentManager.beginTransaction()
             .replace(R.id.map_container, mapFragment)
             .commit()
 
 
         viewLifecycleOwner.lifecycleScope.launch {
-            mapFragment.getMapAsync { tomtomMap ->
+            moveMap(42.34997406716152,-71.1032172645369 )
+        }
+    }
 
-                val cameraOptions = CameraOptions(
-                    position = GeoPoint(42.34997406716152, -71.1032172645369),
-                    zoom = 17.0,
-                    tilt = 0.0,
-                    rotation = 0.0
-                )
+    fun moveMap(lat: Double, long: Double){
+        mapFragment.getMapAsync { tomtomMap ->
 
-                tomtomMap.moveCamera(cameraOptions)
-            }
+            val cameraOptions = CameraOptions(
+                position = GeoPoint(lat, long),
+                zoom = 17.0,
+                tilt = 0.0,
+                rotation = 0.0
+            )
+
+            val cds = GeoPoint(lat, long)
+            val markerOptions = MarkerOptions(
+                coordinate = cds,
+                pinImage = ImageFactory.fromResource(R.drawable.star_icon)
+            )
+
+            tomtomMap.addMarker(markerOptions)
+            tomtomMap.moveCamera(cameraOptions)
         }
     }
 
