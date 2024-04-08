@@ -80,6 +80,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     fun moveMap(lat: Double, long: Double){
         mapFragment.getMapAsync { tomtomMap ->
 
