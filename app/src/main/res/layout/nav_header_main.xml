@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="100dp"
     android:gravity="fill_horizontal"
     android:orientation="horizontal"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:fitsSystemWindows="true"
     android:background="@color/fh_tool_bar"
     android:paddingRight="@dimen/activity_horizontal_margin"
 
@@ -18,7 +19,7 @@
         android:layout_width="280dp"
         android:layout_height="80dp"
 
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:layout_gravity="center"
         android:text="@string/the_flushhub"
         android:fontFamily="@font/ruda_black"
@@ -34,9 +35,11 @@
 
     <ImageView
         android:layout_width="100dp"
-        android:layout_height="90dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
+        android:scaleY=".9"
+        android:scaleX=".9"
         android:layout_marginBottom="20dp"
 
         android:backgroundTint="#151515"

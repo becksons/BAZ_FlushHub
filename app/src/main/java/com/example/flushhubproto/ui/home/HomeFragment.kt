@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -42,7 +44,7 @@ class HomeFragment : Fragment() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
         } else {
-            // Permission already granted
+
             initializeMapWithLocation()
         }
     }
@@ -76,10 +78,12 @@ class HomeFragment : Fragment() {
                     tilt = 0.0,
                     rotation = 0.0
                 )
+
                 tomtomMap.moveCamera(cameraOptions)
             }
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

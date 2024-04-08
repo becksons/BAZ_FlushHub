@@ -1,92 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<FrameLayout
     android:layout_height="match_parent"
-    tools:context="com.example.flushhubproto.MainActivity">
-
-
-    <FrameLayout
-        android:id="@+id/topDrawer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id = "@+id/main_layout">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="420dp"
-        android:background="@color/fh_background"
-        android:translationY="-400dp"
-        android:elevation="4dp"
+        android:layout_height="match_parent"
 
-        >
+        android:background="@android:color/transparent"
+        tools:context="com.example.flushhubproto.MainActivity">
 
 
-
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/topDrawer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="720dp"
+            android:background="@color/fh_tool_bar"
+            android:translationY="-720dp"
+            android:elevation="6dp"
+            android:fitsSystemWindows="true"
 
 
-           >
+            >
 
-            <ImageButton
-                android:id = "@+id/menu_button"
-                android:layout_width="wrap_content"
-                android:layout_height="180dp"
-                android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
-                android:adjustViewBounds="true"
-                android:src="@drawable/tp_menu"
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp"
+                android:fitsSystemWindows="true"
+
+
 
                 >
 
-            </ImageButton>
+                <ImageButton
+                    android:id = "@+id/menu_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:scaleX="1.4"
+                    android:scaleY="1.4"
+                    android:translationY="85dp"
 
-            <Button
-                android:id="@+id/btn_nav_home"
-                android:textSize="30sp"
-                android:background="@drawable/menu_button_style"
-                android:backgroundTint="@color/fh_tool_bar"
-                android:layout_width="400dp"
-                android:layout_height="60dp"
-                android:fontFamily="@font/ruda_regular"
-                android:text="@string/menu_home" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-              />
 
-            <Button
-                android:id="@+id/btn_nav_find"
-                android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:background="@drawable/menu_button_style"
-                android:textSize="30sp"
-                android:fontFamily="@font/ruda_regular"
-                android:text="@string/menu_find" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                />
+                    android:background="@android:color/transparent"
 
-            <Button
-                android:id="@+id/btn_nav_rate"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@drawable/menu_button_style"
-                android:fontFamily="@font/ruda_regular"
-                android:textSize="30sp"
-                android:text="@string/menu_rate" />
+                    android:src="@drawable/tp_menu"
+
+                    >
+
+                </ImageButton>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp" />
+
+                <Button
+                    android:id="@+id/btn_nav_home"
+                    android:textSize="25sp"
+                    android:background="@drawable/menu_button_style"
+                    android:backgroundTint="@color/fh_tool_bar"
+                    android:layout_width="440dp"
+                    android:layout_height="70dp"
+                    android:drawableLeft="@drawable/home_icon"
 
 
 
+                    android:fontFamily="@font/ruda_bold"
+                    android:text="@string/menu_home"
+                    android:textAlignment="textStart"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_nav_find"
+                    android:layout_width="440dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/menu_button_style"
+                    android:textSize="21sp"
+                    android:drawableLeft="@drawable/toilet_icon"
+                    android:textAlignment="textStart"
+                    android:fontFamily="@font/ruda_bold"
+                    android:text="@string/menu_find" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    />
+
+                <Button
+                    android:id="@+id/btn_nav_rate"
+                    android:layout_width="440dp"
+                    android:layout_height="70dp"
+                    android:drawableLeft="@drawable/star_icon"
+                    android:background="@drawable/menu_button_style"
+                    android:fontFamily="@font/ruda_bold"
+                    android:textSize="21sp"
+
+                    android:textAlignment="textStart"
+                    android:text="@string/menu_rate"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    />
+                <Button
+                    android:id="@+id/btn_nav_entertainment"
+                    android:layout_width="440dp"
+                    android:layout_height="70dp"
+                    android:textAlignment="textStart"
+                    android:background="@drawable/menu_button_style"
+                    android:fontFamily="@font/ruda_bold"
+                    android:textSize="21sp"
+                    android:drawableLeft="@drawable/popcorn_icon"
+                    android:text="@string/bathroom_entertainment" />
 
 
 
-    </FrameLayout>
-    <include layout="@layout/app_bar_main"/>
 
-</RelativeLayout>
+            </LinearLayout>
+
+
+
+        </FrameLayout>
+        <include layout="@layout/app_bar_main"/>
+
+    </RelativeLayout>
+
+
+</FrameLayout>
 

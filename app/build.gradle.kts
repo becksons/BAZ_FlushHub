@@ -64,12 +64,15 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("com.google.android.material:material:1.11.0")
+
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
+
     val version = "0.50.6"
     implementation("com.tomtom.sdk.maps:map-display:0.50.6")
     implementation("com.tomtom.sdk.location:provider-android:$version")
