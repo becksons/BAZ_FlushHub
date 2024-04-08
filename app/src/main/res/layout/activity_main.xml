@@ -24,6 +24,8 @@
 
 
             >
+            <include layout="@layout/nav_header_main"/>
+
 
 
 
@@ -33,6 +35,7 @@
                 android:orientation="vertical"
                 android:layout_marginBottom="10dp"
                 android:fitsSystemWindows="true"
+                android:elevation="1dp"
 
 
 
@@ -46,7 +49,8 @@
                     android:scaleType="fitCenter"
                     android:scaleX="1.4"
                     android:scaleY="1.4"
-                    android:translationY="85dp"
+                    android:translationY="155dp"
+                    android:elevation="7dp"
 
 
                     android:background="@android:color/transparent"
@@ -59,7 +63,7 @@
 
                 <View
                     android:layout_width="wrap_content"
-                    android:layout_height="120dp" />
+                    android:layout_height="170dp" />
 
                 <Button
                     android:id="@+id/btn_nav_home"
@@ -68,6 +72,7 @@
                     android:backgroundTint="@color/fh_tool_bar"
                     android:layout_width="440dp"
                     android:layout_height="70dp"
+                    android:elevation="9dp"
                     android:drawableLeft="@drawable/home_icon"
 
 
@@ -83,6 +88,7 @@
                 <Button
                     android:id="@+id/btn_nav_find"
                     android:layout_width="440dp"
+                    android:elevation="9dp"
                     android:layout_height="70dp"
                     android:background="@drawable/menu_button_style"
                     android:textSize="21sp"
@@ -98,6 +104,7 @@
                 <Button
                     android:id="@+id/btn_nav_rate"
                     android:layout_width="440dp"
+                    android:elevation="9dp"
                     android:layout_height="70dp"
                     android:drawableLeft="@drawable/star_icon"
                     android:background="@drawable/menu_button_style"
@@ -116,6 +123,7 @@
                     android:layout_width="440dp"
                     android:layout_height="70dp"
                     android:textAlignment="textStart"
+                    android:elevation="9dp"
                     android:background="@drawable/menu_button_style"
                     android:fontFamily="@font/ruda_bold"
                     android:textSize="21sp"
@@ -130,6 +138,7 @@
 
 
         </FrameLayout>
+
         <include layout="@layout/app_bar_main"/>
 
     </RelativeLayout>
