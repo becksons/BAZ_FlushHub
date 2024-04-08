@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.flushhubproto.MainActivity">
+
+
+    <FrameLayout
+        android:id="@+id/topDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:background="@color/fh_background"
+        android:translationY="-400dp"
+        android:elevation="4dp"
+
+        >
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+
+
+           >
+
+            <ImageButton
+                android:id = "@+id/menu_button"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:background="@android:color/transparent"
+                android:adjustViewBounds="true"
+                android:src="@drawable/tp_menu"
+
+                >
+
+            </ImageButton>
+
+            <Button
+                android:id="@+id/btn_nav_home"
+                android:textSize="30sp"
+                android:background="@drawable/menu_button_style"
+                android:backgroundTint="@color/fh_tool_bar"
+                android:layout_width="400dp"
+                android:layout_height="60dp"
+                android:fontFamily="@font/ruda_regular"
+                android:text="@string/menu_home" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+              />
+
+            <Button
+                android:id="@+id/btn_nav_find"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="@drawable/menu_button_style"
+                android:textSize="30sp"
+                android:fontFamily="@font/ruda_regular"
+                android:text="@string/menu_find" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                />
+
+            <Button
+                android:id="@+id/btn_nav_rate"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/menu_button_style"
+                android:fontFamily="@font/ruda_regular"
+                android:textSize="30sp"
+                android:text="@string/menu_rate" />
+
+
+
+
+        </LinearLayout>
+
+
+
+    </FrameLayout>
+    <include layout="@layout/app_bar_main"/>
+
+</RelativeLayout>
+

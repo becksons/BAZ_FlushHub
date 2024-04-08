@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    tools:context="com.example.flushhubproto.MainActivity">
+
+    <include layout="@layout/content_main" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@color/purple_500"
+
+
+        >
+
+
+
+        <include layout="@layout/nav_header_main"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            >
+
+            <ImageButton
+                android:id="@+id/open_drawer_button"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+
+                android:scaleType="fitXY"
+                android:scaleX="1"
+                android:scaleY="1.5"
+                android:src="@drawable/tp_menu"
+                android:text="@string/menu"
+                android:textSize="20sp"
+
+
+                android:translationX="-50dp">
+
+            </ImageButton>
+
+
+            <TextView
+                android:layout_width="200dp"
+
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+
+                android:layout_marginStart="80dp">
+
+
+            </TextView>
+
+
+        </LinearLayout>
+        <include layout="@layout/content_main"/>
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
