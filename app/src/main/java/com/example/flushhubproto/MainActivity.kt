@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -20,21 +21,29 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
+import com.example.flushhubproto.ui.home.HomeViewModel
 
 import com.example.tomtom.R
 import com.example.tomtom.databinding.ActivityMainBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var recyclerView: RecyclerView
 
 
     private var isDrawerOpen = false
     private var greetBuilder : StringBuilder? = null
-    private lateinit var gestureDetector: GestureDetector
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -61,6 +70,30 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+
+        } else {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    // Use the location object, which could be null in rare cases
+                    location?.let {
+                        val latitude = it.latitude
+                        val longitude = it.longitude
+
+
+                    }
+                }
+        }
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        recyclerView = findViewById(R.id.nearest_location_recycler_view)
+        val adapter = LocationInfoAdapter(emptyList())
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
     }
 
 

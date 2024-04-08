@@ -3,7 +3,6 @@ package com.example.flushhubproto.ui.home
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,18 +14,20 @@ import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.flushhubproto.LocationInfoAdapter
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.camera.CameraOptions
-import com.tomtom.sdk.map.display.image.ImageFactory
-import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
+import com.tomtom.sdk.map.display.ui.UiComponentClickListener
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -36,10 +37,15 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
+
         return binding.root
     }
 
@@ -80,7 +86,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     fun moveMap(lat: Double, long: Double){
         mapFragment.getMapAsync { tomtomMap ->
 
@@ -102,6 +107,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

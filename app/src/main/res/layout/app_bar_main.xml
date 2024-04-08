@@ -19,11 +19,20 @@
 
 
 
+
         <include layout="@layout/nav_header_main"/>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:background="@color/black"
+            android:layout_marginTop="0dp"
+            android:elevation="4dp"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+
 
 
             >
@@ -35,7 +44,7 @@
                 android:layout_height="80dp"
                 android:orientation="vertical"
                 android:layout_margin="10dp"
-                android:translationX="140dp"
+                android:translationX="150dp"
                 android:translationY="5dp"
                 >
 
@@ -44,9 +53,10 @@
                     android:layout_width="250dp"
 
                     android:layout_height="30dp"
-                    android:layout_gravity="start"
+
                     android:textSize="22sp"
                     android:text = "@string/greet_user_default"
+                    android:textAlignment="textStart"
                     android:textColor="@color/white"
                     android:fontFamily="@font/ruda_regular"
 
@@ -60,12 +70,13 @@
                     android:id="@+id/greeting_miles_away"
                     android:layout_width="240dp"
                     android:layout_height="50dp"
+
                     android:layout_gravity="start"
                     android:textSize="18sp"
                     android:text="@string/nearest_restroom_is_x_miles_away"
                     android:textColor="@color/white"
                     android:fontFamily="@font/ruda_regular"
-                    android:translationY="-5dp"
+                    android:translationY="-2dp"
 
                     />
 
@@ -76,8 +87,11 @@
 
 
 
+
         </LinearLayout>
+
         <include layout="@layout/content_main"/>
+
         <ImageButton
             android:id="@+id/open_drawer_button"
             android:layout_width="170dp"
@@ -86,7 +100,7 @@
             android:layout_margin="20dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
-
+            android:elevation="5dp"
             android:scaleType="fitXY"
             android:scaleX=".9"
             android:scaleY="1.6"
@@ -94,14 +108,21 @@
             android:text="@string/menu"
             android:textSize="20sp"
 
-            android:translationX="-135dp"
-            android:translationY="-115dp">
+            android:translationX="-125dp"
+            android:translationY="-112dp">
 
         </ImageButton>
 
 
+
     </com.google.android.material.appbar.AppBarLayout>
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"
+        android:layout_marginTop="0dp"
+        android:translationY="230dp"
+        android:elevation="4dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
