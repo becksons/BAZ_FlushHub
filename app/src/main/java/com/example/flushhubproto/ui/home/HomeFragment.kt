@@ -2,7 +2,9 @@
 package com.example.flushhubproto.ui.home
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,11 +21,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.example.flushhubproto.LocationInfoAdapter
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.tomtom.quantity.Distance
 import com.tomtom.sdk.location.GeoPoint
+import com.tomtom.sdk.location.LocationProvider
+import com.tomtom.sdk.location.android.AndroidLocationProvider
+import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
@@ -31,8 +38,10 @@ import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.UiComponentClickListener
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class HomeFragment : Fragment() {
+
     companion object {
         const val REQUEST_LOCATION_PERMISSION = 1
     }
@@ -71,20 +80,34 @@ class HomeFragment : Fragment() {
     private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
+    val androidLocationProviderConfig = AndroidLocationProviderConfig(
+        minTimeInterval = 250L.milliseconds,
+        minDistance = Distance.meters(20.0)
+    )
+
+    val androidLocationProvider: LocationProvider = AndroidLocationProvider(
+        context = getApplicationContext(),
+        config = androidLocationProviderConfig
+    )
+
+
     private fun initializeMapWithLocation() {
         childFragmentManager.beginTransaction()
             .replace(R.id.map_container, mapFragment)
             .commit()
 
+        mapFragment.getMapAsync {tomtomMap ->
+            tomtomMap.setLocationProvider(androidLocationProvider)
+        }
+        androidLocationProvider.enable()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            moveMap(42.34997406716152,-71.1032172645369 )
+            androidLocationProvider.lastKnownLocation?.position?.let { moveMap(it.latitude,it.longitude ) }
         }
     }
 
     fun moveMap(lat: Double, long: Double){
         mapFragment.getMapAsync { tomtomMap ->
-
             val cameraOptions = CameraOptions(
                 position = GeoPoint(lat, long),
                 zoom = 17.0,
@@ -103,7 +126,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+    //distance and timeaway for display given coords
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
