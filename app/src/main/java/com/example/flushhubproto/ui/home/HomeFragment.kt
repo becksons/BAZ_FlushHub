@@ -9,23 +9,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.util.Log
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import com.example.flushhubproto.LocationInfoAdapter
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.tomtom.quantity.Distance
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
@@ -36,7 +25,6 @@ import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
-import com.tomtom.sdk.map.display.ui.UiComponentClickListener
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
