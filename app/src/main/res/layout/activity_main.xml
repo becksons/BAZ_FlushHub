@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
 <FrameLayout
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -51,12 +57,8 @@
                     android:scaleY="1.4"
                     android:translationY="155dp"
                     android:elevation="7dp"
-
-
                     android:background="@android:color/transparent"
-
                     android:src="@drawable/tp_menu"
-
                     >
 
                 </ImageButton>
@@ -74,9 +76,6 @@
                     android:layout_height="70dp"
                     android:elevation="9dp"
                     android:drawableLeft="@drawable/home_icon"
-
-
-
                     android:fontFamily="@font/ruda_bold"
                     android:text="@string/menu_home"
                     android:textAlignment="textStart"/>
@@ -110,7 +109,6 @@
                     android:background="@drawable/menu_button_style"
                     android:fontFamily="@font/ruda_bold"
                     android:textSize="21sp"
-
                     android:textAlignment="textStart"
                     android:text="@string/menu_rate"
                     />
@@ -131,13 +129,12 @@
                     android:text="@string/bathroom_entertainment" />
 
 
-
-
             </LinearLayout>
 
 
 
         </FrameLayout>
+
 
         <include layout="@layout/app_bar_main"/>
 
@@ -145,3 +142,5 @@
 
 
 </FrameLayout>
+
+</LinearLayout>

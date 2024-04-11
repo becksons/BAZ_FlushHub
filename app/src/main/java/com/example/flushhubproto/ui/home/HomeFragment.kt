@@ -48,6 +48,17 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var androidLocationProvider: LocationProvider? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        androidLocationProvider = AndroidLocationProvider(
+            context = requireContext(),
+            config = androidLocationProviderConfig
+        )
+        // Now can use androidLocationProvider safely within fragment
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
@@ -85,10 +96,10 @@ class HomeFragment : Fragment() {
         minDistance = Distance.meters(20.0)
     )
 
-    val androidLocationProvider: LocationProvider = AndroidLocationProvider(
-        context = getApplicationContext(),
-        config = androidLocationProviderConfig
-    )
+//    val androidLocationProvider: LocationProvider = AndroidLocationProvider(
+//        context = requireContext(),
+//        config = androidLocationProviderConfig
+//    )
 
 
     private fun initializeMapWithLocation() {
@@ -99,10 +110,10 @@ class HomeFragment : Fragment() {
         mapFragment.getMapAsync {tomtomMap ->
             tomtomMap.setLocationProvider(androidLocationProvider)
         }
-        androidLocationProvider.enable()
+        androidLocationProvider?.enable()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            androidLocationProvider.lastKnownLocation?.position?.let { moveMap(it.latitude,it.longitude ) }
+            androidLocationProvider?.lastKnownLocation?.position?.let { moveMap(it.latitude,it.longitude ) }
         }
     }
 
@@ -129,15 +140,11 @@ class HomeFragment : Fragment() {
     //distance and timeaway for display given coords
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-
-
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        androidLocationProvider = null
     }
 }
