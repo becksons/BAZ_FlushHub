@@ -27,11 +27,14 @@ import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.tomtom.quantity.Distance
+import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
+import com.tomtom.sdk.location.OnLocationUpdateListener
 import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
+import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.marker.MarkerOptions
@@ -103,38 +106,46 @@ class HomeFragment : Fragment() {
 
 
     private fun initializeMapWithLocation() {
+
         childFragmentManager.beginTransaction()
             .replace(R.id.map_container, mapFragment)
             .commit()
 
-        mapFragment.getMapAsync {tomtomMap ->
+        mapFragment.getMapAsync { tomtomMap ->
             tomtomMap.setLocationProvider(androidLocationProvider)
-        }
-        androidLocationProvider?.enable()
+            androidLocationProvider?.enable()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            androidLocationProvider?.lastKnownLocation?.position?.let { moveMap(it.latitude,it.longitude ) }
+            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
+                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
+
+                // Move map to the new location
+                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
+            }
+
+            // Register the listener with the location provider
+            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
         }
     }
 
-    fun moveMap(lat: Double, long: Double){
-        mapFragment.getMapAsync { tomtomMap ->
-            val cameraOptions = CameraOptions(
-                position = GeoPoint(lat, long),
-                zoom = 17.0,
-                tilt = 0.0,
-                rotation = 0.0
-            )
+    fun moveMap(tomtomMap: TomTomMap,lat: Double, long: Double){
+        val cameraOptions = CameraOptions(
+            position = GeoPoint(lat, long),
+            zoom = 17.0,
+            tilt = 0.0,
+            rotation = 0.0
+        )
 
-            val cds = GeoPoint(lat, long)
-            val markerOptions = MarkerOptions(
-                coordinate = cds,
-                pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon)
-            )
+        tomtomMap.moveCamera(cameraOptions)
+    }
 
-            tomtomMap.addMarker(markerOptions)
-            tomtomMap.moveCamera(cameraOptions)
-        }
+    fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double){
+        val loc = GeoPoint(lat, long)
+        val markerOptions = MarkerOptions(
+            coordinate = loc,
+            pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon)
+        )
+
+        tomtomMap.addMarker(markerOptions)
     }
 
     //distance and timeaway for display given coords
