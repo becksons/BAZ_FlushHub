@@ -39,18 +39,12 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
         return binding.root
     }
-
 
 
     private fun requestPermissionsIfNecessary() {
@@ -68,7 +62,7 @@ class HomeFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initializeMapWithLocation()
                 } else {
-                    // Handle deny permission.
+                    // Handle deny permission
                 }
             }
         }
@@ -101,13 +95,14 @@ class HomeFragment : Fragment() {
             val cds = GeoPoint(lat, long)
             val markerOptions = MarkerOptions(
                 coordinate = cds,
-                pinImage = ImageFactory.fromResource(R.drawable.star_icon)
+                pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon)
             )
 
             tomtomMap.addMarker(markerOptions)
             tomtomMap.moveCamera(cameraOptions)
         }
     }
+
 
 
     override fun onDestroyView() {

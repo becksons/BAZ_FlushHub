@@ -37,13 +37,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var recyclerView: RecyclerView
 
 
     private var isDrawerOpen = false
     private var greetBuilder : StringBuilder? = null
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -70,29 +68,8 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-
-        } else {
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    // Use the location object, which could be null in rare cases
-                    location?.let {
-                        val latitude = it.latitude
-                        val longitude = it.longitude
 
 
-                    }
-                }
-        }
-        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        recyclerView = findViewById(R.id.nearest_location_recycler_view)
-        val adapter = LocationInfoAdapter(emptyList())
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
 
     }
 
