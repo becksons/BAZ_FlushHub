@@ -4,6 +4,7 @@ package com.example.flushhubproto.ui.home
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,20 +27,35 @@ import com.example.flushhubproto.LocationInfoAdapter
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.tomtom.quantity.Distance
+import com.tomtom.sdk.common.Callback
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
+import com.tomtom.sdk.location.Place
 import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
+import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import com.tomtom.sdk.map.display.ui.UiComponentClickListener
+import com.tomtom.sdk.routing.RoutingFailure
+import com.tomtom.sdk.routing.online.OnlineRoutePlanner
+import com.tomtom.sdk.routing.options.Itinerary
+import com.tomtom.sdk.routing.options.ItineraryPoint
+import com.tomtom.sdk.routing.options.RangeCalculationOptions
+import com.tomtom.sdk.routing.options.RoutePlanningOptions
+import com.tomtom.sdk.routing.range.Budget
+import com.tomtom.sdk.routing.range.Range
+import com.tomtom.sdk.routing.range.RangeCalculator
+import com.tomtom.sdk.vehicle.Vehicle
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -94,6 +110,8 @@ class HomeFragment : Fragment() {
     private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
+    val routePlanner = OnlineRoutePlanner.create(requireContext(), "AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
+
     val androidLocationProviderConfig = AndroidLocationProviderConfig(
         minTimeInterval = 250L.milliseconds,
         minDistance = Distance.meters(20.0)
@@ -120,6 +138,7 @@ class HomeFragment : Fragment() {
 
                 // Move map to the new location
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
+                updateUserLocationOnMap(tomtomMap, location.position.latitude, location.position.longitude)
             }
 
             // Register the listener with the location provider
@@ -127,6 +146,14 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+
+        val locationMarkerOptions = LocationMarkerOptions(
+            type = LocationMarkerOptions.Type.Pointer
+        )
+
+        tomtomMap.enableLocationMarker(locationMarkerOptions)
+    }
     fun moveMap(tomtomMap: TomTomMap,lat: Double, long: Double){
         val cameraOptions = CameraOptions(
             position = GeoPoint(lat, long),
@@ -148,7 +175,29 @@ class HomeFragment : Fragment() {
         tomtomMap.addMarker(markerOptions)
     }
 
-    //distance and timeaway for display given coords
+
+
+//    fun calRange(tomtomMap: TomTomMap, startLat: Double, startLong: Double, desLat: Double, desLong: Double){
+//
+//        val des = ItineraryPoint(Place(GeoPoint(52.377956, 4.897070)))
+//
+//        val vehicle = Vehicle.Pedestrian()
+//
+//        val rangeCalculator = RangeCalculator()
+//
+//        var range = ""
+//
+//        val rangeCalculationOptions = RangeCalculationOptions(
+//            origin = des,
+//            budgets = setOf(Budget.Distance(Distance.meters(1000))),
+//            vehicle = vehicle
+//        )
+//
+//        when (val calculateRangeResult = rangeCalculator.calculateRange(rangeCalculationOptions)) {
+//            is Result.Success -> calculateRangeResult.value()
+//            is Result.Failure -> calculateRangeResult.failure()
+//        }
+//    }
 
 
 
