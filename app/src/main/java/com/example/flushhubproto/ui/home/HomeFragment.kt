@@ -58,6 +58,8 @@ import com.tomtom.sdk.routing.range.RangeCalculator
 import com.tomtom.sdk.vehicle.Vehicle
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
+import android.content.Context
+import kotlinx.coroutines.delay
 
 class HomeFragment : Fragment() {
 
@@ -75,13 +77,16 @@ class HomeFragment : Fragment() {
             context = requireContext(),
             config = androidLocationProviderConfig
         )
-        // Now can use androidLocationProvider safely within fragment
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
+//        context?.let { ctx ->
+//            openMap(ctx,42.350026020986256, -71.10326632227299) //pasing to Google Maps
+//        }
         return binding.root
     }
 
@@ -110,18 +115,12 @@ class HomeFragment : Fragment() {
     private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
-    val routePlanner = OnlineRoutePlanner.create(requireContext(), "AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
+    //val routePlanner = OnlineRoutePlanner.create(requireContext(), "AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
 
     val androidLocationProviderConfig = AndroidLocationProviderConfig(
         minTimeInterval = 250L.milliseconds,
         minDistance = Distance.meters(20.0)
     )
-
-//    val androidLocationProvider: LocationProvider = AndroidLocationProvider(
-//        context = requireContext(),
-//        config = androidLocationProviderConfig
-//    )
-
 
     private fun initializeMapWithLocation() {
 
@@ -173,6 +172,19 @@ class HomeFragment : Fragment() {
         )
 
         tomtomMap.addMarker(markerOptions)
+    }
+
+    fun openMap(context: Context, lat: Double, long: Double, label: String = "Mark") {
+        val geoUri = Uri.parse("geo:0,0?q=$lat,$long($label)")
+        val intent = Intent(Intent.ACTION_VIEW, geoUri)
+        intent.setPackage("com.google.android.apps.maps")
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        } else {
+            val webUri = Uri.parse("https://www.google.com/maps/@$lat,$long,16z")
+            val webIntent = Intent(Intent.ACTION_VIEW, webUri)
+            context.startActivity(webIntent)
+        }
     }
 
 
