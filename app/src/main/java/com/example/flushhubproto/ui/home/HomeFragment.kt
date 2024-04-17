@@ -79,9 +79,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
-        context?.let { ctx ->
-            openMap(ctx,42.350026020986256, -71.10326632227299) //pasing to Google Maps
-        }
+//        context?.let { ctx ->
+//            openMap(ctx,42.350026020986256, -71.10326632227299) //pasing to Google Maps
+//        }
 //
 //        setupAppBarInteraction()
 
