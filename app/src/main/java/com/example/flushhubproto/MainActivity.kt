@@ -1,4 +1,5 @@
 package com.example.flushhubproto
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -34,6 +35,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flushhubproto.schema.test
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
 import com.example.flushhubproto.ui.home.HomeViewModel
 
@@ -41,6 +43,13 @@ import com.example.tomtom.R
 import com.example.tomtom.databinding.ActivityMainBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import io.realm.Realm
+import io.realm.mongodb.App
+import io.realm.mongodb.AppConfiguration
+import io.realm.mongodb.Credentials
+import io.realm.mongodb.sync.Subscription
+import io.realm.mongodb.sync.SyncConfiguration
+import java.lang.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,11 +66,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var greetingTextView: TextView
     private lateinit var distanceTextView: TextView
     private lateinit var fragmentBannerView: TextView
-
-
-
-
-
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +90,41 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
+        // Database Test
+        // Initialize realm
+//        Realm.init(this)
+//        val app = App(AppConfiguration.Builder("flushhub-etqha").build()) // Init App
+//
+//        app.loginAsync(Credentials.anonymous()) { result ->
+//            if (result.isSuccess) {
+//                val user = app.currentUser() ?: throw IllegalStateException("User Not Logged In!")
+//                Log.i("FlUSHHUB", "Logged in as: ${user}")
+//
+//                val flexibleSyncConfig = SyncConfiguration.Builder(user)
+//                    .initialSubscriptions { realm, subscriptions ->
+//                        subscriptions.add(
+//                            Subscription.create(
+//                                "all-bathrooms",
+//                                realm.where(test::class.java)
+//                            )
+//                        )
+//                    }
+//                    .build()
+//
+//                val realm : Realm = Realm.getInstance(flexibleSyncConfig)
+//
+//                // Now we read all of the data
+//                val bathrooms = realm.where(test::class.java).findAll()
+//                bathrooms.forEach { bathroom ->
+//                    Log.d("FLUSHHUB", "Bathroom name: ${bathroom.Name}")
+//                }
+//
+//
+//                realm.close() // Close the resources
+//            } else {
+//                Log.e("FlUSHHUB", "Failed Login: ${result.error}")
+//            }
+//        }
     }
 
     private fun setupDrawer() {

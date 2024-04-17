@@ -1,8 +1,9 @@
 import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("realm-android")
 }
 
 val tomtomApiKey: String by project
@@ -49,6 +50,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    realm {
+        isSyncEnabled = true
     }
 
     buildFeatures {
