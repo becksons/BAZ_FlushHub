@@ -11,13 +11,14 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="3dp"
+            android:layout_height="1dp"
             android:background="@color/black"
             android:layout_marginTop="0dp" />
         <com.google.android.material.appbar.AppBarLayout
             android:id = "@+id/nearest_rest_appbar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:elevation="20dp"
 
 
 
@@ -28,11 +29,13 @@
                 android:layout_width="400dp"
                 android:layout_height="50dp"
                 android:text = "@string/nearest_restrooms"
-                android:textColor="@color/white"
-                android:textSize="30sp"
+                android:textColor="@color/black"
+                android:textSize="27sp"
                 android:textAlignment="center"
-                android:layout_margin = "10dp"
-                android:fontFamily="@font/ruda_bold">
+                android:translationY="-5dp"
+                android:translationX="-20dp"
+                android:layout_margin = "20dp"
+                android:fontFamily="@font/ruda_black">
 
             </TextView>
 
@@ -42,7 +45,7 @@
         </com.google.android.material.appbar.AppBarLayout>
         <View
             android:layout_width="wrap_content"
-            android:layout_height="3dp"
+            android:layout_height="1dp"
             android:background="@color/black"
             android:layout_marginTop="0dp" />
 

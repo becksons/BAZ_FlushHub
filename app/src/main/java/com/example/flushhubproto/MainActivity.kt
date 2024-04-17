@@ -12,9 +12,12 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.GestureDetector
+import android.view.Gravity
 import android.view.Menu
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
@@ -27,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +53,11 @@ class MainActivity : AppCompatActivity() {
     private var submitButton:Button? = null
     private var nameEditText :EditText? = null
     private var landingPage :LinearLayout? = null
+    private lateinit var navController: NavController
+    private lateinit var greetingTextView: TextView
+    private lateinit var distanceTextView: TextView
+    private lateinit var fragmentBannerView: TextView
+
 
 
 
@@ -56,12 +65,9 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -69,8 +75,6 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_LOCATION_PERMISSION)
             return
         }
-
-
 
         val mainLayout: ViewGroup = findViewById(R.id.main_layout)
 
@@ -82,27 +86,32 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
-
-
     }
+
     private fun setupDrawer() {
-
         topDrawer = findViewById(R.id.topDrawer)
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
         val btnMenuClose: ImageButton = findViewById(R.id.menu_button_close)
-
+        val fragmentBannerView:TextView = findViewById(R.id.fragment_banner)
         val btnNavHome: Button = findViewById(R.id.btn_nav_home)
         val btnNavFind: Button = findViewById(R.id.btn_nav_find)
         val btnNavRate: Button = findViewById(R.id.btn_nav_rate)
         val btnNavEntertainment: Button = findViewById(R.id.btn_nav_entertainment)
         val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.home_icon)
-        drawable?.setBounds(0, 0, (drawable.intrinsicWidth * 0.5).toInt(), (drawable.intrinsicHeight * 0.5).toInt()) // Scale drawable to half its size
+        drawable?.setBounds(0, 0, (drawable.intrinsicWidth * 0.5).toInt(), (drawable.intrinsicHeight * 0.5).toInt())
         btnNavHome.setCompoundDrawables(drawable, null, null, null)
 
         btnMenuClose.setOnClickListener {
             navController.navigate(R.id.nav_home)
             closeTopDrawer()
         }
+
+        btnNavEntertainment.setOnClickListener{
+            navController.navigate(R.id.nav_entertainment)
+            closeTopDrawer()
+
+        }
+
         btnNavHome.setOnClickListener {
             navController.navigate(R.id.nav_home)
             closeTopDrawer()
@@ -115,15 +124,81 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.nav_slideshow)
             closeTopDrawer()
         }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.nav_gallery -> {
 
+                    fragmentBannerView.visibility = VISIBLE
+
+                    fragmentBannerView.apply {
+                        text = "FIND YOUR RESTROOM:"
+                        textSize = 23.0F
+                        translationX = 2.0F
+                        translationY = 10.0F
+                        gravity = Gravity.CENTER
+
+                    }
+                    greetingTextView.visibility = GONE
+                    distanceTextView.visibility = GONE
+                }
+
+                R.id.nav_slideshow -> {
+                    fragmentBannerView.visibility = VISIBLE
+                    fragmentBannerView.apply {
+                        text = "BU'S TOP RESTROOMS"
+                        textSize = 24.0F
+
+
+
+                    }
+
+                    greetingTextView.visibility = GONE
+                    distanceTextView.visibility = GONE
+                }
+
+                R.id.nav_home -> {
+                    greetUserWithDistance()
+                    greetingTextView.visibility = VISIBLE
+                    distanceTextView.visibility = VISIBLE
+                    fragmentBannerView.visibility = GONE
+                }
+                R.id.nav_entertainment -> {
+                    fragmentBannerView.visibility = VISIBLE
+                    fragmentBannerView.apply {
+                        text = "BATHROOM\nENTERTAINMENT"
+                        textSize = 23.0F
+                        translationX = -6.0F
+                        translationY= -60.0F
+                        gravity = Gravity.CENTER
+
+                    }
+                    greetingTextView.visibility = GONE
+                    distanceTextView.visibility = GONE
+                }
+
+            }
+        }
+
+    }
+    private fun greetUserWithDistance() {
+        val name = getUserName()
+        val milesAway = 0.01f // Replace with actual logic to calculate distance
+        greetUser(name, milesAway)
+    }
+    private fun getUserName(): String {
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("user_name", "User") ?: "User"
+    }
+
+    private fun updateBannerText(text: String) {
+        greetingTextView = findViewById(R.id.greeting_text_name)
+        distanceTextView = findViewById(R.id.greeting_miles_away)
+        greetingTextView.text = text
+        distanceTextView.visibility = GONE
     }
 
 
-
-
-
-
-private fun isTouchInsideView(event: MotionEvent, view: View): Boolean {
+    private fun isTouchInsideView(event: MotionEvent, view: View): Boolean {
 //    Checking if touch event in range to close top drawer
     val viewLocation = IntArray(2)
     view.getLocationOnScreen(viewLocation)
@@ -140,31 +215,21 @@ private fun isTouchInsideView(event: MotionEvent, view: View): Boolean {
 }
     override fun onStart() {
         super.onStart()
-
-
-
         setupDrawer()
-
-
         submitButton = findViewById<Button>(R.id.submitButton)
         nameEditText = findViewById<EditText>(R.id.nameEditText)
-
         landingPage = findViewById<LinearLayout>(R.id.landing_layout)
-
         submitButton?.setOnClickListener {
             val name = nameEditText?.text.toString()
             if (name.isNotEmpty()) {
                 saveName(name)
                 greetUser(name,0.01F)
-                landingPage?.visibility = View.GONE
+                landingPage?.visibility = GONE
             } else {
                 Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
             }
         }
-
         checkAndDisplayUserName()
-
-
         val openButton: ImageButton = findViewById(R.id.open_drawer_button)
         openButton.setOnClickListener {
             if (isDrawerOpen) {
@@ -190,28 +255,29 @@ private fun isTouchInsideView(event: MotionEvent, view: View): Boolean {
         val name = sharedPreferences.getString("user_name", null)
         if (!isFirstLaunch && name != null) {
             greetUser(name,0.01F)
-            landingPage?.visibility = View.GONE
+            landingPage?.visibility = GONE
 
         } else {
-            landingPage?.visibility = View.VISIBLE
+            landingPage?.visibility = VISIBLE
 
         }
     }
 
-    private fun greetUser(name: String,milesAway: Float){
-        Log.d("User greet text", "User greeted")
-        val greetingTextView: TextView = findViewById(R.id.greeting_text_name)
-        val distanceTextView: TextView = findViewById(R.id.greeting_miles_away)
 
-
+    private fun greetUser(name: String, milesAway: Float) {
+        greetingTextView = findViewById(R.id.greeting_text_name)
+        distanceTextView = findViewById(R.id.greeting_miles_away)
         val greetingText = SpannableString("Don't worry, $name!")
         greetingText.setSpan(StyleSpan(Typeface.BOLD), 12, 12 + name.length+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val distanceText = SpannableString("The nearest restroom is \n $milesAway miles away!")
-        distanceText.setSpan(StyleSpan(Typeface.BOLD), 24, 24 + milesAway.toInt()+9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
+        val distanceText = SpannableString("       The nearest restroom is \n        $milesAway miles away!")
+        distanceText.setSpan(StyleSpan(Typeface.BOLD), 24, 24 + milesAway.toString().length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         greetingTextView.text = greetingText
         distanceTextView.text = distanceText
+
+        greetingTextView.visibility = VISIBLE
+        distanceTextView.visibility = VISIBLE
+
 
 
     }

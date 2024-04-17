@@ -5,20 +5,22 @@
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
     app:cardCornerRadius="4dp"
+    android:background="@color/fh_tool_bar"
     app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/fh_tool_bar"
 
         android:padding="16dp">
         <ImageButton
-            android:layout_width="40dp"
+            android:layout_width="30dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:src = "@drawable/bathroom_location_icon"
-            android:scaleType="fitEnd">
+            android:scaleType="fitStart">
 
         </ImageButton>
 
@@ -35,21 +37,25 @@
                 android:layout_height="wrap_content"
                 android:text="@string/address_default"
                 android:textSize="14sp"
+                android:fontFamily="@font/ruda_regular"
+                android:layout_gravity="center"
 
                 android:textColor="#000" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:translationY="4dp"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/distance_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/item_dist_default"
+                    android:fontFamily="@font/ruda_regular"
                     android:textSize="14sp"
                     android:textColor="#666" />
                 <View
-                    android:layout_width="210dp"
+                    android:layout_width="218dp"
                     android:layout_height="20dp">
 
                 </View>
@@ -58,10 +64,12 @@
                     android:id="@+id/time_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
                     android:text="@string/item_minaway_default"
+                    android:fontFamily="@font/ruda_regular"
                     android:textSize="14sp"
                     android:textColor="#666"
-                    android:layout_gravity="center_vertical" />
+                    android:layout_gravity="center" />
 
             </LinearLayout>
 

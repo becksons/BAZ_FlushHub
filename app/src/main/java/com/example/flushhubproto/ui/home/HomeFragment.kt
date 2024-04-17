@@ -82,6 +82,8 @@ class HomeFragment : Fragment() {
         context?.let { ctx ->
             openMap(ctx,42.350026020986256, -71.10326632227299) //pasing to Google Maps
         }
+//
+//        setupAppBarInteraction()
 
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]

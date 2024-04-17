@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:layout_margin="3dp"
+    app:cardCornerRadius="4dp"
+    android:background="@color/fh_tool_bar"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/fh_tool_bar"
+
+         >
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="55dp"
+
+            android:src = "@drawable/review_star"
+            android:scaleType="fitEnd"
+
+            >
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/restroom_rank_num"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+
+            android:text="#1"
+            android:fontFamily="@font/ruda_bold"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:translationX="-55dp"
+            android:translationY="5dp"/>
+
+
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+
+            android:translationX="-30dp"
+
+
+
+
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/review_item_building"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+
+                android:fontFamily="@font/ruda_bold"
+                android:text="@string/building"
+
+                android:textColor="#000"
+
+                android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/restroom_item_floor"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:text="@string/floor"
+                    android:fontFamily="@font/ruda_bold"
+
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                     />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/restroom_item_gender"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:layout_gravity="end"
+            android:translationX="55dp"
+
+            android:src="@drawable/gender_nuetral_icon" />
+        <View
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            >
+
+        </View>
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:translationY="-5dp"
+            android:translationX="20dp">
+
+            <RatingBar
+                android:layout_width="190dp"
+                android:layout_height="40dp"
+                android:numStars="5"
+                android:rating="3"
+                android:translationX="-50dp"
+                android:scaleX=".4"
+                android:scaleY=".4">
+
+            </RatingBar>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:translationY="-10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/ruda_black"
+                android:text = "REVIEWS"
+                android:textSize="12dp"
+                >
+
+            </Button>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

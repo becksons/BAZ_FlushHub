@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fh_tool_bar"
+    tools:context="com.example.flushhubproto.ui.gallery.FindRestroomFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/fh_tool_bar"
+
+        android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:textSize = "28sp"
+                android:layout_margin="20dp"
+
+                android:textStyle="bold"
+                android:shadowRadius="2"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:shadowColor="@color/black"
+                android:text = "@string/what_type_of_restroom_are_you_looking_for"
+                android:textColor = "@color/black"
+                android:fontFamily="@font/ruda_regular"
+                >
+            </TextView>
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+
+            android:background="@color/black"/>
+
+
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textSize="30sp"
+
+            android:textColor="@color/black"
+            android:fontFamily="@font/ruda_bold"
+            android:text="@string/gender">
+
+        </TextView>
+
+        <RadioGroup
+            android:id="@+id/gender_radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/purple_500"
+
+
+            android:orientation="horizontal"
+            android:progressTint="@color/purple_500"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/gender_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/woman_icon"
+                android:elevation="4dp"
+
+
+
+                />
+
+            <RadioButton
+                android:id="@+id/gender_neutral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/gender_nuetral_icon"
+                android:elevation="4dp" />
+
+            <RadioButton
+                android:id="@+id/gender_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/man_icon"
+                android:elevation="4dp" />
+
+
+        </RadioGroup>
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+
+
+            android:background="@color/black">
+
+        </View>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="-30dp"
+            android:fontFamily="@font/ruda_bold"
+            android:text="@string/campus"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp">
+
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/campus_section"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:layout_margin="30dp"
+            android:translationY="-20dp"
+            app:layout_constraintTop_toBottomOf="@id/gender_radio_group"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <Button
+                android:id="@+id/campus_west"
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:elevation="4dp"
+                android:fontFamily="@font/ruda_black"
+                android:text="@string/west"
+                />
+
+            <Button
+                android:id="@+id/campus_central"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ruda_black"
+                android:elevation="4dp"
+                android:textColor="@color/black"
+                android:layout_margin="10dp"
+                android:text="@string/central"
+                />
+
+            <Button
+                android:id="@+id/campus_east"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ruda_black"
+                android:elevation="4dp"
+                android:textColor="@color/black"
+                android:layout_margin="10dp"
+                android:text="@string/east"
+        />
+        </LinearLayout>
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="-60dp"
+
+
+            android:background="@color/black">
+
+        </View>
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/ruda_bold"
+            android:text="@string/rating"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp"/>
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="5dp"
+            android:numStars="5"
+            android:progressTint="@color/purple_500"
+            android:rating="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campus_section" />
+
+
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@color/black">
+
+        </View>
+        <Button
+            android:id="@+id/find_button"
+            android:layout_width="250dp"
+            android:layout_height="80dp"
+            android:elevation="5dp"
+            android:layout_gravity="center"
+            android:text="@string/find"
+            android:fontFamily="@font/ruda_black"
+            android:textSize="50sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/find_button"
+            android:textAlignment="textStart"
+            android:drawableLeft="@drawable/search_icon"
+            app:layout_constraintTop_toBottomOf="@id/rating_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="RtlCompat" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
