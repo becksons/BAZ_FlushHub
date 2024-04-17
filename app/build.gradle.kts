@@ -74,6 +74,12 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
 
     val version = "0.50.6"
+    implementation("com.tomtom.sdk.routing:route-planner-online:1.0.0")
+    implementation("com.tomtom.sdk.routing:range-calculator:1.0.0")
+    implementation("com.tomtom.sdk.routing:model:1.0.0")
+    implementation("com.tomtom.sdk.location:model:1.0.0")
+    implementation("com.tomtom.sdk.vehicle:model:1.0.0")
+    implementation("com.tomtom.quantity:quantity:1.0.0")
     implementation("com.tomtom.sdk.maps:map-display:$version")
     implementation("com.tomtom.sdk.location:provider-android:$version")
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
