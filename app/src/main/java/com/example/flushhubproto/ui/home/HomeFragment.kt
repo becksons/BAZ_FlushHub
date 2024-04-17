@@ -3,7 +3,10 @@ package com.example.flushhubproto.ui.home
 
 import android.Manifest
 import android.animation.ValueAnimator
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,9 +37,11 @@ import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
+import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import kotlin.time.Duration.Companion.milliseconds
+
 
 class HomeFragment : Fragment() {
 
@@ -74,20 +79,18 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
-//        setupAppBarInteraction()
+        context?.let { ctx ->
+            openMap(ctx,42.350026020986256, -71.10326632227299) //pasing to Google Maps
+        }
 
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         setupRecyclerView(binding)
         observeLocationInfos()
 
-
-
-
-
-
         return binding.root
     }
+
 //    private fun setupAppBarInteraction() {
 //        val appBar = binding.nearestLocationRecyclerView.nearestRestAppbar // Make sure you have the correct reference to your AppBar
 //        appBar.setOnClickListener {
@@ -124,6 +127,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_LOCATION_PERMISSION -> {
@@ -139,7 +143,7 @@ class HomeFragment : Fragment() {
     private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
-    val androidLocationProviderConfig = AndroidLocationProviderConfig(
+    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
         minTimeInterval = 250L.milliseconds,
         minDistance = Distance.meters(20.0)
     )
@@ -161,10 +165,19 @@ class HomeFragment : Fragment() {
 
                 // Move map to the new location
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
+                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
             }
 
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
         }
+    }
+    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+
+        val locationMarkerOptions = LocationMarkerOptions(
+            type = LocationMarkerOptions.Type.Pointer
+        )
+
+        tomtomMap.enableLocationMarker(locationMarkerOptions)
     }
 
     private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
@@ -176,6 +189,18 @@ class HomeFragment : Fragment() {
         )
 
         tomtomMap.moveCamera(cameraOptions)
+    }
+    fun openMap(context: Context, lat: Double, long: Double, label: String = "Mark") {
+        val geoUri = Uri.parse("geo:0,0?q=$lat,$long($label)")
+        val intent = Intent(Intent.ACTION_VIEW, geoUri)
+        intent.setPackage("com.google.android.apps.maps")
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        } else {
+            val webUri = Uri.parse("https://www.google.com/maps/@$lat,$long,16z")
+            val webIntent = Intent(Intent.ACTION_VIEW, webUri)
+            context.startActivity(webIntent)
+        }
     }
 
     fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double){
