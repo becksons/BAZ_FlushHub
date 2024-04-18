@@ -21,7 +21,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flushhubproto.BathroomViewModel
 import com.example.flushhubproto.LocationInfoAdapter
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
@@ -97,6 +99,8 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private var isExpanded = false
 
+    private val bathroomViewModel: BathroomViewModel by activityViewModels()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -112,14 +116,30 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
+        // Load the Markers into the Tom Tom Map.
+        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
+            // Unpack the test object and get the long-lat coordinates
+            dataList?.forEach { data ->
+                Log.d("FLUSHHUB", "Coordinates: ${data.Coordinates}")
+                val parts = data.Coordinates.split(',')
+                val longitude: Double = parts[0].toDouble()
+                val latitude: Double = parts[1].toDouble()
+
+                mapFragment.getMapAsync { tomtomMap ->
+                    markMap(tomtomMap,latitude,longitude)
+                }
+            }
+        }
+
 //        context?.let { ctx ->
-//            openMap(ctx,42.350026020986256, -71.10326632227299) //pasing to Google Maps
+//            openMap(ctx,42.350026020986256, -71.10326632227299) //parsing to Google Maps
 //        }
 //
 //        setupAppBarInteraction()
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         setupRecyclerView(binding)
+
         observeLocationInfos()
 
         return binding.root
@@ -147,8 +167,13 @@ class HomeFragment : Fragment() {
 
 
     private fun observeLocationInfos() {
-        viewModel.locationInfos.observe(viewLifecycleOwner) { locationInfos ->
-            adapter.updateData(locationInfos)
+//        viewModel.locationInfos.observe(viewLifecycleOwner) { locationInfos ->
+//            adapter.updateData(locationInfos)
+//        }
+        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
+            if (bathrooms != null) {
+                adapter.updateData(bathrooms)
+            }
         }
     }
 

@@ -1,14 +1,17 @@
 package com.example.flushhubproto
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flushhubproto.schema.test
 import com.example.tomtom.R
 
-class LocationInfoAdapter(private var locationList: List<LocationInfo>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
-    fun updateData(newLocationList: List<LocationInfo>) {
+class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newLocationList: List<test>) {
         locationList = newLocationList
         notifyDataSetChanged()
     }
@@ -32,10 +35,10 @@ class LocationInfoAdapter(private var locationList: List<LocationInfo>) : Recycl
         private val timeTextView: TextView = itemView.findViewById(R.id.time_text_view)
 
 
-        fun bind(location: LocationInfo) {
-            addressTextView.text = location.address
-            distanceTextView.text = location.distance
-            timeTextView.text = location.time
+        fun bind(location: test) {
+            addressTextView.text = location.Location
+            distanceTextView.text = "0.1m"
+            timeTextView.text = "10 min"
         }
     }
 }
