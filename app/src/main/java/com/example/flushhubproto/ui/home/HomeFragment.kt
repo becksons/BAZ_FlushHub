@@ -2,7 +2,6 @@ package com.example.flushhubproto.ui.home
 
 
 import android.Manifest
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,9 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.util.Log
-import android.util.TypedValue
-import android.widget.LinearLayout
-import android.widget.TextView
 import kotlin.math.roundToInt
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
@@ -33,7 +29,6 @@ import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
-import com.tomtom.sdk.location.Place
 import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
@@ -43,12 +38,7 @@ import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.IOException
-import java.util.concurrent.Executors
 import kotlin.time.Duration.Companion.milliseconds
-import com.google.gson.Gson
 
 
 class HomeFragment : Fragment() {
@@ -88,6 +78,8 @@ class HomeFragment : Fragment() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) { /* Handle sliding */ }
         }
 
+        var currentLongitude: Double = 0.0
+        var currentLatitude: Double = 0.0
     }
 
 
@@ -108,9 +100,7 @@ class HomeFragment : Fragment() {
             context = requireContext(),
             config = androidLocationProviderConfig
         )
-
-        // Now can use androidLocationProvider safely within fragment
-    }
+    }         // Now can use androidLocationProvider safely within fragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -120,7 +110,6 @@ class HomeFragment : Fragment() {
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
             // Unpack the test object and get the long-lat coordinates
             dataList?.forEach { data ->
-                Log.d("FLUSHHUB", "Coordinates: ${data.Coordinates}")
                 val parts = data.Coordinates.split(',')
                 val longitude: Double = parts[0].toDouble()
                 val latitude: Double = parts[1].toDouble()
@@ -135,7 +124,6 @@ class HomeFragment : Fragment() {
 //            openMap(ctx,42.350026020986256, -71.10326632227299) //parsing to Google Maps
 //        }
 //
-//        setupAppBarInteraction()
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         setupRecyclerView(binding)
@@ -144,18 +132,6 @@ class HomeFragment : Fragment() {
 
         return binding.root
     }
-
-//    private fun setupAppBarInteraction() {
-//        val appBar = binding.nearestLocationRecyclerView.nearestRestAppbar // Make sure you have the correct reference to your AppBar
-//        appBar.setOnClickListener {
-//            if (isExpanded) {
-//                collapseRecyclerView()
-//            } else {
-//                expandRecyclerView()
-//            }
-//            isExpanded = !isExpanded
-//        }
-//    }
 
 
     private fun setupRecyclerView(binding: FragmentHomeBinding) {
@@ -167,9 +143,6 @@ class HomeFragment : Fragment() {
 
 
     private fun observeLocationInfos() {
-//        viewModel.locationInfos.observe(viewLifecycleOwner) { locationInfos ->
-//            adapter.updateData(locationInfos)
-//        }
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
             if (bathrooms != null) {
                 adapter.updateData(bathrooms)
@@ -210,7 +183,6 @@ class HomeFragment : Fragment() {
 
 
     private fun initializeMapWithLocation() {
-
         childFragmentManager.beginTransaction()
             .replace(R.id.map_container, mapFragment)
             .commit()
@@ -221,6 +193,10 @@ class HomeFragment : Fragment() {
 
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
+
+                // Store the Current Latitude and Longitude
+                currentLatitude = location.position.latitude
+                currentLongitude = location.position.longitude
 
                 // Move map to the new location
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
@@ -263,7 +239,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double){
+    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double){
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
             coordinate = loc,
@@ -272,42 +248,6 @@ class HomeFragment : Fragment() {
 
         tomtomMap.addMarker(markerOptions)
     }
-
-    //distance and timeaway for display given coords
-
-    fun calRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double){
-        val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-        val executor = Executors.newSingleThreadExecutor()
-        executor.execute {
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-                val responseData = response.body?.string()
-                if (responseData != null) {
-                    displayRouteDetails(responseData)
-                }
-            }
-        }
-    }
-
-    fun parseRouteData(jsonData: String): RouteResponse {
-        val gson = Gson()
-        return gson.fromJson(jsonData, RouteResponse::class.java)
-    }
-
-    fun displayRouteDetails(jsonData: String) {
-        val routeResponse = parseRouteData(jsonData)
-        routeResponse.routes.forEach { route ->
-            println("Route Length: ${route.summary.lengthInMeters} meters")
-            println("Travel Time: ${(route.summary.travelTimeInSeconds/60.0).roundToInt()} mins")
-        }
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
