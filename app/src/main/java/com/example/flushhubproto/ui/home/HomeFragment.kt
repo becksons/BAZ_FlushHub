@@ -15,7 +15,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.widget.LinearLayout
 import android.widget.TextView
-
+import kotlin.math.roundToInt
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +31,7 @@ import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
+import com.tomtom.sdk.location.Place
 import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
@@ -40,10 +41,42 @@ import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
+import java.util.concurrent.Executors
 import kotlin.time.Duration.Companion.milliseconds
+import com.google.gson.Gson
 
 
 class HomeFragment : Fragment() {
+    data class RouteResponse(
+        val formatVersion: String,
+        val routes: List<Route>
+    )
+
+    data class Route(
+        val summary: RouteSummary,
+        val legs: List<Leg>
+    )
+
+    data class RouteSummary(
+        val lengthInMeters: Int,
+        val travelTimeInSeconds: Int,
+        val departureTime: String,
+        val arrivalTime: String
+    )
+
+    data class Leg(
+        val summary: RouteSummary,
+        val points: List<Point>
+    )
+
+    data class Point(
+        val latitude: Double,
+        val longitude: Double
+    )
+
 
     companion object {
         const val REQUEST_LOCATION_PERMISSION = 1
@@ -84,7 +117,6 @@ class HomeFragment : Fragment() {
 //        }
 //
 //        setupAppBarInteraction()
-
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         setupRecyclerView(binding)
@@ -168,6 +200,7 @@ class HomeFragment : Fragment() {
                 // Move map to the new location
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+                //calRange(location.position.latitude, location.position.longitude, 42.350026020986256, -71.10326632227299)
             }
 
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
@@ -192,7 +225,7 @@ class HomeFragment : Fragment() {
 
         tomtomMap.moveCamera(cameraOptions)
     }
-    fun openMap(context: Context, lat: Double, long: Double, label: String = "Mark") {
+    fun openMap(context: Context, lat: Double, long: Double, label: String = "Restroom") {
         val geoUri = Uri.parse("geo:0,0?q=$lat,$long($label)")
         val intent = Intent(Intent.ACTION_VIEW, geoUri)
         intent.setPackage("com.google.android.apps.maps")
@@ -217,7 +250,38 @@ class HomeFragment : Fragment() {
 
     //distance and timeaway for display given coords
 
+    fun calRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double){
+        val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .build()
 
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val responseData = response.body?.string()
+                if (responseData != null) {
+                    displayRouteDetails(responseData)
+                }
+            }
+        }
+    }
+
+    fun parseRouteData(jsonData: String): RouteResponse {
+        val gson = Gson()
+        return gson.fromJson(jsonData, RouteResponse::class.java)
+    }
+
+    fun displayRouteDetails(jsonData: String) {
+        val routeResponse = parseRouteData(jsonData)
+        routeResponse.routes.forEach { route ->
+            println("Route Length: ${route.summary.lengthInMeters} meters")
+            println("Travel Time: ${(route.summary.travelTimeInSeconds/60.0).roundToInt()} mins")
+        }
+    }
 
 
     override fun onDestroyView() {
