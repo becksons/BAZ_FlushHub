@@ -70,6 +70,7 @@ class HomeFragment : Fragment() {
     )
 
 
+
     companion object {
         const val REQUEST_LOCATION_PERMISSION = 1
 
@@ -120,9 +121,8 @@ class HomeFragment : Fragment() {
             }
         }
 
-//        context?.let { ctx ->
-//            openMap(ctx,42.350026020986256, -71.10326632227299) //parsing to Google Maps
-//        }
+
+
 //
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
@@ -139,7 +139,20 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = LocationInfoAdapter(emptyList())
         recyclerView.adapter = adapter
-    }
+        adapter.setOnItemClickListener(object: LocationInfoAdapter.LocationViewHolder.OnItemsClickListener{
+            override fun onItemClick(position:Int){
+//                        context?.let { ctx ->
+//
+//                        openMap(ctx,42.350026020986256, -71.10326632227299) //parsing to Google Maps
+//        }
+                println("List item clicked!----------------------")
+
+            }
+
+        })
+
+        }
+
 
 
     private fun observeLocationInfos() {
@@ -255,4 +268,5 @@ class HomeFragment : Fragment() {
         androidLocationProvider = null
 
     }
+
 }

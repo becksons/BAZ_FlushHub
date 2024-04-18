@@ -21,9 +21,15 @@ import kotlin.math.roundToInt
 
 class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
     @SuppressLint("NotifyDataSetChanged")
+    var listener: LocationViewHolder.OnItemsClickListener? = null
+
     fun updateData(newLocationList: List<test>) {
         locationList = newLocationList
         notifyDataSetChanged()
+    }
+
+    fun setOnItemClickListener(listener: LocationViewHolder.OnItemsClickListener) {
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
@@ -43,8 +49,17 @@ class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.A
         private val addressTextView: TextView = itemView.findViewById(R.id.address_text_view)
         private val distanceTextView: TextView = itemView.findViewById(R.id.distance_text_view)
         private val timeTextView: TextView = itemView.findViewById(R.id.time_text_view)
+        var listener: LocationViewHolder.OnItemsClickListener? = null
 
         // Calculates Distance and Travel time based on given Coordinates
+        init {
+            itemView.setOnClickListener{
+                val position = adapterPosition
+                if(position != RecyclerView.NO_POSITION){
+                    listener?.onItemClick(position)
+                }
+            }
+        }
         private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
             val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
             val client = OkHttpClient()
@@ -84,6 +99,9 @@ class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.A
             }
 
             return results
+        }
+        interface OnItemsClickListener{
+            fun onItemClick(position: Int)
         }
 
         private fun parseRouteData(jsonData: String): HomeFragment.RouteResponse {
