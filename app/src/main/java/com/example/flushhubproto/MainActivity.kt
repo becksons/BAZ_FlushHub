@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Database Initialization
+
         Realm.init(this)  // Initialize realm before ViewModel
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun greetUserWithDistance() {
         val name = getUserName()
-        val milesAway = 0.01f // Replace with actual logic to calculate distance
+        val milesAway = 0.01f  //TODO: Change to meters
         greetUser(name, milesAway)
     }
     private fun getUserName(): String {

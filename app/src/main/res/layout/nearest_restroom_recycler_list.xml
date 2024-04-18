@@ -9,16 +9,11 @@
         android:orientation="vertical">
 
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:background="@color/black"
-            android:layout_marginTop="0dp" />
         <com.google.android.material.appbar.AppBarLayout
             android:id = "@+id/nearest_rest_appbar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:elevation="20dp"
+            android:elevation="10dp"
 
 
 
@@ -43,11 +38,6 @@
 
 
         </com.google.android.material.appbar.AppBarLayout>
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:background="@color/black"
-            android:layout_marginTop="0dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/nearest_location_recycler_view"

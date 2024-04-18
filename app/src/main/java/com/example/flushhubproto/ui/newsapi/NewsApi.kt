@@ -1,6 +1,5 @@
-package com.example.newsapp.newsapi
+package com.example.flushhubproto.ui.newsapi
 
-import com.example.flushhubproto.ui.newsapi.NewsResponse
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

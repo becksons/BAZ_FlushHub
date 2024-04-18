@@ -34,7 +34,6 @@ class FindRestroomFragment : Fragment() {
         return root
     }
     private fun handleGenderSelection(gender: String) {
-        // Conditional logic based on gender
         if (gender == "Male") {
             // Do something for Male
 

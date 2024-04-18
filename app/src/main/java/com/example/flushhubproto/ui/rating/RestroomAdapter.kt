@@ -20,7 +20,7 @@ class RestroomAdapter(private val restrooms: List<Restroom>, private val listene
     class RestroomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var restroomIDCount = 0
         fun bind(restroom: Restroom, listener: OnItemClickListener) {
-            // Bind your view elements with restroom properties
+
             itemView.findViewById<TextView>(R.id.reviewNickname).text = restroom.name
 //            restroom.reviews[restroom.id].plus(itemView.findViewById<TextView>(R.id.review).text)
 //            itemView.findViewById<Button>(R.id.submitReviewButton).setOnClickListener {

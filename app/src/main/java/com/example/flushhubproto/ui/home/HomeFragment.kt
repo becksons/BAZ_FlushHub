@@ -106,9 +106,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
-        // Load the Markers into the Tom Tom Map.
+
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
-            // Unpack the test object and get the long-lat coordinates
+
             dataList?.forEach { data ->
                 val parts = data.Coordinates.split(',')
                 val longitude: Double = parts[0].toDouble()
@@ -166,7 +166,7 @@ class HomeFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initializeMapWithLocation()
                 } else {
-                    // Handle deny permission
+                    //TODO: error handle for permission denied
                 }
             }
         }
@@ -194,11 +194,10 @@ class HomeFragment : Fragment() {
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
 
-                // Store the Current Latitude and Longitude
                 currentLatitude = location.position.latitude
                 currentLongitude = location.position.longitude
 
-                // Move map to the new location
+
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
                 //calRange(location.position.latitude, location.position.longitude, 42.350026020986256, -71.10326632227299)

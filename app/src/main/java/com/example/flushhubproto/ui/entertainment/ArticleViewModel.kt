@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.example.newsapp.newsapi.RetrofitInstance
+import com.example.flushhubproto.ui.newsapi.RetrofitInstance
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import android.content.Context
