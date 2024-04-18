@@ -105,4 +105,9 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
     // Testing Fragments in Isolation
     debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
+
+    //news api dependencies
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
 }

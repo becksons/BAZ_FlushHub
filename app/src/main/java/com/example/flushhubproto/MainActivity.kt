@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_entertainment -> {
                     fragmentBannerView.visibility = VISIBLE
                     fragmentBannerView.apply {
-                        text = "BATHROOM\nENTERTAINMENT"
+                        text = "\nFLUSH HUB NEWS"
                         textSize = 23.0F
                         translationX = -6.0F
                         translationY= -60.0F

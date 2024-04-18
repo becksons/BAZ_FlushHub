@@ -45,4 +45,8 @@
     <string name="location">LOCATION:</string>
     <string name="select_building">Select building</string>
     <string name="select_floor">Select floor</string>
+    <string name="flushhub_news">FlushHub News</string>
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+    <string name="details">Details</string>
 </resources>

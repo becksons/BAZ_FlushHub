@@ -66,6 +66,37 @@
         android:id="@+id/nav_entertainment"
         android:name="com.example.flushhubproto.ui.entertainment.EntertainmentFragment"
         android:layout = "@layout/fragmnet_entertainment"
-        android:label="EntertainmentFragment"
-        />
+        android:label="EntertainmentFragment">
+    <action
+        android:id="@+id/list_to_detail"
+        app:destination="@id/detailFragment">
+
+    </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/newsListFragment"
+        android:name="com.example.flushhubproto.ui.entertainment.EntertainmentFragment"
+        tools:layout="@layout/fragmnet_entertainment">
+
+        <action
+            android:id="@+id/list_to_detail"
+            app:destination="@id/detailFragment">
+
+        </action>
+
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.flushhubproto.ui.entertainment.DetailFragment"
+        tools:layout="@layout/news_item_detail">
+        <action
+            android:id="@+id/detail_to_list"
+            app:destination="@id/nav_entertainment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+
+
 </navigation>
