@@ -11,6 +11,7 @@ import com.example.tomtom.databinding.FragmentRatingsBinding
 
 class RatingsFragment : Fragment() {
 
+
     private var _binding: FragmentRatingsBinding? = null
 
     // This property is only valid between onCreateView and
