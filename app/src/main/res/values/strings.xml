@@ -49,4 +49,6 @@
     <string name="title">Title</string>
     <string name="author">Author</string>
     <string name="details">Details</string>
+    <string name="start_your_route">START YOUR ROUTE</string>
+    <string name="go">GO</string>
 </resources>

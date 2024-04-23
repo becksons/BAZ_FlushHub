@@ -256,14 +256,15 @@
 
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="270dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:fontFamily="@font/ruda_bold"
             android:text="@string/leave_a_review"
             android:textColor="@color/black"
             android:textSize="25sp"
-            android:translationX="110dp">
+            android:textAlignment="center"
+            >
 
         </TextView>
 
@@ -279,6 +280,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 android:hint="@string/type_your_review_here"
                 android:inputType="textMultiLine"
                 android:gravity="start"

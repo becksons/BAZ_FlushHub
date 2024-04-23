@@ -1,7 +1,6 @@
-package com.example.flushhubproto
+package com.example.flushhubproto.ui.home
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flushhubproto.schema.test
@@ -11,7 +10,6 @@ import io.realm.mongodb.AppConfiguration
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.sync.Subscription
 import io.realm.mongodb.sync.SyncConfiguration
-import java.lang.IllegalStateException
 
 class BathroomViewModel : ViewModel() {
     private lateinit var app: App
@@ -66,10 +64,9 @@ class BathroomViewModel : ViewModel() {
     }
 
     private fun loadAllBathrooms() {
-        // Loads all Bathroom Schema Objects and puts it in Live_Data
         realm?.executeTransactionAsync { bgRealm ->
             val results = bgRealm.where(test::class.java)?.findAll()
-            val bathrooms = results?.let { bgRealm.copyFromRealm(it) } // Detach the value
+            val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             _bathrooms.postValue(bathrooms)
         }
     }
