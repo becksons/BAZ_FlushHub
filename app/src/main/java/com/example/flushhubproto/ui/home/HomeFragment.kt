@@ -36,6 +36,7 @@ import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
+import com.tomtom.sdk.map.display.marker.Marker
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import kotlin.time.Duration.Companion.milliseconds
@@ -123,7 +124,7 @@ class HomeFragment : Fragment() {
 //        context?.let { ctx ->
 //            openMap(ctx,42.350026020986256, -71.10326632227299) //parsing to Google Maps
 //        }
-//
+
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         setupRecyclerView(binding)
@@ -246,6 +247,8 @@ class HomeFragment : Fragment() {
         )
 
         tomtomMap.addMarker(markerOptions)
+
+        tomtomMap.addMarkerClickListener { marker: Marker -> Log.d("marker", marker.coordinate.toString()) }
     }
 
     override fun onDestroyView() {
