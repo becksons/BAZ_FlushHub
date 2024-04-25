@@ -45,26 +45,22 @@
                     <ImageView
                         android:layout_width="150dp"
                         android:elevation="6dp"
-                        android:translationY="-10dp"
+                        android:translationY="80dp"
 
                         android:layout_height="150dp"
+                        android:scaleType="fitXY"
+                        android:translationX="-20dp"
+                        android:layout_gravity="center"
+                        android:scaleX="2.8"
+                        android:scaleY = "2"
+
                         android:layout_margin="20dp"
-                        android:src = "@drawable/toilet_bowl"
+                        android:src = "@drawable/top_star_icon"
                         >
                     </ImageView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="@string/number_one"
-                        android:elevation="15dp"
 
-                        android:textSize="20sp"
-                        android:textColor="@color/black"
-                        android:fontFamily="@font/ruda_black"
-                        android:translationY="100dp"
-                        android:translationX="-108dp">
 
-                    </TextView>
+
 
 
                     <LinearLayout
@@ -137,15 +133,12 @@
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
 
-                                android:src="@drawable/gender_nuetral_icon"></ImageView>
+                                android:src="@drawable/gender_nuetral_icon">
+
+                            </ImageView>
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="300dp"
-                            android:layout_height="2dp"
-                            android:background="@color/black">
 
-                        </View>
 
                         <RatingBar
                             android:id="@+id/top_rating_bar"
@@ -153,7 +146,7 @@
                             android:layout_height="wrap_content"
                             android:elevation="35dp"
                             android:numStars="5"
-                            android:translationX="10dp"
+                            android:translationX="30dp"
                             android:scaleX=".8"
                             android:scaleY=".8"
                             android:progressTint="@color/purple_500"
@@ -188,7 +181,7 @@
         <LinearLayout
             android:layout_width="350dp"
             android:layout_height="30dp"
-            android:translationX="80dp"
+            android:translationX="50dp"
             android:orientation="horizontal">
             <TextView
 
@@ -196,7 +189,7 @@
                 android:layout_height="30dp"
 
                 android:fontFamily="@font/ruda_bold"
-                android:text="@string/building"
+                android:text="@string/building_list"
                 android:layout_margin="5dp"
                 android:textColor="#000"
 
@@ -207,7 +200,7 @@
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
                 android:fontFamily="@font/ruda_bold"
-                android:text="@string/floor"
+                android:text="@string/at_floor_list"
                 android:translationX="-30dp"
                 android:textColor="#000"
 
@@ -218,7 +211,7 @@
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
                 android:fontFamily="@font/ruda_bold"
-                android:text="Gender:"
+                android:text="@string/gender_list"
                 android:translationX="-30dp"
                 android:textColor="#000"
 
@@ -239,6 +232,13 @@
 
 
         </LinearLayout>
+        <View
+            android:layout_width="350dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:background="@color/black">
+
+        </View>
 
 
         <androidx.recyclerview.widget.RecyclerView

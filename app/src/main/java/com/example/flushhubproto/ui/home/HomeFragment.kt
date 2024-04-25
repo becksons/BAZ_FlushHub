@@ -152,17 +152,7 @@ class HomeFragment : Fragment() {
                 val address: String = data.Location
 
                 mapFragment.getMapAsync { tomtomMap ->
-                    tomtomMap.addMarkerClickListener { clickedMarker ->
-                        val locationInfo = "Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
-                        val detailText = "Address: $address, Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
 
-                        bathroomViewModel.updateSelectedLocation(detailText)
-
-
-                        Log.d("MarkerClick", "Marker at $address was clicked.")
-                        showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, address)
-
-                    }
                     markMap(tomtomMap,latitude,longitude,address)
 
 
@@ -308,6 +298,17 @@ class HomeFragment : Fragment() {
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon)
         )
+        tomtomMap.addMarkerClickListener { clickedMarker ->
+            val locationInfo = "Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
+            val detailText = "Address: $address, Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
+
+            bathroomViewModel.updateSelectedLocation(detailText)
+
+
+            Log.d("MarkerClick", "Marker at $address was clicked.")
+            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, address)
+
+        }
 
 
         val marker = tomtomMap.addMarker(markerOptions)
@@ -385,7 +386,11 @@ class HomeFragment : Fragment() {
         binding.detailsTextView.text = null
         binding.detailsTextView.text = address
         binding.mapButton.setOnClickListener {
-            openMap(requireContext(), lat, lon, address)
+            context?.let{ctx->
+                openMap(ctx, lat, lon, address)
+
+            }
+
         }
         bathroomViewModel.updateSelectedLocation("Address: $address, Latitude: $lat, Longitude: $lon")
 

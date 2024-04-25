@@ -58,4 +58,7 @@
     <string name="building_location">Building location</string>
     <string name="floor_location">Floor location</string>
     <string name="default_rank">4.5</string>
+    <string name="at_floor_list">at Floor</string>
+    <string name="building_list">Building</string>
+    <string name="gender_list">Gender</string>
 </resources>

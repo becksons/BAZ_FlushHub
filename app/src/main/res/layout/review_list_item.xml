@@ -34,14 +34,9 @@
 
 
              />
-        <View
-            android:layout_width="2dp"
-            android:layout_gravity="center"
-            android:layout_height="45dp"
-            android:translationX="-35dp"
-            android:background="@color/black">
 
-        </View>
+
+
 
 
 
