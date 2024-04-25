@@ -115,10 +115,6 @@ class HomeFragment : Fragment() {
         }
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
-            binding.mapButton.setOnClickListener {
-                val (lat, lon) = details.split(',').map { it.split(':').last().trim().toDouble() }
-                openMap(requireContext(), lat, lon, "Detailed Location")
-            }
         }
 
         androidLocationProvider = AndroidLocationProvider(
@@ -292,12 +288,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String) {
+    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom") {
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon)
         )
+
+        tomtomMap.addMarker(markerOptions)
+
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val locationInfo = "Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
             val detailText = "Address: $address, Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
@@ -309,12 +308,6 @@ class HomeFragment : Fragment() {
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, address)
 
         }
-
-
-        val marker = tomtomMap.addMarker(markerOptions)
-
-
-
     }
     private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
         val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
@@ -388,7 +381,6 @@ class HomeFragment : Fragment() {
         binding.mapButton.setOnClickListener {
             context?.let{ctx->
                 openMap(ctx, lat, lon, address)
-
             }
 
         }
