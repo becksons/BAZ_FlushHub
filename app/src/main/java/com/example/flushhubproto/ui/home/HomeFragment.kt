@@ -148,20 +148,11 @@ class HomeFragment : Fragment() {
                 val address: String = data.Location
 
                 mapFragment.getMapAsync { tomtomMap ->
-
                     markMap(tomtomMap,latitude,longitude,address)
-
-
                 }
 
             }
         }
-
-//        context?.let { ctx ->
-//            openMap(ctx,42.350026020986256, -71.10326632227299) //parsing to Google Maps
-//        }
-
-
 
         setupRecyclerView(binding)
 
@@ -252,14 +243,7 @@ class HomeFragment : Fragment() {
 
         val locationMarkerOptions = LocationMarkerOptions(
             type = LocationMarkerOptions.Type.Chevron
-
-
 //            customModel = android.net.Uri.fromFile(file)
-
-
-
-
-
         )
 
         tomtomMap.enableLocationMarker(locationMarkerOptions)
@@ -292,20 +276,22 @@ class HomeFragment : Fragment() {
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
             coordinate = loc,
-            pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon)
+            pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
+            tag = address
+
         )
 
         tomtomMap.addMarker(markerOptions)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val locationInfo = "Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
-            val detailText = "Address: $address, Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
+            val detailText = "Address: ${clickedMarker.tag}, Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
 
             bathroomViewModel.updateSelectedLocation(detailText)
 
 
             Log.d("MarkerClick", "Marker at $address was clicked.")
-            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, address)
+            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
 
         }
     }
@@ -362,7 +348,7 @@ class HomeFragment : Fragment() {
 //    }
 
 
-    private fun showGoToRouteLayout(lat:Double, lon: Double,address: String) {
+    private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
         val layout = binding.root.findViewById<View>(R.id.go_to_route_layout)
         binding.goToRouteLayout.visibility = VISIBLE
         binding.goToRouteLayout.apply {
