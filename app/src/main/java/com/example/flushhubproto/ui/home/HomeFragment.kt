@@ -164,7 +164,7 @@ class HomeFragment : Fragment() {
 //        context?.let { ctx ->
 //            openMap(ctx,42.350026020986256, -71.10326632227299) //parsing to Google Maps
 //        }
-//
+
 
 
         setupRecyclerView(binding)
@@ -393,9 +393,6 @@ class HomeFragment : Fragment() {
 
         }
         bathroomViewModel.updateSelectedLocation("Address: $address, Latitude: $lat, Longitude: $lon")
-
-
-
     }
     private fun hideGoToRouteLayout() {
 
