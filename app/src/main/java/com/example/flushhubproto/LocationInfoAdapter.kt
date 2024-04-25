@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.schema.test
 import com.example.flushhubproto.ui.home.HomeFragment
@@ -13,11 +14,10 @@ import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
-import java.lang.Exception
-import java.lang.IllegalStateException
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import kotlin.math.roundToInt
+
 
 class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
     @SuppressLint("NotifyDataSetChanged")
@@ -25,6 +25,7 @@ class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.A
         locationList = newLocationList
         notifyDataSetChanged()
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.location_info_item, parent, false)
@@ -39,10 +40,19 @@ class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.A
     override fun getItemCount() = locationList.size
 
 
-    class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+   inner class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val addressTextView: TextView = itemView.findViewById(R.id.address_text_view)
         private val distanceTextView: TextView = itemView.findViewById(R.id.distance_text_view)
         private val timeTextView: TextView = itemView.findViewById(R.id.time_text_view)
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                   //TODO: Figure out item listener for restroom recycler list
+                    Toast.makeText(itemView.context,"Item clicked at $position",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         // Calculates Distance and Travel time based on given Coordinates
         private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {

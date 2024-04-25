@@ -5,7 +5,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,11 +12,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.LocationInfoAdapter
@@ -42,6 +41,7 @@ import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.File
 import java.io.IOException
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -100,7 +100,7 @@ class HomeFragment : Fragment() {
     private var androidLocationProvider: LocationProvider? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: LocationInfoAdapter
-    private lateinit var viewModel: HomeViewModel
+
     private var isExpanded = false
 
     private val bathroomViewModel: BathroomViewModel by activityViewModels()
@@ -112,6 +112,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fun toggleBar() {
             isBarVisible = !isBarVisible
+        }
+        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
+            binding.detailsTextView.text = details
+            binding.mapButton.setOnClickListener {
+                val (lat, lon) = details.split(',').map { it.split(':').last().trim().toDouble() }
+                openMap(requireContext(), lat, lon, "Detailed Location")
+            }
         }
 
         androidLocationProvider = AndroidLocationProvider(
@@ -133,6 +140,7 @@ class HomeFragment : Fragment() {
 
 
 
+
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
 
 
@@ -145,10 +153,14 @@ class HomeFragment : Fragment() {
 
                 mapFragment.getMapAsync { tomtomMap ->
                     tomtomMap.addMarkerClickListener { clickedMarker ->
+                        val locationInfo = "Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
+                        val detailText = "Address: $address, Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
+
+                        bathroomViewModel.updateSelectedLocation(detailText)
+
 
                         Log.d("MarkerClick", "Marker at $address was clicked.")
                         showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, address)
-
 
                     }
                     markMap(tomtomMap,latitude,longitude,address)
@@ -164,7 +176,7 @@ class HomeFragment : Fragment() {
 //        }
 //
 
-        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
         setupRecyclerView(binding)
 
         observeLocationInfos()
@@ -214,6 +226,7 @@ class HomeFragment : Fragment() {
     private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
+
     private val androidLocationProviderConfig = AndroidLocationProviderConfig(
         minTimeInterval = 250L.milliseconds,
         minDistance = Distance.meters(20.0)
@@ -225,6 +238,7 @@ class HomeFragment : Fragment() {
         childFragmentManager.beginTransaction()
             .replace(R.id.map_container, mapFragment)
             .commit()
+
 
         mapFragment.getMapAsync { tomtomMap ->
             tomtomMap.setLocationProvider(androidLocationProvider)
@@ -247,9 +261,19 @@ class HomeFragment : Fragment() {
         }
     }
     private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+        val customArrowImage = ImageFactory.fromResource(R.drawable.nav_arrow)
+        val file = File("/Users/becksonstein/AndroidStudioProjects/FlushHubProto/app/src/main/assets/custom_nav_arrow.svg")
 
         val locationMarkerOptions = LocationMarkerOptions(
-            type = LocationMarkerOptions.Type.Pointer
+            type = LocationMarkerOptions.Type.Chevron
+
+
+//            customModel = android.net.Uri.fromFile(file)
+
+
+
+
+
         )
 
         tomtomMap.enableLocationMarker(locationMarkerOptions)
@@ -266,13 +290,13 @@ class HomeFragment : Fragment() {
         tomtomMap.moveCamera(cameraOptions)
     }
     fun openMap(context: Context, lat: Double, long: Double, label: String = "Restroom") {
-        val geoUri = Uri.parse("geo:0,0?q=$lat,$long($label)")
+        val geoUri = android.net.Uri.parse("geo:0,0?q=$lat,$long($label)")
         val intent = Intent(Intent.ACTION_VIEW, geoUri)
         intent.setPackage("com.google.android.apps.maps")
         if (intent.resolveActivity(context.packageManager) != null) {
             context.startActivity(intent)
         } else {
-            val webUri = Uri.parse("https://www.google.com/maps/@$lat,$long,16z")
+            val webUri = android.net.Uri.parse("https://www.google.com/maps/@$lat,$long,16z")
             val webIntent = Intent(Intent.ACTION_VIEW, webUri)
             context.startActivity(webIntent)
         }
@@ -284,6 +308,7 @@ class HomeFragment : Fragment() {
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon)
         )
+
 
         val marker = tomtomMap.addMarker(markerOptions)
 
@@ -346,10 +371,25 @@ class HomeFragment : Fragment() {
     private fun showGoToRouteLayout(lat:Double, lon: Double,address: String) {
         val layout = binding.root.findViewById<View>(R.id.go_to_route_layout)
         binding.goToRouteLayout.visibility = VISIBLE
+        binding.goToRouteLayout.apply {
+            visibility = View.VISIBLE
+            alpha = 0f
+            animate()
+                .alpha(1f)
+                .setDuration(500)
+                .setListener(null)
+        }
+
+
+
+        binding.detailsTextView.text = null
+        binding.detailsTextView.text = address
         binding.mapButton.setOnClickListener {
-            // Intent to open maps or start navigation
             openMap(requireContext(), lat, lon, address)
         }
+        bathroomViewModel.updateSelectedLocation("Address: $address, Latitude: $lat, Longitude: $lon")
+
+
 
     }
     private fun hideGoToRouteLayout() {
@@ -368,6 +408,12 @@ class HomeFragment : Fragment() {
             .addToBackStack(null)
             .commit()
     }
+    fun onItemClick(position: Int) {
+
+        Toast.makeText(context, "Item clicked at position $position", Toast.LENGTH_SHORT).show()
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

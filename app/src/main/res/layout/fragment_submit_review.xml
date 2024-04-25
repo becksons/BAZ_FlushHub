@@ -290,7 +290,22 @@
 
 
         </LinearLayout>
+        <Button
+            android:id="@+id/submit_button"
+            android:fontFamily="@font/ruda_black"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/find_button"
+            android:text="SUBMIT YOUR REVIEW"
+            android:textAlignment="center"
 
+
+
+            />
 
     </LinearLayout>
 

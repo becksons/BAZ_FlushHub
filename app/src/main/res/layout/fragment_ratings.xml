@@ -4,18 +4,260 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DADADA"
     tools:context="com.example.flushhubproto.ui.rating.RatingsFragment">
-    <FrameLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="30dp"
-        tools:context=".BathroomRatingsFragment">
+        android:translationY="100dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/ruda_regular"
+            android:gravity="center"
+            android:text="@string/no_ratings_available"
+            android:visibility="gone" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:elevation="18dp"
+            android:layout_margin="10dp"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                android:background="#D6D6D6">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+
+                    android:background="@android:color/transparent">
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:elevation="6dp"
+                        android:translationY="-10dp"
+
+                        android:layout_height="150dp"
+                        android:layout_margin="20dp"
+                        android:src = "@drawable/toilet_bowl"
+                        >
+                    </ImageView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:text="@string/number_one"
+                        android:elevation="15dp"
+
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/ruda_black"
+                        android:translationY="100dp"
+                        android:translationX="-108dp">
+
+                    </TextView>
+
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+
+                        android:layout_height="179dp"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical"
+                        android:translationX="-80dp">
+
+                        <TextView
+                            android:layout_width="200dp"
+                            android:layout_height="30dp"
+                            android:fontFamily="@font/ruda_black"
+
+                            android:text="@string/restroom_name"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="20sp">
+
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/top_name"
+                            android:layout_width="200dp"
+                            android:layout_height="30dp"
+
+                            android:fontFamily="@font/ruda_bold"
+                            android:text="@string/name"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="18sp">
+
+
+                        </TextView>
+
+
+                        <TextView
+                            android:layout_width="200dp"
+                            android:layout_height="30dp"
+
+                            android:fontFamily="@font/ruda_black"
+                            android:text="Building at Floor:"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="20sp">
+
+
+                        </TextView>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:translationX="20dp">
+
+                            <TextView
+                                android:id="@+id/top_buildingfloor"
+                                android:layout_width="140dp"
+                                android:layout_height="30dp"
+
+                                android:fontFamily="@font/ruda_bold"
+                                android:text="Building/floor"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"></TextView>
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+
+                                android:src="@drawable/gender_nuetral_icon"></ImageView>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="300dp"
+                            android:layout_height="2dp"
+                            android:background="@color/black">
+
+                        </View>
+
+                        <RatingBar
+                            android:id="@+id/top_rating_bar"
+                            android:layout_width="195dp"
+                            android:layout_height="wrap_content"
+                            android:elevation="35dp"
+                            android:numStars="5"
+                            android:translationX="10dp"
+                            android:scaleX=".8"
+                            android:scaleY=".8"
+                            android:progressTint="@color/purple_500"
+                            android:rating="5">
+
+                        </RatingBar>
+
+
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/top_rank_rating_num"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:translationY="-50dp"
+                    android:translationX="130dp"
+                    android:textSize="30sp"
+
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/ruda_bold"
+                    android:text="@string/default_rank" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="30dp"
+            android:translationX="80dp"
+            android:orientation="horizontal">
+            <TextView
+
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+
+                android:fontFamily="@font/ruda_bold"
+                android:text="@string/building"
+                android:layout_margin="5dp"
+                android:textColor="#000"
+
+                android:textSize="16sp" />
+            <TextView
+
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:fontFamily="@font/ruda_bold"
+                android:text="@string/floor"
+                android:translationX="-30dp"
+                android:textColor="#000"
+
+                android:textSize="16sp" />
+            <TextView
+
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:fontFamily="@font/ruda_bold"
+                android:text="Gender:"
+                android:translationX="-30dp"
+                android:textColor="#000"
+
+                android:textSize="16sp" />
+            <TextView
+
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:fontFamily="@font/ruda_bold"
+                android:text="Ratings"
+                android:translationX="-30dp"
+                android:textColor="#000"
+
+                android:textSize="16sp" />
+
+
+
+
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ratingsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:layout_height="300dp"
+            android:scrollbars="vertical"
+            android:layout_margin="10dp"
+              />
 
-    </FrameLayout>
+        <Button
+            android:id="@+id/leaveReview"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="bottom|end"
+            android:text="@string/leave_a_review">
+
+        </Button>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

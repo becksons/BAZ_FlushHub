@@ -138,8 +138,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_slideshow -> {
                     fragmentBannerView.visibility = VISIBLE
                     fragmentBannerView.apply {
-                        text = "BU'S TOP RESTROOMS"
-                        textSize = 24.0F
+                        text = "\nBU'S TOP RESTROOMS"
+                        textSize = 22.0F
 
 
 

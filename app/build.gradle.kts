@@ -53,6 +53,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    sourceSets {
+        getByName("main") {
+            assets {
+                srcDirs("src/main/assets")
+            }
+        }
+    }
 
     realm {
         isSyncEnabled = true
@@ -122,5 +129,8 @@ dependencies {
     //jetpack compose
     implementation ("androidx.compose.material:material:1.6.6")
     implementation ("androidx.compose.ui:ui-tooling:1.6.6")
+
+    implementation( "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
 
 }

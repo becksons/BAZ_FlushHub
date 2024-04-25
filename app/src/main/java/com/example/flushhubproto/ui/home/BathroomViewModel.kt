@@ -1,6 +1,7 @@
 package com.example.flushhubproto.ui.home
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flushhubproto.schema.test
@@ -14,6 +15,8 @@ import io.realm.mongodb.sync.SyncConfiguration
 class BathroomViewModel : ViewModel() {
     private lateinit var app: App
     private var realm: Realm? = null
+    private val _selectedLocation = MutableLiveData<String>()
+    val selectedLocation: LiveData<String> = _selectedLocation
 
     // Data vars
     private val _bathrooms = MutableLiveData<List<test>?>()
@@ -21,6 +24,9 @@ class BathroomViewModel : ViewModel() {
 
     init {
         initializeMongoDBRealm()
+    }
+    fun selectLocation(address: String) {
+        _selectedLocation.value = address
     }
 
 
@@ -75,5 +81,10 @@ class BathroomViewModel : ViewModel() {
         realm?.close()
         realm = null
         super.onCleared()
+    }
+
+    fun updateSelectedLocation(locationInfo: String) {
+        _selectedLocation.value = locationInfo
+
     }
 }
