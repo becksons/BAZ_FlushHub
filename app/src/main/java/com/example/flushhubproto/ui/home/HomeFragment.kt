@@ -248,7 +248,11 @@ class HomeFragment : Fragment() {
 
         tomtomMap.addMarker(markerOptions)
 
-        tomtomMap.addMarkerClickListener { marker: Marker -> Log.d("marker", marker.coordinate.toString()) }
+        tomtomMap.addMarkerClickListener { marker: Marker ->
+            context?.let { ctx ->
+                openMap(ctx,marker.coordinate.latitude, marker.coordinate.longitude)
+            }
+        }
     }
 
     override fun onDestroyView() {
