@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -48,8 +47,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.8"
+    }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    sourceSets {
+        getByName("main") {
+            assets {
+                srcDirs("src/main/assets")
+            }
+        }
     }
 
     realm {
@@ -58,6 +67,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
     buildTypes.configureEach {
         buildConfigField("String", "TOMTOM_API_KEY", "\"$tomtomApiKey\"")
@@ -77,7 +87,10 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
-    implementation ("com.google.code.gson:gson:2.10")
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation("androidx.compose.foundation:foundation-layout-android:1.6.6")
+    implementation("androidx.compose.animation:animation-core-android:1.6.6")
+    implementation("androidx.compose.foundation:foundation-android:1.6.6")
 
     val version = "0.50.6"
     implementation("com.tomtom.sdk.routing:route-planner-online:1.0.0")
@@ -89,11 +102,12 @@ dependencies {
     implementation("com.tomtom.sdk.maps:map-display:$version")
     implementation("com.tomtom.sdk.location:provider-android:$version")
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
+    implementation ("androidx.compose.ui:ui:1.6.6")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     val fragment_version = "1.6.2"
@@ -109,5 +123,14 @@ dependencies {
     //news api dependencies
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    implementation ("androidx.compose.compiler:compiler:1.5.8")//keep at 1.5.8
+
+    //jetpack compose
+    implementation ("androidx.compose.material:material:1.6.6")
+    implementation ("androidx.compose.ui:ui-tooling:1.6.6")
+
+    implementation( "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
 
 }

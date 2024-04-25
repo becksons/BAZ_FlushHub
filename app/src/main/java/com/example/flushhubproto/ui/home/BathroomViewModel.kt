@@ -1,4 +1,4 @@
-package com.example.flushhubproto
+package com.example.flushhubproto.ui.home
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,11 +11,12 @@ import io.realm.mongodb.AppConfiguration
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.sync.Subscription
 import io.realm.mongodb.sync.SyncConfiguration
-import java.lang.IllegalStateException
 
 class BathroomViewModel : ViewModel() {
     private lateinit var app: App
     private var realm: Realm? = null
+    private val _selectedLocation = MutableLiveData<String>()
+    val selectedLocation: LiveData<String> = _selectedLocation
 
     // Data vars
     private val _bathrooms = MutableLiveData<List<test>?>()
@@ -23,6 +24,9 @@ class BathroomViewModel : ViewModel() {
 
     init {
         initializeMongoDBRealm()
+    }
+    fun selectLocation(address: String) {
+        _selectedLocation.value = address
     }
 
 
@@ -66,10 +70,9 @@ class BathroomViewModel : ViewModel() {
     }
 
     private fun loadAllBathrooms() {
-        // Loads all Bathroom Schema Objects and puts it in Live_Data
         realm?.executeTransactionAsync { bgRealm ->
             val results = bgRealm.where(test::class.java)?.findAll()
-            val bathrooms = results?.let { bgRealm.copyFromRealm(it) } // Detach the value
+            val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             _bathrooms.postValue(bathrooms)
         }
     }
@@ -78,5 +81,10 @@ class BathroomViewModel : ViewModel() {
         realm?.close()
         realm = null
         super.onCleared()
+    }
+
+    fun updateSelectedLocation(locationInfo: String) {
+        _selectedLocation.value = locationInfo
+
     }
 }

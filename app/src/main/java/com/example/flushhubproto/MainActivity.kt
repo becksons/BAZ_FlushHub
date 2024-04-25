@@ -6,15 +6,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.location.Location
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import android.util.Log
-import android.view.GestureDetector
 import android.view.Gravity
-import android.view.Menu
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
@@ -31,20 +27,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.flushhubproto.schema.test
+import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
-import com.example.flushhubproto.ui.home.HomeViewModel
 
 import com.example.tomtom.R
 import com.example.tomtom.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import io.realm.Realm
 
 class MainActivity : AppCompatActivity() {
@@ -70,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
-        Realm.init(this)  // Initialize realm before ViewModel
+        Realm.init(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -149,8 +138,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_slideshow -> {
                     fragmentBannerView.visibility = VISIBLE
                     fragmentBannerView.apply {
-                        text = "BU'S TOP RESTROOMS"
-                        textSize = 24.0F
+                        text = "\nBU'S TOP RESTROOMS"
+                        textSize = 22.0F
 
 
 

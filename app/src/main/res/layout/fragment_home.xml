@@ -4,15 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@android:color/transparent"
     tools:context="com.example.flushhubproto.ui.home.HomeFragment">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:orientation="vertical">
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map_container"
             android:layout_width="match_parent"
             android:layout_height="500dp"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -20,6 +27,80 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
             tools:context="com.example.flushhubproto.ui.home.HomeFragment" />
+
+        <LinearLayout
+            android:id = "@+id/go_to_route_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:elevation="10dp"
+            android:background="@color/fh_tool_bar"
+
+
+
+            tools:context="com.example.flushhubproto.ui.home.GoToRouteFragment">
+            <LinearLayout
+                android:id = "@+id/go_to_route_banner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/location_pin"
+                    android:translationY="-15dp"
+                    android:translationX="-20dp">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/details_text_view"
+                    android:layout_width="220dp"
+                    android:layout_height="40dp"
+                    android:fontFamily="@font/ruda_regular"
+
+                    android:text="Details will appear here"
+                    android:textColor="#000000"
+                    android:translationX="-30dp"
+
+
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/map_button"
+                    android:fontFamily="@font/ruda_black"
+                    android:layout_width="100dp"
+                    android:layout_gravity="center"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+
+                    android:textSize="21sp"
+                    android:elevation="8dp"
+
+                    android:background="@drawable/find_button"
+                    android:text="GO"
+
+
+                    android:drawableLeft="@drawable/walk_icon"
+
+
+
+                    />
+
+
+
+            </LinearLayout>
+
+            <!-- TextView for displaying route details like coordinates, distance, and time -->
+
+
+        </LinearLayout>
+
 
         <include layout="@layout/nearest_restroom_recycler_list" android:id="@+id/nearest_location_recycler_view" />
 

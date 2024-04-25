@@ -96,6 +96,22 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
+    <fragment
+        android:id="@+id/ratingsFragment"
+        android:name="com.example.flushhubproto.ui.rating.RatingsFragment"
+        android:label="fragment_ratings"
+        tools:layout="@layout/fragment_ratings" >
+        <action
+            android:id="@+id/action_ratingsFragment_to_submitReviewFragment"
+            app:destination="@id/submitReviewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/submitReviewFragment"
+        android:name="com.example.flushhubproto.ui.rating.SubmitReviewFragment"
+        android:label="fragment_submit_review"
+        tools:layout="@layout/fragment_submit_review" />
+
 
 
 
