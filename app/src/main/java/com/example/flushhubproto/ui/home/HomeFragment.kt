@@ -1,6 +1,7 @@
 package com.example.flushhubproto.ui.home
 
 
+import kotlin.math.*
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -134,12 +135,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
-
-
-
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
 
-
+            val processedAddresses = mutableSetOf<String>()
 
             dataList?.forEach { data ->
                 val parts = data.Coordinates.split(',')
@@ -147,8 +145,12 @@ class HomeFragment : Fragment() {
                 val latitude: Double = parts[1].toDouble()
                 val address: String = data.Location
 
-                mapFragment.getMapAsync { tomtomMap ->
-                    markMap(tomtomMap,latitude,longitude,address)
+                if (address !in processedAddresses) {
+                    Log.d("addy", address)
+                    processedAddresses.add(address)
+                    mapFragment.getMapAsync { tomtomMap ->
+                        markMap(tomtomMap, latitude, longitude, address)
+                    }
                 }
 
             }
@@ -335,6 +337,7 @@ class HomeFragment : Fragment() {
 
         return results
     }
+
     private fun parseRouteData(jsonData: String): HomeFragment.RouteResponse {
         val gson = Gson()
         return gson.fromJson(jsonData, HomeFragment.RouteResponse::class.java)
