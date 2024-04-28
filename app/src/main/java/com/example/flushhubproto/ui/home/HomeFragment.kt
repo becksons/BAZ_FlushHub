@@ -1,7 +1,5 @@
 package com.example.flushhubproto.ui.home
 
-
-import kotlin.math.*
 import android.Manifest
 import android.content.Context
 import android.content.Intent
