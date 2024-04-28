@@ -12,4 +12,7 @@ open class test (
     var Location:String = "",
     var Name: String = "",
     var Type: String = "",
+    @Transient
+    var distanceInMeters: Int? = null,
+    var distanceInMin: Int? = null,
 ) : RealmObject() {}
