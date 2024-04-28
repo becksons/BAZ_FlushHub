@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.schema.test
 import com.example.flushhubproto.ui.home.HomeFragment
@@ -116,8 +117,8 @@ class LocationInfoAdapter(private var locationList: List<test>) : RecyclerView.A
             )
 
             addressTextView.text = location.Location
-            distanceTextView.text = "${calculations?.get(0)}m"
-            timeTextView.text = "${calculations?.get(1)} min"
+            distanceTextView.text = "${calculations?.get(0)}" + itemView.context.getString(R.string.meters)
+            timeTextView.text = "${calculations?.get(1)}" + itemView.context.getString(R.string.minutes)
         }
     }
 }
