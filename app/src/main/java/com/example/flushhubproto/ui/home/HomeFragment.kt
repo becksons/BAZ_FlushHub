@@ -120,13 +120,7 @@ class HomeFragment : Fragment() {
             context = requireContext(),
             config = androidLocationProviderConfig
         )
-
-
-
-
-
     }
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -134,14 +128,13 @@ class HomeFragment : Fragment() {
         requestPermissionsIfNecessary()
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
-
             val processedAddresses = mutableSetOf<String>()
 
             dataList?.forEach { data ->
-                val parts = data.Coordinates.split(',')
+                val parts = data.first.Coordinates.split(',')
                 val longitude: Double = parts[0].toDouble()
                 val latitude: Double = parts[1].toDouble()
-                val address: String = data.Location
+                val address: String = data.first.Location
 
                 if (address !in processedAddresses) {
                     Log.d("addy", address)
@@ -340,13 +333,6 @@ class HomeFragment : Fragment() {
         val gson = Gson()
         return gson.fromJson(jsonData, HomeFragment.RouteResponse::class.java)
     }
-
-
-//    private fun displayRouteDetails(dist: Int?, time: Int?,desc: String?,lat: Double,lon: Double) {
-//
-//        binding.detailsTextView.text = "$desc \n Distance: $dist Time: $time Address:"
-//
-//    }
 
 
     private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
