@@ -5,12 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flushhubproto.schema.test
+import com.google.gson.Gson
 import io.realm.Realm
 import io.realm.mongodb.App
 import io.realm.mongodb.AppConfiguration
 import io.realm.mongodb.Credentials
 import io.realm.mongodb.sync.Subscription
 import io.realm.mongodb.sync.SyncConfiguration
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import kotlin.math.roundToInt
 
 class BathroomViewModel : ViewModel() {
     private lateinit var app: App
@@ -19,8 +26,8 @@ class BathroomViewModel : ViewModel() {
     val selectedLocation: LiveData<String> = _selectedLocation
 
     // Data vars
-    private val _bathrooms = MutableLiveData<List<test>?>()
-    val bathrooms: MutableLiveData<List<test>?> get() = _bathrooms
+    private val _bathrooms = MutableLiveData<List<Triple<test, Double, Double>>?>()
+    val bathrooms: MutableLiveData<List<Triple<test, Double, Double>>?> get() = _bathrooms
 
     init {
         initializeMongoDBRealm()
@@ -69,11 +76,86 @@ class BathroomViewModel : ViewModel() {
         loadAllBathrooms()
     }
 
+    // ================== Database Processing Functions ==================
+
+    // Calculates Distance and Travel time based on given Coordinates
+    private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
+        val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        var routeLength = 0
+        var routeTime = 0
+
+        val executor = Executors.newSingleThreadExecutor()
+
+        val task: Callable<List<Int>> = Callable<List<Int>> {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                val responseData = response.body?.string()
+                if (responseData != null) {
+                    val routeResponse = parseRouteData(responseData)
+                    routeResponse.routes.forEach { route ->
+                        routeLength = route.summary.lengthInMeters
+                        routeTime = (route.summary.travelTimeInSeconds/60.0).roundToInt()
+                    }
+                    return@Callable listOf(routeLength, routeTime)
+                }
+                throw IllegalStateException("Response Data is Null!")
+            }
+        }
+
+        val future = executor.submit(task)
+        val results: List<Int>? = try {
+            future.get()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        } finally {
+            executor.shutdown()
+        }
+
+        return results
+    }
+
+    private fun parseRouteData(jsonData: String): HomeFragment.RouteResponse {
+        val gson = Gson()
+        return gson.fromJson(jsonData, HomeFragment.RouteResponse::class.java)
+    }
+
     private fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
             val results = bgRealm.where(test::class.java)?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
-            _bathrooms.postValue(bathrooms)
+            if (bathrooms != null) { // Do a null check, if null we don't proceed
+                _bathrooms.postValue(bathrooms.map { test -> // Critical Thread processes! Crashes may happen here if resources are not correctly allocated
+                    // Defaults
+                    var distance = -1.0
+                    var time = -1.0
+
+                    val parts = test.Coordinates.split(',')
+                    val longitude: Double = parts[0].toDouble()
+                    val latitude: Double = parts[1].toDouble()
+
+                    val calculations = calcRange(
+                        42.350498333333334,
+                        -71.10539833333333,
+                        latitude,
+                        longitude
+                    )
+
+                    if (calculations != null) {
+                        distance = calculations[0].toDouble()
+                        time = calculations[1].toDouble()
+                    }
+
+                    Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}")
+
+                    Triple(test, distance, time)
+                })
+            }
         }
     }
 
@@ -85,6 +167,5 @@ class BathroomViewModel : ViewModel() {
 
     fun updateSelectedLocation(locationInfo: String) {
         _selectedLocation.value = locationInfo
-
     }
 }
