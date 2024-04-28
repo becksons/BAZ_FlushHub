@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.schema.test
 import com.example.tomtom.R
@@ -70,6 +71,10 @@ class LocationInfoAdapter(private var locationList: List<Triple<test, Double, Do
             } else {
                 timeTextView.text = "${location.third} min"
             }
+            return results
+        }
+
+
         }
     }
 }

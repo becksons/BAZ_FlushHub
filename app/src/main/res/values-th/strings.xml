@@ -5,20 +5,20 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">ตั้งค่า</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_find">Find Your Restroom</string>
-    <string name="menu_rate">Review Restrooms</string>
-    <string name="menu">Menu</string>
+    <string name="menu_home">หน้าหลัก</string>
+    <string name="menu_find">หาห้องน้ำ</string>
+    <string name="menu_rate">ให้คะแนนห้องน้ำ</string>
+    <string name="menu">เมนู</string>
     <string name="the_flushhub">The FlushHub</string>
-    <string name="greet_user_default">Don\'t worry, user!</string>
-    <string name="nearest_restroom_is_x_miles_away">The nearest restroom is .01 meters away </string>
+    <string name="greet_user_default">ไม่ต้องห่วง, user!</string>
+    <string name="nearest_restroom_is_x_miles_away">ห้องน้ำที่ใกล้ที่สุดอยู่ .01 เมตรจากคุณ </string>
     <string name="bathroom_entertainment">Bathroom Entertainment</string>
-    <string name="nearest_restrooms">Nearest Restrooms:</string>
-    <string name="address_default" translatable="false">621 Commonwealth Ave, Boston, MA 02215</string>
-    <string name="item_dist_default">0.2 meters</string>
-    <string name="item_minaway_default">4 mins</string>
+    <string name="nearest_restrooms">ห้องน้ำที่ใกล้ที่สุด:</string>
+    <string name="address_default">621 Commonwealth Ave, Boston, MA 02215</string>
+    <string name="item_dist_default">0.2 เมตร</string>
+    <string name="item_minaway_default">4 นาที</string>
     <string name="landing_greeting">Welcome to the FlushHub!</string>
     <string name="what_is_your_name">What is your name?</string>
     <string name="submit">Enter</string>
@@ -52,15 +52,15 @@
     <string name="start_your_route">START YOUR ROUTE</string>
     <string name="go">GO</string>
     <string name="no_ratings_available">No ratings available</string>
-    <string name="number_one" translatable="false">#1</string>
+    <string name="number_one">#1</string>
     <string name="restroom_name">Restroom Name:</string>
     <string name="name">Name</string>
     <string name="building_location">Building location</string>
     <string name="floor_location">Floor location</string>
-    <string name="default_rank" translatable="false">4.5</string>
+    <string name="default_rank">4.5</string>
     <string name="at_floor_list">at Floor</string>
     <string name="building_list">Building</string>
     <string name="gender_list">Gender</string>
-    <string name="meters">m</string>
-    <string name="minutes">min</string>
+    <string name="meters">ม.</string>
+    <string name="minutes">นาที</string>
 </resources>
