@@ -71,10 +71,6 @@ class LocationInfoAdapter(private var locationList: List<Triple<test, Double, Do
             } else {
                 timeTextView.text = "${location.third} min"
             }
-            return results
-        }
-
-
         }
     }
 }
