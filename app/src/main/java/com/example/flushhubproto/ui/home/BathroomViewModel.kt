@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.flushhubproto.schema.test
+import com.example.flushhubproto.schema.bathroom
 import com.google.gson.Gson
 import io.realm.Realm
 import io.realm.mongodb.App
@@ -26,8 +26,8 @@ class BathroomViewModel : ViewModel() {
     val selectedLocation: LiveData<String> = _selectedLocation
 
     // Data vars
-    private val _bathrooms = MutableLiveData<List<Triple<test, Double, Double>>?>()
-    val bathrooms: MutableLiveData<List<Triple<test, Double, Double>>?> get() = _bathrooms
+    private val _bathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
+    val bathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get() = _bathrooms
 
     init {
         initializeMongoDBRealm()
@@ -60,7 +60,7 @@ class BathroomViewModel : ViewModel() {
                     subscriptions.add(
                         Subscription.create(
                             "all-bathrooms",
-                            realm.where(test::class.java)
+                            realm.where(bathroom::class.java)
                         )
                     )
                 }
@@ -127,7 +127,7 @@ class BathroomViewModel : ViewModel() {
 
     private fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
-            val results = bgRealm.where(test::class.java)?.findAll()
+            val results = bgRealm.where(bathroom::class.java)?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             if (bathrooms != null) { // Do a null check, if null we don't proceed
                 _bathrooms.postValue(bathrooms.map { test -> // Critical Thread processes! Crashes may happen here if resources are not correctly allocated

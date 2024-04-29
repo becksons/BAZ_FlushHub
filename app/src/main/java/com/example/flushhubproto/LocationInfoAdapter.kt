@@ -8,14 +8,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flushhubproto.schema.test
+import com.example.flushhubproto.schema.bathroom
 import com.example.tomtom.R
 
 
 
-class LocationInfoAdapter(private var locationList: List<Triple<test, Double, Double>>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
+class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double, Double>>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newLocationList: List<Triple<test, Double, Double>>?) {
+    fun updateData(newLocationList: List<Triple<bathroom, Double, Double>>?) {
         if (newLocationList != null) {
             locationList = newLocationList
         }
@@ -57,7 +57,7 @@ class LocationInfoAdapter(private var locationList: List<Triple<test, Double, Do
        }
 
         @SuppressLint("SetTextI18n")
-        fun bind(location: Triple<test, Double, Double>) {
+        fun bind(location: Triple<bathroom, Double, Double>) {
 
             addressTextView.text = location.first.Location
             if (location.second == -1.0) {

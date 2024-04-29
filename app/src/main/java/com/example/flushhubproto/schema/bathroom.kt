@@ -4,7 +4,7 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.bson.types.ObjectId
 
-open class test (
+open class bathroom (
     @PrimaryKey
     var _id: ObjectId = ObjectId(),
     var Coordinates: String = "",
@@ -12,4 +12,6 @@ open class test (
     var Location:String = "",
     var Name: String = "",
     var Type: String = "",
+    var Rating: String = "",
+    var Reviews: String = ""
 ) : RealmObject() {}
