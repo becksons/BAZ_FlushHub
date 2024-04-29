@@ -193,7 +193,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
+    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
 
