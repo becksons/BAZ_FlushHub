@@ -13,11 +13,11 @@
     <string name="menu">Menu</string>
     <string name="the_flushhub">The FlushHub</string>
     <string name="greet_user_default">Don\'t worry, user!</string>
-    <string name="nearest_restroom_is_x_miles_away">The nearest restroom is .01 meters away </string>
+    <string name="nearest_restroom_is_x_miles_away">The nearest restroom is .01 miles away </string>
     <string name="bathroom_entertainment">Bathroom Entertainment</string>
     <string name="nearest_restrooms">Nearest Restrooms:</string>
     <string name="address_default" translatable="false">621 Commonwealth Ave, Boston, MA 02215</string>
-    <string name="item_dist_default">0.2 meters</string>
+    <string name="item_dist_default">0.2 miles</string>
     <string name="item_minaway_default">4 mins</string>
     <string name="landing_greeting">Welcome to the FlushHub!</string>
     <string name="what_is_your_name">What is your name?</string>
@@ -61,6 +61,12 @@
     <string name="at_floor_list">at Floor</string>
     <string name="building_list">Building</string>
     <string name="gender_list">Gender</string>
-    <string name="meters">m</string>
+    <string name="miles">mil</string>
     <string name="minutes">min</string>
+    <string name="top_restroom">BU\'S TOP RESTROOMS</string>
+    <string name="news" translatable="false">FLUSH HUB NEWS</string>
+    <string name="ask_name">Please enter your name</string>
+    <string name="dont_worry">Don\'t worry,</string>
+    <string name="nearest">The nearest restroom is</string>
+    <string name="miles_away">miles away!</string>
 </resources>

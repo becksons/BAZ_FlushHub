@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                     fragmentBannerView.visibility = VISIBLE
 
                     fragmentBannerView.apply {
-                        text = "FIND YOUR RESTROOM:"
+                        text = getString(R.string.find_your_restroom)
                         textSize = 23.0F
                         translationX = 2.0F
                         translationY = 10.0F
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_slideshow -> {
                     fragmentBannerView.visibility = VISIBLE
                     fragmentBannerView.apply {
-                        text = "\nBU'S TOP RESTROOMS"
+                        text = "\n" + getString(R.string.find_your_restroom)
                         textSize = 22.0F
 
 
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_entertainment -> {
                     fragmentBannerView.visibility = VISIBLE
                     fragmentBannerView.apply {
-                        text = "\nFLUSH HUB NEWS"
+                        text = "\n" + getString(R.string.news)
                         textSize = 23.0F
                         translationX = -6.0F
                         translationY= -60.0F
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                 greetUser(name,0.01F)
                 landingPage?.visibility = GONE
             } else {
-                Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.ask_name), Toast.LENGTH_SHORT).show()
             }
         }
         checkAndDisplayUserName()
@@ -260,9 +260,9 @@ class MainActivity : AppCompatActivity() {
     private fun greetUser(name: String, milesAway: Float) {
         greetingTextView = findViewById(R.id.greeting_text_name)
         distanceTextView = findViewById(R.id.greeting_miles_away)
-        val greetingText = SpannableString("Don't worry, $name!")
+        val greetingText = SpannableString(getString(R.string.dont_worry) + " $name!")
         greetingText.setSpan(StyleSpan(Typeface.BOLD), 12, 12 + name.length+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val distanceText = SpannableString("       The nearest restroom is \n        $milesAway miles away!")
+        val distanceText = SpannableString("       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away))
         distanceText.setSpan(StyleSpan(Typeface.BOLD), 24, 24 + milesAway.toString().length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         greetingTextView.text = greetingText

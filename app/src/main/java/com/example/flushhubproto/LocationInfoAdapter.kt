@@ -63,13 +63,13 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
             if (location.second == -1.0) {
                 distanceTextView.text = "N/A"
             } else {
-                distanceTextView.text = "${metersToMiles(location.second)} mi"
+                distanceTextView.text = "${metersToMiles(location.second)}" + itemView.context.getString(R.string.miles)
             }
 
             if (location.third == -1.0) {
                 timeTextView.text = "N/A"
             } else {
-                timeTextView.text = "${location.third} min"
+                timeTextView.text = "${location.third}" + itemView.context.getString(R.string.minutes)
             }
         }
     }
