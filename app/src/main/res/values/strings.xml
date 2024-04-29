@@ -52,12 +52,12 @@
     <string name="start_your_route">START YOUR ROUTE</string>
     <string name="go">GO</string>
     <string name="no_ratings_available">No ratings available</string>
-    <string name="number_one" translatable="false">#1</string>
+    <string name="number_one">#1</string>
     <string name="restroom_name">Restroom Name:</string>
     <string name="name">Name</string>
     <string name="building_location">Building location</string>
     <string name="floor_location">Floor location</string>
-    <string name="default_rank" translatable="false">4.5</string>
+    <string name="default_rank">4.5</string>
     <string name="at_floor_list">at Floor</string>
     <string name="building_list">Building</string>
     <string name="gender_list">Gender</string>

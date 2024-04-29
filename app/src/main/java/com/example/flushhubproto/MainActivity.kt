@@ -260,13 +260,13 @@ class MainActivity : AppCompatActivity() {
     private fun greetUser(name: String, milesAway: Float) {
         greetingTextView = findViewById(R.id.greeting_text_name)
         distanceTextView = findViewById(R.id.greeting_miles_away)
-        val greetingText = SpannableString(getString(R.string.dont_worry) + " $name!")
-        greetingText.setSpan(StyleSpan(Typeface.BOLD), 12, 12 + name.length+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val distanceText = SpannableString("       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away))
-        distanceText.setSpan(StyleSpan(Typeface.BOLD), 24, 24 + milesAway.toString().length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        //val greetingText = SpannableString(getString(R.string.dont_worry) + " $name!")
+        //greetingText.setSpan(StyleSpan(Typeface.BOLD), 12, 12 + name.length+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        //val distanceText = SpannableString("       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away))
+        //distanceText.setSpan(StyleSpan(Typeface.BOLD), 24, 24 + milesAway.toString().length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        greetingTextView.text = greetingText
-        distanceTextView.text = distanceText
+        greetingTextView.text = getString(R.string.dont_worry) + " $name!"
+        distanceTextView.text = "       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away)
 
         greetingTextView.visibility = VISIBLE
         distanceTextView.visibility = VISIBLE
