@@ -31,6 +31,9 @@
             app:exitAnim="@anim/nav_default_enter_anim"
             app:popEnterAnim="@anim/nav_default_enter_anim"
             app:popExitAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_nav_home_to_loadingFragment"
+            app:destination="@id/loadingFragment" />
     </fragment>
 
     <fragment
@@ -111,8 +114,14 @@
         android:name="com.example.flushhubproto.ui.rating.SubmitReviewFragment"
         android:label="fragment_submit_review"
         tools:layout="@layout/fragment_submit_review" />
-
-
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.example.flushhubproto.LoadingFragment"
+        android:label="LoadingFragment" >
+        <action
+            android:id="@+id/action_loadingFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 
 
 </navigation>

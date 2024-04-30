@@ -4,12 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -27,6 +23,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.flushhubproto.ui.home.BathroomViewModel
@@ -38,9 +35,12 @@ import io.realm.Realm
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        var isLoading = MutableLiveData(true)
+    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
-
 
     private var isDrawerOpen = false
     private var greetBuilder : StringBuilder? = null
@@ -84,6 +84,16 @@ class MainActivity : AppCompatActivity() {
     private fun setupDrawer() {
         topDrawer = findViewById(R.id.topDrawer)
         navController = findNavController(R.id.nav_host_fragment_content_main)
+
+        // Kickstart Loading Screen
+        isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                navController.navigate(R.id.loadingFragment)
+            } else {
+                navController.navigate(R.id.nav_home)
+            }
+        }
+
         val btnMenuClose: ImageButton = findViewById(R.id.menu_button_close)
         val fragmentBannerView:TextView = findViewById(R.id.fragment_banner)
         val btnNavHome: Button = findViewById(R.id.btn_nav_home)
@@ -140,9 +150,6 @@ class MainActivity : AppCompatActivity() {
                     fragmentBannerView.apply {
                         text = "\n" + getString(R.string.find_your_restroom)
                         textSize = 22.0F
-
-
-
                     }
 
                     greetingTextView.visibility = GONE
@@ -171,7 +178,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-
     }
     private fun greetUserWithDistance() {
         val name = getUserName()

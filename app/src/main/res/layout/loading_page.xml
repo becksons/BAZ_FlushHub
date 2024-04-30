@@ -5,7 +5,8 @@
     android:id = "@+id/loading_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fh_tool_bar">
+    android:background="@color/fh_tool_bar"
+    tools:showIn="@layout/activity_main">
 
     <ProgressBar
         android:id="@+id/progressBar"

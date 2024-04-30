@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.schema.bathroom
 import com.google.gson.Gson
 import io.realm.Realm
@@ -154,10 +155,15 @@ class BathroomViewModel : ViewModel() {
                     Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}")
 
                     Triple(test, distance, time)
-                })
+                }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
             }
+            MainActivity.isLoading.postValue(false) // Finish Loading
         }
     }
+    fun queryBathroomsFullQuery(gender: String, minRating: String) {
+
+    }
+    // ===================================================================
 
     override fun onCleared() {
         realm?.close()

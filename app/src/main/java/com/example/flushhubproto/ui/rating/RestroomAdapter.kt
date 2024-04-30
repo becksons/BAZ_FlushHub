@@ -1,5 +1,6 @@
 package com.example.flushhubproto.ui.rating
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +24,6 @@ class RestroomAdapter(private var restrooms: List<Restroom>, private val listene
 
     inner class RestroomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(restroom: Restroom, listener: OnItemClickListener) {
-
-
             itemView.findViewById<Button>(R.id.submit_button)?.setOnClickListener {
                 listener.navigateToSubmitReviewFragment(restroom.id)
             }
@@ -54,16 +53,6 @@ class RestroomAdapter(private var restrooms: List<Restroom>, private val listene
                     ?.setImageResource(R.drawable.man_icon)
 
             }
-
-
-
-
-
-
-
-
-
-
         }
     }
 
@@ -76,6 +65,7 @@ class RestroomAdapter(private var restrooms: List<Restroom>, private val listene
     override fun onBindViewHolder(holder: RestroomViewHolder, position: Int) {
         holder.bind(restrooms[position], listener)
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newData: List<Restroom>) {
         this.restrooms = newData
         notifyDataSetChanged()
