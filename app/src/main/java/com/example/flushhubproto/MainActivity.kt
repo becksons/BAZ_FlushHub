@@ -24,12 +24,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
-
 import com.example.tomtom.R
 import com.example.tomtom.databinding.ActivityMainBinding
 import io.realm.Realm
@@ -91,7 +89,14 @@ class MainActivity : AppCompatActivity() {
             if (isLoading) {
                 navController.navigate(R.id.loadingFragment)
                 binding.root.isClickable = false
+                binding.appBarMain.appBarBanner.visibility = GONE
+                binding.appBarMain.navHeaderMain.root.visibility = GONE
+                binding.appBarMain.openDrawerButton.visibility = GONE
             } else {
+                binding.appBarMain.appBarBanner.visibility =  VISIBLE
+                binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
+                binding.appBarMain.openDrawerButton.visibility = VISIBLE
+
                 navController.navigate(R.id.nav_home)
                 binding.root.isClickable = true
             }
@@ -133,9 +138,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.nav_gallery -> {
-
                     fragmentBannerView.visibility = VISIBLE
-
                     fragmentBannerView.apply {
                         text = getString(R.string.find_your_restroom)
                         textSize = 23.0F

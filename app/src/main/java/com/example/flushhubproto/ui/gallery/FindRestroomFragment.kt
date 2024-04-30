@@ -6,19 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentFindBinding
 
 
 class FindRestroomFragment : Fragment() {
+
     private var _binding: FragmentFindBinding? = null
+    private val bathroomViewModel: BathroomViewModel by activityViewModels()
     private val binding get() = _binding!!
     private var currentQuery: MutableList<String> = mutableListOf("All Gender", "Central", "3.0")
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         _binding = FragmentFindBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.genderRadioGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -29,6 +36,7 @@ class FindRestroomFragment : Fragment() {
                 else -> "All Gender"
             }
             handleGenderSelection(gender)
+
         }
 
         setupListeners()
@@ -36,6 +44,7 @@ class FindRestroomFragment : Fragment() {
     }
     private fun handleGenderSelection(gender: String) {
         currentQuery[0] = gender
+
     }
 
     private fun setupListeners() {
@@ -62,11 +71,17 @@ class FindRestroomFragment : Fragment() {
             // Run Query
             // Switch to Loading Screen
             // Switch Back to Home
+            bathroomViewModel.queryReady.postValue(true)
+            bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
+            bathroomViewModel.queryBathroomsFullQuery()
+            findNavController().navigate(R.id.nav_home)
+
         }
     }
 
     private fun handleCampusSelection(campus: String) {
         currentQuery[1] = campus
+
     }
 
     private fun updateButtonState(selectedButton: View) {
@@ -81,6 +96,7 @@ class FindRestroomFragment : Fragment() {
 
     private fun handleRatingChange(rating: Float) {
         currentQuery[2] = rating.toString()
+
     }
 
     override fun onDestroyView() {
