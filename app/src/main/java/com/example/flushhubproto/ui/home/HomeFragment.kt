@@ -135,15 +135,22 @@ class HomeFragment : Fragment() {
                 val longitude: Double = parts[0].toDouble()
                 val latitude: Double = parts[1].toDouble()
                 val address: String = data.first.Location
+                var distance = "N/A"
+                var time = "N/A"
+                val stars: String = data.first.Rating
+
+                if (data.second != -1.0){
+                    distance = metersToMiles(data.second)
+                    time = data.third.toString()
+                }
 
                 if (address !in processedAddresses) {
                     Log.d("addy", address)
                     processedAddresses.add(address)
                     mapFragment.getMapAsync { tomtomMap ->
-                        markMap(tomtomMap, latitude, longitude, address)
+                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                     }
                 }
-
             }
         }
 
@@ -152,6 +159,11 @@ class HomeFragment : Fragment() {
         observeLocationInfos()
 
         return binding.root
+    }
+
+    private fun metersToMiles(meters: Double): String {
+        val conversionFactor = 0.000621371
+        return String.format("%.1f", meters * conversionFactor)
     }
 
 
@@ -193,7 +205,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
+    private val mapOptions = MapOptions(mapKey ="cgGBmEJ8CTYVh2QoYT5ip8TfzCmDiTHX")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
 
@@ -265,28 +277,36 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom") {
+    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
-            tag = address
-
+            tag = "Address: ${address}\n" +
+                    "Distance: ${distance}" + requireContext().getString(R.string.miles) +
+                    "\nETA: ${eta}" + requireContext().getString(R.string.minutes) +
+                    "\nRating: ${rating}" + requireContext().getString(R.string.stars)
         )
 
         tomtomMap.addMarker(markerOptions)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
-            val locationInfo = "Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
-            val detailText = "Address: ${clickedMarker.tag}, Latitude: ${clickedMarker.coordinate.latitude}, Longitude: ${clickedMarker.coordinate.longitude}"
+            val detailText = clickedMarker.tag
 
-            bathroomViewModel.updateSelectedLocation(detailText)
+            if (detailText != null) {
+                bathroomViewModel.updateSelectedLocation(detailText)
+            }
 
 
             Log.d("MarkerClick", "Marker at $address was clicked.")
-            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
+            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
 
         }
+
+        //longitude:
+        //west: < -71.110940
+        //center: >= -71.110940 && <= -71.100546
+        //east: > -71.100546
     }
     private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
         val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
@@ -357,7 +377,7 @@ class HomeFragment : Fragment() {
             }
 
         }
-        bathroomViewModel.updateSelectedLocation("Address: $address, Latitude: $lat, Longitude: $lon")
+        bathroomViewModel.updateSelectedLocation(address)
     }
     private fun hideGoToRouteLayout() {
 

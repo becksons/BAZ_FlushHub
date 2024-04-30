@@ -70,4 +70,5 @@
     <string name="nearest">The nearest restroom is</string>
     <string name="miles_away">miles away!</string>
     <string name="your_restrooms">Your Restrooms:</string>
+    <string name="stars">stars</string>
 </resources>
