@@ -60,4 +60,5 @@
     <string name="dont_worry">ไม่ต้องห่วง</string>
     <string name="nearest">ห้องน้ำที่ใกล้ที่สุดอยู่</string>
     <string name="miles_away">ไมล์จากคุณ</string>
+    <string name="stars">ดาว</string>
 </resources>
