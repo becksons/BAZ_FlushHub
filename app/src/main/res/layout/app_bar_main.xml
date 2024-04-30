@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.flushhubproto.MainActivity">
 
-    <include layout="@layout/content_main" />
-    <include layout="@layout/nav_header_main"/>
+    <include layout="@layout/content_main" android:id="@+id/content_main" />
+    <include layout="@layout/nav_header_main" android:id="@+id/nav_header_main" />
 
     <ImageButton
         android:id="@+id/open_drawer_button"

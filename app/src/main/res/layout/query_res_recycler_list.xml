@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id = "@+id/query_res_recycler"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id = "@+id/query_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:elevation="10dp"
+
+
+
+
+            >
+            <TextView
+
+                android:layout_width="400dp"
+                android:layout_height="50dp"
+                android:text = "@string/your_restrooms"
+                android:textColor="@color/black"
+                android:textSize="27sp"
+                android:textAlignment="center"
+                android:translationY="-5dp"
+                android:translationX="-20dp"
+                android:layout_margin = "20dp"
+                android:fontFamily="@font/ruda_black">
+
+            </TextView>
+
+
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/nearest_location_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+
+            />
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

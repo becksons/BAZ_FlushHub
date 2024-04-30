@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.schema.bathroom
 import com.example.tomtom.R
@@ -63,7 +62,7 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
             if (location.second == -1.0) {
                 distanceTextView.text = "N/A"
             } else {
-                distanceTextView.text = "${metersToMiles(location.second)}" + itemView.context.getString(R.string.miles)
+                distanceTextView.text = metersToMiles(location.second) + itemView.context.getString(R.string.miles)
             }
 
             if (location.third == -1.0) {

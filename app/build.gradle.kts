@@ -126,7 +126,7 @@ dependencies {
 
     implementation ("androidx.compose.compiler:compiler:1.5.8")//keep at 1.5.8
 
-    //jetpack compose
+
     implementation ("androidx.compose.material:material:1.6.6")
     implementation ("androidx.compose.ui:ui-tooling:1.6.6")
 

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.schema.bathroom
 import com.google.gson.Gson
 import io.realm.Realm
@@ -25,6 +26,18 @@ class BathroomViewModel : ViewModel() {
     private val _selectedLocation = MutableLiveData<String>()
     val selectedLocation: LiveData<String> = _selectedLocation
 
+    //Search query listener
+    private val _queryReady = MutableLiveData<Boolean>(false)
+    val queryReady :MutableLiveData<Boolean> get() = _queryReady
+
+    private val _searchQuery = MutableLiveData<Triple<String,String,String>>()
+    val searchQuery: MutableLiveData<Triple<String,String,String>>get() = _searchQuery
+
+
+
+
+
+
     // Data vars
     private val _bathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
     val bathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get() = _bathrooms
@@ -35,6 +48,7 @@ class BathroomViewModel : ViewModel() {
     fun selectLocation(address: String) {
         _selectedLocation.value = address
     }
+
 
 
     private fun initializeMongoDBRealm() {
@@ -155,11 +169,20 @@ class BathroomViewModel : ViewModel() {
                     Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}")
 
                     Triple(test, distance, time)
-                })
+                }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
             }
+            MainActivity.isLoading.postValue(false) // Finish Loading
         }
     }
+    fun queryBathroomsFullQuery() {
+        if(queryReady.value == true){
+            //do query
+            Log.d("Query ready", "Query ready...")
+            Log.d("Search query: ", searchQuery.value.toString())
+        }
 
+    }
+    // ===================================================================
     override fun onCleared() {
         realm?.close()
         realm = null
