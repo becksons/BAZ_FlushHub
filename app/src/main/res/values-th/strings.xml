@@ -61,4 +61,5 @@
     <string name="nearest">ห้องน้ำที่ใกล้ที่สุดอยู่</string>
     <string name="miles_away">ไมล์จากคุณ</string>
     <string name="stars">ดาว</string>
+    <string name="your_restrooms">ห้องน้ำของคุณ:</string>
 </resources>
