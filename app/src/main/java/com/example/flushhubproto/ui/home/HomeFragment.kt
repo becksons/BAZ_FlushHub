@@ -289,7 +289,6 @@ class HomeFragment : Fragment() {
         )
 
         tomtomMap.addMarker(markerOptions)
-        //tomtomMap.markersShrinkingRange = IntRange(200, 500)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
@@ -303,6 +302,10 @@ class HomeFragment : Fragment() {
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
 
         }
+
+        //west: < -71.110940
+        //center: >= -71.110940 && <= -71.100546
+        //east: > -71.100546
     }
     private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
         val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
