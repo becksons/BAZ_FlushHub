@@ -303,6 +303,7 @@ class HomeFragment : Fragment() {
 
         }
 
+        //longitude:
         //west: < -71.110940
         //center: >= -71.110940 && <= -71.100546
         //east: > -71.100546
