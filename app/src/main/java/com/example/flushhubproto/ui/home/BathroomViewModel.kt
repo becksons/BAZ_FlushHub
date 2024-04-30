@@ -94,7 +94,7 @@ class BathroomViewModel : ViewModel() {
 
     // Calculates Distance and Travel time based on given Coordinates
     private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
-        val apiKey = "cgGBmEJ8CTYVh2QoYT5ip8TfzCmDiTHX"
+        val apiKey = "YbAIKDlzANgswfBTirAdDONIKfLN9n6J"
         val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=$apiKey&travelMode=pedestrian"
         val client = OkHttpClient()
         val request = Request.Builder()

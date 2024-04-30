@@ -105,6 +105,8 @@ class HomeFragment : Fragment() {
     private val bathroomViewModel: BathroomViewModel by activityViewModels()
     private var isBarVisible: Boolean = false
 
+    private val markers = mutableListOf<Marker>()
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -145,7 +147,6 @@ class HomeFragment : Fragment() {
                 }
 
                 if (address !in processedAddresses) {
-                    Log.d("addy", address)
                     processedAddresses.add(address)
                     mapFragment.getMapAsync { tomtomMap ->
                         markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
@@ -205,7 +206,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private val mapOptions = MapOptions(mapKey ="cgGBmEJ8CTYVh2QoYT5ip8TfzCmDiTHX")
+    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
 
@@ -278,9 +279,12 @@ class HomeFragment : Fragment() {
     }
 
     fun filerMap(area: String){
-        mapFragment.getMapAsync{tomtomMap ->
-            tomtomMap.removeMarkers()
+        Log.d("markers in remove", markers.toString())
+        markers.forEach { marker ->
+            Log.d("removed", marker.id.toString())
+            marker.remove()
         }
+        markers.clear()
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
             val processedAddresses = mutableSetOf<String>()
 
@@ -303,17 +307,21 @@ class HomeFragment : Fragment() {
                     mapFragment.getMapAsync{tomtomMap ->
                         if(area == "west"){
                             if(longitude < -71.110940){
+                                Log.d("remove", longitude.toString())
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                             }
                         }else if(area == "central"){
+                            Log.d("remove", "central")
                             if(longitude >= -71.110940 && longitude <= -71.100546){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                             }
                         }else if(area == "east"){
+                            Log.d("remove", "east")
                             if(longitude > -71.100546){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                             }
                         }else{
+                            Log.d("remove", "all")
                             markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                         }
                     }
@@ -333,7 +341,9 @@ class HomeFragment : Fragment() {
                     "\nRating: ${rating}" + requireContext().getString(R.string.stars)
         )
 
-        tomtomMap.addMarker(markerOptions)
+        val marker = tomtomMap.addMarker(markerOptions)
+
+        markers.add(marker)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
