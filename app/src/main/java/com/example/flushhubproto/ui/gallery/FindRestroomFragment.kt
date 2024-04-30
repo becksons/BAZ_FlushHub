@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.flushhubproto.ui.home.BathroomViewModel
+import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentFindBinding
 
@@ -17,6 +18,7 @@ class FindRestroomFragment : Fragment() {
 
     private var _binding: FragmentFindBinding? = null
     private val bathroomViewModel: BathroomViewModel by activityViewModels()
+    private val homeFragment: HomeFragment = HomeFragment()
     private val binding get() = _binding!!
     private var currentQuery: MutableList<String> = mutableListOf("All Gender", "Central", "3.0")
 
@@ -48,16 +50,20 @@ class FindRestroomFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        var area: String = "all"
         binding.campusEast.setOnClickListener {
             handleCampusSelection("East")
+            area = "east"
             updateButtonState(it)
         }
         binding.campusCentral.setOnClickListener {
             handleCampusSelection("Central")
+            area = "central"
             updateButtonState(it)
         }
         binding.campusWest.setOnClickListener {
             handleCampusSelection("West")
+            area = "west"
             updateButtonState(it)
         }
 
@@ -71,6 +77,7 @@ class FindRestroomFragment : Fragment() {
             // Run Query
             // Switch to Loading Screen
             // Switch Back to Home
+            homeFragment.filerMap(area)
             bathroomViewModel.queryReady.postValue(true)
             bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
             bathroomViewModel.queryBathroomsFullQuery()
