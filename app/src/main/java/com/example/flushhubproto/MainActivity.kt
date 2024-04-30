@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.flushhubproto.ui.home.BathroomViewModel
@@ -89,8 +90,10 @@ class MainActivity : AppCompatActivity() {
         isLoading.observe(this) { isLoading ->
             if (isLoading) {
                 navController.navigate(R.id.loadingFragment)
+                binding.root.isClickable = false
             } else {
                 navController.navigate(R.id.nav_home)
+                binding.root.isClickable = true
             }
         }
 
