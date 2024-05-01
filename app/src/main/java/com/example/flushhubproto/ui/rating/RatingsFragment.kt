@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentRatingsBinding
@@ -57,6 +58,10 @@ class RatingsFragment : Fragment() {
         viewModel.ratings.observe(viewLifecycleOwner) { ratings ->
             (binding.ratingsRecyclerView.adapter as RestroomAdapter).updateData(ratings)
             binding.emptyView.visibility = if (ratings.isEmpty()) View.VISIBLE else View.GONE
+        }
+
+        binding.leaveReview.setOnClickListener {
+            findNavController().navigate(R.id.submitReviewFragment)
         }
     }
 
