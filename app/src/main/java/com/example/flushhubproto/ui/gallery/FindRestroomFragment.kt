@@ -77,7 +77,6 @@ class FindRestroomFragment : Fragment() {
             // Run Query
             // Switch to Loading Screen
             // Switch Back to Home
-            homeFragment.filerMap(area)
             bathroomViewModel.queryReady.postValue(true)
             bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
             bathroomViewModel.queryBathroomsFullQuery()
