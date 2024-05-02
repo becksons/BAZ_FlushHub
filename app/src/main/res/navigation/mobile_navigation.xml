@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_nav_gallery_to_nav_slideshow"
             app:destination="@id/nav_slideshow" />
+        <action
+            android:id="@+id/action_nav_gallery_to_queryResultFragment"
+            app:destination="@id/queryResultFragment" />
     </fragment>
 
     <fragment
@@ -121,6 +124,14 @@
         <action
             android:id="@+id/action_loadingFragment_to_nav_home"
             app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/queryResultFragment"
+        android:name="com.example.flushhubproto.ui.gallery.QueryResultFragment"
+        android:label="QueryResultFragment" >
+        <action
+            android:id="@+id/action_queryResultFragment_to_nav_gallery"
+            app:destination="@id/nav_gallery" />
     </fragment>
 
 

@@ -41,7 +41,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/nearest_location_recycler_view"
+            android:id="@+id/query_res_recycler_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
