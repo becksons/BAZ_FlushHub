@@ -105,8 +105,6 @@ class HomeFragment : Fragment() {
     private lateinit var bathroomViewModel: BathroomViewModel
     private var isBarVisible: Boolean = false
 
-    private val markers = mutableListOf<Marker>()
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,9 +113,9 @@ class HomeFragment : Fragment() {
             isBarVisible = !isBarVisible
         }
 
-        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
-            filterMap(criteria)
-        }
+//        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
+//            filterMap(criteria)
+//        }
 
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
@@ -286,75 +284,18 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun filterMap(area: String = "all"){
-        Log.d("Find Button call from home frag","filter map called...")
-        Log.d("markers in remove", markers.toString())
-        markers.forEach { marker ->
-            Log.d("removed", marker.id.toString())
-            marker.remove()
-        }
-        markers.clear()
-
-        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
-            val processedAddresses = mutableSetOf<String>()
-
-            dataList?.forEach { data ->
-                val parts = data.first.Coordinates.split(',')
-                val longitude: Double = parts[0].toDouble()
-                val latitude: Double = parts[1].toDouble()
-                val address: String = data.first.Location
-                var distance = "N/A"
-                var time = "N/A"
-                var stars = "N/A"
-
-                if (data.second != -1.0){
-                    distance = metersToMiles(data.second)
-                    time = data.third.toString()
-                    stars = data.first.Rating.toString()
-                }
-
-                if (address !in processedAddresses) {
-                    processedAddresses.add(address)
-                    mapFragment.getMapAsync{tomtomMap ->
-                        if(area == "west"){
-                            if(longitude < -71.110940){
-                                Log.d("remove", longitude.toString())
-                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-                            }
-                        }else if(area == "central"){
-                            Log.d("remove", "central")
-                            if(longitude >= -71.110940 && longitude <= -71.100546){
-                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-                            }
-                        }else if(area == "east"){
-                            Log.d("remove", "east")
-                            if(longitude > -71.100546){
-                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-                            }
-                        }else{
-                            Log.d("remove", "all")
-                            markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
             tag = "Address: ${address}\n" +
-                    "Distance: ${distance}" + requireContext().getString(R.string.miles) +
-                    "\nETA: ${eta}" + requireContext().getString(R.string.minutes) +
-                    "\nRating: ${rating}" + requireContext().getString(R.string.stars)
+                    "Distance: $distance" + requireContext().getString(R.string.miles) +
+                    "\nETA: $eta" + requireContext().getString(R.string.minutes) +
+                    "\nRating: $rating" + requireContext().getString(R.string.stars)
         )
 
         val marker = tomtomMap.addMarker(markerOptions)
-
-        markers.add(marker)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag

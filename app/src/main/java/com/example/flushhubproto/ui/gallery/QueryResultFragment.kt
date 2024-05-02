@@ -25,6 +25,7 @@ import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
+import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
@@ -75,12 +76,29 @@ class QueryResultFragment: Fragment() {
     private lateinit var adapter: LocationInfoAdapter
     private val markers = mutableListOf<Marker>()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
+//            filterMap(criteria)
+//        }
+
+        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
+            binding.detailsTextView.text = details
+        }
+
+
+        androidLocationProvider = AndroidLocationProvider(
+            context = requireContext(),
+            config = androidLocationProviderConfig
+        )
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = QueryResFragmentBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         requestPermissionsIfNecessary()
-        filterMap()
+        filterMap("west")
 
         setupRecyclerView(binding)
 
@@ -200,7 +218,6 @@ class QueryResultFragment: Fragment() {
 
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
-                //calRange(location.position.latitude, location.position.longitude, 42.350026020986256, -71.10326632227299)
             }
 
 
@@ -217,9 +234,9 @@ class QueryResultFragment: Fragment() {
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
             tag = "Address: ${address}\n" +
-                    "Distance: ${distance}" + requireContext().getString(R.string.miles) +
-                    "\nETA: ${eta}" + requireContext().getString(R.string.minutes) +
-                    "\nRating: ${rating}" + requireContext().getString(R.string.stars)
+                    "Distance: $distance" + requireContext().getString(R.string.miles) +
+                    "\nETA: $eta" + requireContext().getString(R.string.minutes) +
+                    "\nRating: $rating" + requireContext().getString(R.string.stars)
         )
 
         val marker = tomtomMap.addMarker(markerOptions)
@@ -236,7 +253,6 @@ class QueryResultFragment: Fragment() {
 
             Log.d("MarkerClick", "Marker at $address was clicked.")
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
-
         }
     }
     private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
