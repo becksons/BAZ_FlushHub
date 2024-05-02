@@ -33,14 +33,12 @@ class BathroomViewModel : ViewModel() {
     private val _searchQuery = MutableLiveData<Triple<String,String,String>>()
     val searchQuery: MutableLiveData<Triple<String,String,String>>get() = _searchQuery
 
-
-
-
-
-
     // Data vars
     private val _bathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
     val bathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get() = _bathrooms
+
+    private val _queriedBathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
+    val queriedBathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get()  = _queriedBathrooms
 
     init {
         initializeMongoDBRealm()
@@ -174,13 +172,77 @@ class BathroomViewModel : ViewModel() {
             MainActivity.isLoading.postValue(false) // Finish Loading
         }
     }
-    fun queryBathroomsFullQuery() {
-        if(queryReady.value == true){
-            //do query
-            Log.d("Query ready", "Query ready...")
-            Log.d("Search query: ", searchQuery.value.toString())
-        }
+    fun queryBathroomsFullQuery(gender: String, area: String, minRating: Double, currLat: Double, currLong: Double) {
+        realm?.executeTransactionAsync { bgRealm ->
+            val results = bgRealm.where(bathroom::class.java)
+            .equalTo("Type", gender)
+            .greaterThanOrEqualTo("Rating", minRating)
+            .findAll()
 
+            val queryResults = results?.let { bgRealm.copyFromRealm(it) }
+            if (!queryResults.isNullOrEmpty()) {
+                _queriedBathrooms.postValue(queryResults.mapNotNull { queryRes->
+                    // Defaults
+                    var distance = -1.0
+                    var time = -1.0
+
+                    val parts = queryRes.Coordinates.split(',')
+                    val longitude: Double = parts[0].toDouble()
+                    val latitude: Double = parts[1].toDouble()
+
+                    Log.i("FlUSHHUB", "[QUERY] Got locations of: ${queryRes.Location}")
+
+                    if(area == "west" && longitude < -71.110940) {
+                        Log.i("FlUSHHUB", "[QUERY] CALCULATING WEST")
+                        val calculations = calcRange(
+                            currLat,
+                            currLong,
+                            latitude,
+                            longitude
+                        )
+
+                        if (calculations != null) {
+                            distance = calculations[0].toDouble()
+                            time = calculations[1].toDouble()
+                        }
+                    } else if(area == "central" && longitude >= -71.110940 && longitude <= -71.100546){
+                        Log.i("FlUSHHUB", "[QUERY] CALCULATING CENTRAL")
+                        val calculations = calcRange(
+                            currLat,
+                            currLong,
+                            latitude,
+                            longitude
+                        )
+
+                        if (calculations != null) {
+                            distance = calculations[0].toDouble()
+                            time = calculations[1].toDouble()
+                        }
+                    } else if(area == "east" && longitude > -71.100546){
+                        Log.i("FlUSHHUB", "[QUERY] CALCULATING EAST")
+                        val calculations = calcRange(
+                            currLat,
+                            currLong,
+                            latitude,
+                            longitude
+                        )
+
+                        if (calculations != null) {
+                            distance = calculations[0].toDouble()
+                            time = calculations[1].toDouble()
+                        }
+                    }
+
+                    if (distance != -1.0 && time != -1.0) {
+                        Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
+                        Triple(queryRes, distance, time)
+                    } else {
+                        null
+                    }
+                }.sortedBy { it.second })
+            }
+            MainActivity.isLoading.postValue(false) // Finish Loading
+        }
     }
     // ===================================================================
     override fun onCleared() {

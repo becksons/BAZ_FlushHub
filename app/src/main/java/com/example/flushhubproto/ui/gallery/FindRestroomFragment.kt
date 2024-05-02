@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
@@ -20,14 +21,13 @@ class FindRestroomFragment : Fragment() {
     private val bathroomViewModel: BathroomViewModel by activityViewModels()
     private val homeFragment: HomeFragment = HomeFragment()
     private val binding get() = _binding!!
-    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "Central", "3.0")
+    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "central", "3.0")
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentFindBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.genderRadioGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -41,28 +41,38 @@ class FindRestroomFragment : Fragment() {
 
         }
 
+        bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { dataList ->
+            dataList?.forEach { data->
+                val parts = data.first.Coordinates.split(',')
+                val longitude: Double = parts[0].toDouble()
+                val latitude: Double = parts[1].toDouble()
+                val address: String = data.first.Location
+                val stars: Double = data.first.Rating
+                Log.d("QUERY INFO","[FLUSHUB QUERY] Found Bathroom at $longitude, $latitude at $address with $stars stars.")
+            }
+        }
+
         setupListeners()
         return root
     }
     private fun handleGenderSelection(gender: String) {
         currentQuery[0] = gender
-
     }
 
     private fun setupListeners() {
         var area: String = "all"
         binding.campusEast.setOnClickListener {
-            handleCampusSelection("East")
+            handleCampusSelection("east")
             area = "east"
             updateButtonState(it)
         }
         binding.campusCentral.setOnClickListener {
-            handleCampusSelection("Central")
+            handleCampusSelection("central")
             area = "central"
             updateButtonState(it)
         }
         binding.campusWest.setOnClickListener {
-            handleCampusSelection("West")
+            handleCampusSelection("west")
             area = "west"
             updateButtonState(it)
         }
@@ -74,14 +84,14 @@ class FindRestroomFragment : Fragment() {
         binding.findButton.setOnClickListener {
             Log.d("Find Button","Find Button Clicked!")
             Log.d("Find Button","Current Query: $currentQuery")
-            // Run Query
-            // Switch to Loading Screen
-            // Switch Back to Home
-            bathroomViewModel.queryReady.postValue(true)
-            bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
-            bathroomViewModel.queryBathroomsFullQuery()
-            homeFragment.filterMap(area)
-            findNavController().navigate(R.id.loadingFragment)
+            MainActivity.isLoading.postValue(true) // Start Loading
+            bathroomViewModel.queryBathroomsFullQuery(
+                currentQuery[0],
+                currentQuery[1],
+                currentQuery[2].toDouble(),
+                42.350498333333334,
+                -71.10539833333333
+            )
         }
     }
 

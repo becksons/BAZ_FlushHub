@@ -298,7 +298,7 @@ class HomeFragment : Fragment() {
                 val address: String = data.first.Location
                 var distance = "N/A"
                 var time = "N/A"
-                val stars: String = data.first.Rating
+                val stars: Double = data.first.Rating
 
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
@@ -310,21 +310,21 @@ class HomeFragment : Fragment() {
                     mapFragment.getMapAsync{tomtomMap ->
                         if(area == "west"){
                             if(longitude < -71.110940){
-                                Log.d("remove", longitude.toString())
+//                                Log.d("remove", longitude.toString())
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                             }
                         }else if(area == "central"){
-                            Log.d("remove", "central")
+//                            Log.d("remove", "central")
                             if(longitude >= -71.110940 && longitude <= -71.100546){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                             }
                         }else if(area == "east"){
-                            Log.d("remove", "east")
+//                            Log.d("remove", "east")
                             if(longitude > -71.100546){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                             }
                         }else{
-                            Log.d("remove", "all")
+//                            Log.d("remove", "all")
                             markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                         }
                     }
@@ -333,7 +333,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
+    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: Double = 0.0) {
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
             coordinate = loc,
