@@ -15,16 +15,31 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent">
 
+        <Button
+            android:id="@+id/query_res_back_button"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_margin="100dp"
+            android:layout_marginStart="40dp"
+
+            android:layout_marginTop="20dp"
+
+            android:text="@string/back"
+            android:translationX="-80dp"
+            android:translationY="-80dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/query_map_container"
-            android:layout_width="wrap_content"
-            android:layout_height="336dp"
-            android:layout_marginEnd="315dp"
+            android:layout_width="410dp"
+            android:layout_height="450dp"
             android:background="@android:color/transparent"
-            app:layout_constraintEnd_toStartOf="@+id/query_res_back_button"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/go_to_route_layout"
+            app:layout_constraintTop_toTopOf="parent"
             tools:context="com.example.flushhubproto.ui.home.HomeFragment" />
 
         <LinearLayout
@@ -98,29 +113,17 @@
 
             <!-- TextView for displaying route details like coordinates, distance, and time -->
 
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/query_res_back_button"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="340dp"
-            android:text="@string/back"
-            app:layout_constraintBottom_toTopOf="@+id/query_res_recycler_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/query_map_container"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/query_res_recycler_view"
             layout="@layout/query_res_recycler_list"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="300dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/query_res_back_button" />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

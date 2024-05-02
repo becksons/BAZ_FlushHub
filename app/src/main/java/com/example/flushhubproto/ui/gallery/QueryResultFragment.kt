@@ -119,11 +119,12 @@ class QueryResultFragment: Fragment() {
                 val address: String = data.first.Location
                 var distance = "N/A"
                 var time = "N/A"
-                val stars: String = data.first.Rating
+                var stars = "N/A"
 
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
                     time = data.third.toString()
+                    stars = data.first.Rating.toString()
                 }
 
                 if (address !in processedAddresses) {
