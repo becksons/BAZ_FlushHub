@@ -42,6 +42,14 @@ class BathroomViewModel : ViewModel() {
     private val _bathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
     val bathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get() = _bathrooms
 
+
+    private val _filterCriteria = MutableLiveData<String>()
+    val filterCriteria:MutableLiveData<String>  get() = _filterCriteria
+
+    fun setFilterCriteria(criteria: String) {
+        _filterCriteria.value = criteria
+    }
+
     init {
         initializeMongoDBRealm()
     }
