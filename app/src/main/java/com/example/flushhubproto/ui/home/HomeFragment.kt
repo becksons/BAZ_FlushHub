@@ -91,7 +91,6 @@ class HomeFragment : Fragment() {
 
         var currentLongitude: Double = 0.0
         var currentLatitude: Double = 0.0
-        private val mapOptions = MapOptions(mapKey ="cgGBmEJ8CTYVh2QoYT5ip8TfzCmDiTHX")
     }
 
 
@@ -105,6 +104,8 @@ class HomeFragment : Fragment() {
 
     private val bathroomViewModel: BathroomViewModel by activityViewModels()
     private var isBarVisible: Boolean = false
+
+    private val markers = mutableListOf<Marker>()
 
 
 
@@ -128,32 +129,33 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
-        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
-            val processedAddresses = mutableSetOf<String>()
+//        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
+//            val processedAddresses = mutableSetOf<String>()
+//
+//            dataList?.forEach { data ->
+//                val parts = data.first.Coordinates.split(',')
+//                val longitude: Double = parts[0].toDouble()
+//                val latitude: Double = parts[1].toDouble()
+//                val address: String = data.first.Location
+//                var distance = "N/A"
+//                var time = "N/A"
+//                val stars: String = data.first.Rating
+//
+//                if (data.second != -1.0){
+//                    distance = metersToMiles(data.second)
+//                    time = data.third.toString()
+//                }
+//
+//                if (address !in processedAddresses) {
+//                    processedAddresses.add(address)
+//                    mapFragment.getMapAsync { tomtomMap ->
+//                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
+//                    }
+//                }
+//            }
+//        }
 
-            dataList?.forEach { data ->
-                val parts = data.first.Coordinates.split(',')
-                val longitude: Double = parts[0].toDouble()
-                val latitude: Double = parts[1].toDouble()
-                val address: String = data.first.Location
-                var distance = "N/A"
-                var time = "N/A"
-                val stars: String = data.first.Rating
-
-                if (data.second != -1.0){
-                    distance = metersToMiles(data.second)
-                    time = data.third.toString()
-                }
-
-                if (address !in processedAddresses) {
-                    Log.d("addy", address)
-                    processedAddresses.add(address)
-                    mapFragment.getMapAsync { tomtomMap ->
-                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-                    }
-                }
-            }
-        }
+        filterMap()
 
         setupRecyclerView(binding)
 
@@ -206,9 +208,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-
+    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
     private val mapFragment = MapFragment.newInstance(mapOptions)
-
 
 
     private val androidLocationProviderConfig = AndroidLocationProviderConfig(
@@ -254,7 +255,6 @@ class HomeFragment : Fragment() {
         )
 
         tomtomMap.enableLocationMarker(locationMarkerOptions)
-
     }
 
     private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
@@ -280,6 +280,59 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun filterMap(area: String = "all"){
+        Log.d("markers in remove", markers.toString())
+        markers.forEach { marker ->
+            Log.d("removed", marker.id.toString())
+            marker.remove()
+        }
+        markers.clear()
+
+        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
+            val processedAddresses = mutableSetOf<String>()
+
+            dataList?.forEach { data ->
+                val parts = data.first.Coordinates.split(',')
+                val longitude: Double = parts[0].toDouble()
+                val latitude: Double = parts[1].toDouble()
+                val address: String = data.first.Location
+                var distance = "N/A"
+                var time = "N/A"
+                val stars: String = data.first.Rating
+
+                if (data.second != -1.0){
+                    distance = metersToMiles(data.second)
+                    time = data.third.toString()
+                }
+
+                if (address !in processedAddresses) {
+                    processedAddresses.add(address)
+                    mapFragment.getMapAsync{tomtomMap ->
+                        if(area == "west"){
+                            if(longitude < -71.110940){
+                                Log.d("remove", longitude.toString())
+                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
+                            }
+                        }else if(area == "central"){
+                            Log.d("remove", "central")
+                            if(longitude >= -71.110940 && longitude <= -71.100546){
+                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
+                            }
+                        }else if(area == "east"){
+                            Log.d("remove", "east")
+                            if(longitude > -71.100546){
+                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
+                            }
+                        }else{
+                            Log.d("remove", "all")
+                            markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
@@ -291,7 +344,9 @@ class HomeFragment : Fragment() {
                     "\nRating: ${rating}" + requireContext().getString(R.string.stars)
         )
 
-        tomtomMap.addMarker(markerOptions)
+        val marker = tomtomMap.addMarker(markerOptions)
+
+        markers.add(marker)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
@@ -305,12 +360,9 @@ class HomeFragment : Fragment() {
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
 
         }
-
-        //longitude:
-        //west: < -71.110940
-        //center: >= -71.110940 && <= -71.100546
-        //east: > -71.100546
     }
+
+
     private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
         val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
         val client = OkHttpClient()

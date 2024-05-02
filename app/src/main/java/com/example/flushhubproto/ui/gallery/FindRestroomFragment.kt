@@ -80,9 +80,8 @@ class FindRestroomFragment : Fragment() {
             bathroomViewModel.queryReady.postValue(true)
             bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
             bathroomViewModel.queryBathroomsFullQuery()
-            findNavController().navigate(R.id.loadingFragment)
             homeFragment.filterMap(area)
-
+            findNavController().navigate(R.id.loadingFragment)
         }
     }
 
