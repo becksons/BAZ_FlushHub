@@ -303,6 +303,12 @@ class QueryResultFragment: Fragment() {
         minTimeInterval = 250L.milliseconds,
         minDistance = Distance.meters(20.0)
     )
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        androidLocationProvider = null
+
+    }
 
 
 
