@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.flushhubproto.MainActivity
@@ -20,7 +22,9 @@ class FindRestroomFragment : Fragment() {
     private lateinit var bathroomViewModel: BathroomViewModel
     private val binding get() = _binding!!
     private var currentQuery: MutableList<String> = mutableListOf("All Gender", "central", "3.0")
-
+    companion object{
+        var isQueryLoading = MutableLiveData(false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +32,7 @@ class FindRestroomFragment : Fragment() {
     ): View {
         _binding = FragmentFindBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         binding.genderRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             val gender = when (checkedId) {
@@ -37,6 +42,7 @@ class FindRestroomFragment : Fragment() {
                 else -> "All Gender"
             }
             handleGenderSelection(gender)
+
 
         }
 
@@ -51,6 +57,7 @@ class FindRestroomFragment : Fragment() {
             }
         }
 
+
         setupListeners()
         return root
     }
@@ -59,20 +66,18 @@ class FindRestroomFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        var area: String = "all"
         binding.campusEast.setOnClickListener {
             handleCampusSelection("east")
-            area = "east"
+
             updateButtonState(it)
         }
         binding.campusCentral.setOnClickListener {
             handleCampusSelection("central")
-            area = "central"
+
             updateButtonState(it)
         }
         binding.campusWest.setOnClickListener {
             handleCampusSelection("west")
-            area = "west"
             updateButtonState(it)
         }
 
@@ -83,7 +88,21 @@ class FindRestroomFragment : Fragment() {
         binding.findButton.setOnClickListener {
             Log.d("Find Button","Find Button Clicked!")
             Log.d("Find Button","Current Query: $currentQuery")
-            MainActivity.isLoading.postValue(true) // Start Loading
+            isQueryLoading.postValue(true)
+            isQueryLoading.observe(viewLifecycleOwner) { isLoading ->
+                if (isLoading) {
+                    Log.d("Query loading", "Query is loading")
+                    findNavController().navigate(R.id.loadingFragment)
+                } else {
+                    Log.d("Query loading", "Done loading")
+                    findNavController().navigate(R.id.queryResultFragment)
+
+
+
+                }
+            }
+
+
             bathroomViewModel.queryBathroomsFullQuery(
                 currentQuery[0],
                 currentQuery[1],
@@ -91,6 +110,8 @@ class FindRestroomFragment : Fragment() {
                 42.350498333333334,
                 -71.10539833333333
             )
+            bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
+
         }
     }
 
@@ -101,6 +122,7 @@ class FindRestroomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
     }
@@ -114,9 +136,9 @@ class FindRestroomFragment : Fragment() {
             }
         }
     }
-    fun applyFilter(criteria: String) {
-        bathroomViewModel.setFilterCriteria(criteria)
-    }
+//    fun applyFilter(criteria: String) {
+//        bathroomViewModel.setFilterCriteria(criteria)
+//    }
 
     private fun handleRatingChange(rating: Float) {
         currentQuery[2] = rating.toString()

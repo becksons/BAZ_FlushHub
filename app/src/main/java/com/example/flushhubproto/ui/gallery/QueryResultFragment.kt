@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.LocationInfoAdapter
@@ -74,10 +76,10 @@ class QueryResultFragment: Fragment() {
     private var androidLocationProvider: LocationProvider? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: LocationInfoAdapter
-    private val markers = mutableListOf<Marker>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 //        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
 //            filterMap(criteria)
@@ -98,11 +100,16 @@ class QueryResultFragment: Fragment() {
         _binding = QueryResFragmentBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         requestPermissionsIfNecessary()
-        filterMap("west")
 
-        setupRecyclerView(binding)
+          val queryRes = bathroomViewModel.searchQuery.value?.second
+          filterMap(queryRes.toString())
 
-        observeLocationInfos()
+          setupRecyclerView(binding)
+
+          observeLocationInfos()
+
+
+
         return binding.root
     }
     private fun setupRecyclerView(binding: QueryResFragmentBinding) {
@@ -120,12 +127,6 @@ class QueryResultFragment: Fragment() {
     }
     fun filterMap(area: String = "all"){
         Log.d("Find Button call from home frag","filter map called...")
-        Log.d("markers in remove", markers.toString())
-        markers.forEach { marker ->
-            Log.d("removed", marker.id.toString())
-            marker.remove()
-        }
-        markers.clear()
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
             val processedAddresses = mutableSetOf<String>()
@@ -240,8 +241,6 @@ class QueryResultFragment: Fragment() {
         )
 
         val marker = tomtomMap.addMarker(markerOptions)
-
-        markers.add(marker)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.schema.bathroom
+import com.example.flushhubproto.ui.gallery.FindRestroomFragment
 import com.google.gson.Gson
 import io.realm.Realm
 import io.realm.mongodb.App
@@ -39,6 +40,8 @@ class BathroomViewModel : ViewModel() {
 
     private val _queriedBathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
     val queriedBathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get()  = _queriedBathrooms
+
+
 
     init {
         initializeMongoDBRealm()
@@ -241,7 +244,7 @@ class BathroomViewModel : ViewModel() {
                     }
                 }.sortedBy { it.second })
             }
-            MainActivity.isLoading.postValue(false) // Finish Loading
+           FindRestroomFragment.isQueryLoading.postValue(false) // Finish Loading
         }
     }
     // ===================================================================
