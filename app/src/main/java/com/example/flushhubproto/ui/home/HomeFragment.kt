@@ -129,33 +129,32 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requestPermissionsIfNecessary()
 
-//        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
-//            val processedAddresses = mutableSetOf<String>()
-//
-//            dataList?.forEach { data ->
-//                val parts = data.first.Coordinates.split(',')
-//                val longitude: Double = parts[0].toDouble()
-//                val latitude: Double = parts[1].toDouble()
-//                val address: String = data.first.Location
-//                var distance = "N/A"
-//                var time = "N/A"
-//                val stars: String = data.first.Rating
-//
-//                if (data.second != -1.0){
-//                    distance = metersToMiles(data.second)
-//                    time = data.third.toString()
-//                }
-//
-//                if (address !in processedAddresses) {
-//                    processedAddresses.add(address)
-//                    mapFragment.getMapAsync { tomtomMap ->
-//                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-//                    }
-//                }
-//            }
-//        }
+        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
+            val processedAddresses = mutableSetOf<String>()
 
-        filterMap()
+            dataList?.forEach { data ->
+                val parts = data.first.Coordinates.split(',')
+                val longitude: Double = parts[0].toDouble()
+                val latitude: Double = parts[1].toDouble()
+                val address: String = data.first.Location
+                var distance = "N/A"
+                var time = "N/A"
+                var stars = "N/A"
+
+                if (data.second != -1.0){
+                    distance = metersToMiles(data.second)
+                    time = data.third.toString()
+                    stars = data.first.Rating.toString()
+                }
+
+                if (address !in processedAddresses) {
+                    processedAddresses.add(address)
+                    mapFragment.getMapAsync { tomtomMap ->
+                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
+                    }
+                }
+            }
+        }
 
         setupRecyclerView(binding)
 
@@ -298,11 +297,12 @@ class HomeFragment : Fragment() {
                 val address: String = data.first.Location
                 var distance = "N/A"
                 var time = "N/A"
-                val stars: String = data.first.Rating
+                var stars = "N/A"
 
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
                     time = data.third.toString()
+                    stars = data.first.Rating.toString()
                 }
 
                 if (address !in processedAddresses) {
