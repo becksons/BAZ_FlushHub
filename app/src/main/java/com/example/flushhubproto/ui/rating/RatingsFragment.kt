@@ -47,10 +47,10 @@ class RatingsFragment : Fragment() {
             }
 
             override fun onReviewsClicked(restroomId: Int) {
-                //review click here
+            //review click here
             }
             override fun onLeaveReviewClicked(restroomId: Int) {
-                //leave review click here
+            //leave review click here
             }
         })
 
