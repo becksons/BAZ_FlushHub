@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.LocationInfoAdapter
@@ -102,7 +102,7 @@ class HomeFragment : Fragment() {
 
     private var isExpanded = false
 
-    private val bathroomViewModel: BathroomViewModel by activityViewModels()
+    private lateinit var bathroomViewModel: BathroomViewModel
     private var isBarVisible: Boolean = false
 
     private val markers = mutableListOf<Marker>()
@@ -114,9 +114,15 @@ class HomeFragment : Fragment() {
         fun toggleBar() {
             isBarVisible = !isBarVisible
         }
+
+        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
+            filterMap(criteria)
+        }
+
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
         }
+
 
         androidLocationProvider = AndroidLocationProvider(
             context = requireContext(),
@@ -127,35 +133,35 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         requestPermissionsIfNecessary()
 
-//        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
-//            val processedAddresses = mutableSetOf<String>()
-//
-//            dataList?.forEach { data ->
-//                val parts = data.first.Coordinates.split(',')
-//                val longitude: Double = parts[0].toDouble()
-//                val latitude: Double = parts[1].toDouble()
-//                val address: String = data.first.Location
-//                var distance = "N/A"
-//                var time = "N/A"
-//                val stars: String = data.first.Rating
-//
-//                if (data.second != -1.0){
-//                    distance = metersToMiles(data.second)
-//                    time = data.third.toString()
-//                }
-//
-//                if (address !in processedAddresses) {
-//                    processedAddresses.add(address)
-//                    mapFragment.getMapAsync { tomtomMap ->
-//                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-//                    }
-//                }
-//            }
-//        }
+        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
+            val processedAddresses = mutableSetOf<String>()
 
-        filterMap()
+            dataList?.forEach { data ->
+                val parts = data.first.Coordinates.split(',')
+                val longitude: Double = parts[0].toDouble()
+                val latitude: Double = parts[1].toDouble()
+                val address: String = data.first.Location
+                var distance = "N/A"
+                var time = "N/A"
+                var stars = "N/A"
+
+                if (data.second != -1.0){
+                    distance = metersToMiles(data.second)
+                    time = data.third.toString()
+                    stars = data.first.Rating.toString()
+                }
+
+                if (address !in processedAddresses) {
+                    processedAddresses.add(address)
+                    mapFragment.getMapAsync { tomtomMap ->
+                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
+                    }
+                }
+            }
+        }
 
         setupRecyclerView(binding)
 
@@ -281,6 +287,7 @@ class HomeFragment : Fragment() {
     }
 
     fun filterMap(area: String = "all"){
+        Log.d("Find Button call from home frag","filter map called...")
         Log.d("markers in remove", markers.toString())
         markers.forEach { marker ->
             Log.d("removed", marker.id.toString())
@@ -303,6 +310,7 @@ class HomeFragment : Fragment() {
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
                     time = data.third.toString()
+                    stars = data.first.Rating.toString()
                 }
 
                 if (address !in processedAddresses) {

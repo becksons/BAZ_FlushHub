@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
-import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentFindBinding
 
@@ -18,8 +17,7 @@ import com.example.tomtom.databinding.FragmentFindBinding
 class FindRestroomFragment : Fragment() {
 
     private var _binding: FragmentFindBinding? = null
-    private val bathroomViewModel: BathroomViewModel by activityViewModels()
-    private val homeFragment: HomeFragment = HomeFragment()
+    private lateinit var bathroomViewModel: BathroomViewModel
     private val binding get() = _binding!!
     private var currentQuery: MutableList<String> = mutableListOf("All Gender", "central", "3.0")
 
@@ -30,6 +28,7 @@ class FindRestroomFragment : Fragment() {
     ): View {
         _binding = FragmentFindBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         binding.genderRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             val gender = when (checkedId) {
                 R.id.gender_male -> "Male"
@@ -100,6 +99,12 @@ class FindRestroomFragment : Fragment() {
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+    }
+
     private fun updateButtonState(selectedButton: View) {
         listOf(binding.campusEast, binding.campusCentral, binding.campusWest).forEach {
             if (it == selectedButton) {
@@ -108,6 +113,9 @@ class FindRestroomFragment : Fragment() {
                 it.isEnabled = true
             }
         }
+    }
+    fun applyFilter(criteria: String) {
+        bathroomViewModel.setFilterCriteria(criteria)
     }
 
     private fun handleRatingChange(rating: Float) {
