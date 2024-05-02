@@ -12,6 +12,6 @@ open class bathroom (
     var Location:String = "",
     var Name: String = "",
     var Type: String = "",
-    var Rating: String = "",
+    var Rating: Double = 0.0,
     var Reviews: String = ""
 ) : RealmObject() {}
