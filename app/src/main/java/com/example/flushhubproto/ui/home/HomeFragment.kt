@@ -183,6 +183,7 @@ class HomeFragment : Fragment() {
 
 
     private fun observeLocationInfos() {
+        Log.d("Home recycler length", "${bathroomViewModel.bathrooms.value?.size}")
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
             if (bathrooms != null) {
                 adapter.updateData(bathrooms)

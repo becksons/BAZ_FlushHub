@@ -1,6 +1,7 @@
 package com.example.flushhubproto
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +18,14 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
     fun updateData(newLocationList: List<Triple<bathroom, Double, Double>>?) {
         if (newLocationList != null) {
             locationList = newLocationList
+        }else{
+            Log.d("Location adapter update data", "location list is null")
         }
+
+        Log.d("update data adapter", "Updating data in adapter...")
         notifyDataSetChanged()
     }
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {

@@ -14,8 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.flushhubproto.LocationInfoAdapter
+import com.example.flushhubproto.QueryAdapter
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
@@ -32,6 +31,7 @@ import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
+import com.tomtom.sdk.map.display.marker.Marker
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import java.io.File
@@ -71,11 +71,12 @@ class QueryResultFragment: Fragment() {
     private val binding get() = _binding!!
 
     private var androidLocationProvider: LocationProvider? = null
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: LocationInfoAdapter
+
+    private lateinit var adapter: QueryAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
 
@@ -99,33 +100,55 @@ class QueryResultFragment: Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = QueryResFragmentBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
+
+
+        val queryRes = bathroomViewModel.searchQuery.value?.second
+        filterMap(queryRes.toString())
+        adapter = QueryAdapter(emptyList())
+
+        adapter.updateData(queryList)
+
+        binding.queryResRecyclerView.queryResRecyclerList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@QueryResultFragment.adapter
+
+
+        }
+
+
+        observeQueriedBathrooms()
+        //setupRecyclerView()
         requestPermissionsIfNecessary()
 
-          val queryRes = bathroomViewModel.searchQuery.value?.second
-          filterMap(queryRes.toString())
 
-          setupRecyclerView(binding)
 
-          observeLocationInfos()
+
+
 
 
 
         return binding.root
     }
-    private fun setupRecyclerView(binding: QueryResFragmentBinding) {
-        recyclerView = binding.queryResRecyclerView.queryResRecyclerList
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = LocationInfoAdapter(emptyList())
-        recyclerView.adapter = adapter
+
+    private fun setupRecyclerView() {
+
+
     }
-    private fun observeLocationInfos() {
-        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
-            if (bathrooms != null) {
-                adapter.updateData(bathrooms)
-            }
-        }
+    private fun observeQueriedBathrooms() {
+        Log.d("Queried bathroom data in Query Res", "Observing live data...")
+        // Make sure you observe the queriedBathrooms LiveData to update the RecyclerView
+        Log.d("Query recycler length", "${bathroomViewModel.queriedBathrooms.value?.size}")
+
     }
-    fun filterMap(area: String = "all", rating: Double = 0.0){
+
+//    private fun observeLocationInfos() {
+//        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
+//            if (bathrooms != null) {
+//                adapter.updateData(bathrooms)
+//            }
+//        }
+//    }
+private fun filterMap(area: String = "all", rating: Double = 0.0){
         Log.d("Find Button call from home frag","filter map called...")
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
@@ -171,6 +194,7 @@ class QueryResultFragment: Fragment() {
                     }
                 }
             }
+
         }
     }
 
@@ -200,6 +224,7 @@ class QueryResultFragment: Fragment() {
 
     private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
     private val mapFragment = MapFragment.newInstance(mapOptions)
+    private val queryList = mutableListOf<Marker>()
     private fun initializeMapWithLocation() {
         childFragmentManager.beginTransaction()
             .replace(R.id.query_map_container, mapFragment)
@@ -241,6 +266,8 @@ class QueryResultFragment: Fragment() {
         )
 
         val marker = tomtomMap.addMarker(markerOptions)
+        queryList.add(marker)
+    //-----------------------------
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
@@ -250,7 +277,7 @@ class QueryResultFragment: Fragment() {
             }
 
 
-            Log.d("MarkerClick", "Marker at $address was clicked.")
+            Log.d(" Query MarkerClick", "Marker at $address was clicked.")
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
         }
     }

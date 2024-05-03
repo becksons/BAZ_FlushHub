@@ -248,6 +248,7 @@ class BathroomViewModel : ViewModel() {
             }
             MainActivity.isQueryLoading.postValue(false)// Finish Loading
 
+
         }
 
     }
@@ -256,6 +257,9 @@ class BathroomViewModel : ViewModel() {
         realm?.close()
         realm = null
         super.onCleared()
+    }
+    fun updateQueriedBathrooms(results: List<Triple<bathroom, Double, Double>>) {
+        _queriedBathrooms.postValue(results)
     }
 
     fun updateSelectedLocation(locationInfo: String) {
