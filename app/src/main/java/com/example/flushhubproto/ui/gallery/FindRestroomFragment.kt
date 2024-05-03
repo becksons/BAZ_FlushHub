@@ -66,12 +66,10 @@ class FindRestroomFragment : Fragment() {
     private fun setupListeners() {
         binding.campusEast.setOnClickListener {
             handleCampusSelection("east")
-
             updateButtonState(it)
         }
         binding.campusCentral.setOnClickListener {
             handleCampusSelection("central")
-
             updateButtonState(it)
         }
         binding.campusWest.setOnClickListener {
