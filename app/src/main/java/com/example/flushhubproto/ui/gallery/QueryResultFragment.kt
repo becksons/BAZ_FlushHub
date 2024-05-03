@@ -101,12 +101,14 @@ class QueryResultFragment: Fragment() {
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         requestPermissionsIfNecessary()
 
-          val queryRes = bathroomViewModel.searchQuery.value?.second
-          filterMap(queryRes.toString())
+        val gender = bathroomViewModel.searchQuery.value?.first
+        val area = bathroomViewModel.searchQuery.value?.second
+        val rating = bathroomViewModel.searchQuery.value?.third?.toDouble()
+        filterMap(gender.toString(), area.toString(), rating!!)
 
-          setupRecyclerView(binding)
+        setupRecyclerView(binding)
 
-          observeLocationInfos()
+        observeLocationInfos()
 
 
 
@@ -125,7 +127,7 @@ class QueryResultFragment: Fragment() {
             }
         }
     }
-    fun filterMap(area: String = "all", rating: Double = 0.0){
+    fun filterMap(gender: String = "All Gender", area: String = "all", rating: Double = 0.0){
         Log.d("Find Button call from home frag","filter map called...")
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
@@ -139,6 +141,7 @@ class QueryResultFragment: Fragment() {
                 var distance = "N/A"
                 var time = "N/A"
                 var stars = 0.0
+                val type: String = data.first.Type
 
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
@@ -150,18 +153,18 @@ class QueryResultFragment: Fragment() {
                     processedAddresses.add(address)
                     mapFragment.getMapAsync{tomtomMap ->
                         if(area == "west"){
-                            if(longitude < -71.110940 && stars >= rating){
+                            if(type == gender && longitude < -71.110940 && stars >= rating){
                                 Log.d("remove", longitude.toString())
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
                             }
                         }else if(area == "central"){
                             Log.d("remove", "central")
-                            if(longitude >= -71.110940 && longitude <= -71.100546 && stars >= rating){
+                            if(type == gender && longitude >= -71.110940 && longitude <= -71.100546 && stars >= rating){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
                             }
                         }else if(area == "east"){
                             Log.d("remove", "east")
-                            if(longitude > -71.100546 && stars >= rating){
+                            if(type == gender && longitude > -71.100546 && stars >= rating){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
                             }
                         }else{
