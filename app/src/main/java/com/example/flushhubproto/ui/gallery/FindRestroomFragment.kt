@@ -19,7 +19,7 @@ class FindRestroomFragment : Fragment() {
     private var _binding: FragmentFindBinding? = null
     private lateinit var bathroomViewModel: BathroomViewModel
     private val binding get() = _binding!!
-    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "central", "3.0")
+    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "all", "0.0")
     companion object{
         var isQueryLoading = MutableLiveData(false)
     }

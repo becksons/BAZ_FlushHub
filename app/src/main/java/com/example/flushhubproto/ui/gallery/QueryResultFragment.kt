@@ -141,14 +141,14 @@ class QueryResultFragment: Fragment() {
 
     }
 
-//    private fun observeLocationInfos() {
+    //    private fun observeLocationInfos() {
 //        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
 //            if (bathrooms != null) {
 //                adapter.updateData(bathrooms)
 //            }
 //        }
 //    }
-private fun filterMap(area: String = "all", rating: Double = 0.0){
+    private fun filterMap(area: String = "all", rating: Double = 0.0){
         Log.d("Find Button call from home frag","filter map called...")
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
@@ -267,7 +267,7 @@ private fun filterMap(area: String = "all", rating: Double = 0.0){
 
         val marker = tomtomMap.addMarker(markerOptions)
         queryList.add(marker)
-    //-----------------------------
+        //-----------------------------
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
