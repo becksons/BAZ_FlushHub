@@ -36,10 +36,12 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var isLoading = MutableLiveData(true)
+        var isQueryLoading = MutableLiveData(false)
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
+    private var loadStart = true
 
     private var isDrawerOpen = false
     private var greetBuilder : StringBuilder? = null
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        isQueryLoading.postValue(false)
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -99,8 +102,11 @@ class MainActivity : AppCompatActivity() {
 
                 navController.navigate(R.id.nav_home)
                 binding.root.isClickable = true
+                loadStart = false
             }
         }
+        observeLoadingState()
+
 
         val btnMenuClose: ImageButton = findViewById(R.id.menu_button_close)
         val fragmentBannerView:TextView = findViewById(R.id.fragment_banner)
@@ -218,9 +224,25 @@ class MainActivity : AppCompatActivity() {
     return touchX >= viewX && touchX <= (viewX + viewWidth) &&
             touchY >= viewY && touchY <= (viewY + viewHeight)
 }
+    private fun observeLoadingState() {
+       isQueryLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                navController.navigate(R.id.loadingFragment)
+            } else {
+                if (navController.currentDestination?.id == R.id.loadingFragment && !loadStart) {
+                    navController.navigate(R.id.queryResultFragment)
+                }
+
+
+
+            }
+        }
+    }
     override fun onStart() {
         super.onStart()
+
         setupDrawer()
+
         submitButton = findViewById<Button>(R.id.submitButton)
         nameEditText = findViewById<EditText>(R.id.nameEditText)
         landingPage = findViewById<LinearLayout>(R.id.landing_layout)
@@ -234,6 +256,8 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.ask_name), Toast.LENGTH_SHORT).show()
             }
         }
+
+
         checkAndDisplayUserName()
         val openButton: ImageButton = findViewById(R.id.open_drawer_button)
         openButton.setOnClickListener {

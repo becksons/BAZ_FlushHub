@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
@@ -88,20 +86,9 @@ class FindRestroomFragment : Fragment() {
         binding.findButton.setOnClickListener {
             Log.d("Find Button","Find Button Clicked!")
             Log.d("Find Button","Current Query: $currentQuery")
-            isQueryLoading.postValue(true)
-            isQueryLoading.observe(viewLifecycleOwner) { isLoading ->
-                if (isLoading) {
-                    Log.d("Query loading", "Query is loading")
-                    findNavController().navigate(R.id.loadingFragment)
-                } else {
-                    Log.d("Query loading", "Done loading")
-                    findNavController().navigate(R.id.queryResultFragment)
 
 
-
-                }
-            }
-
+           MainActivity.isQueryLoading.postValue(true)
 
             bathroomViewModel.queryBathroomsFullQuery(
                 currentQuery[0],

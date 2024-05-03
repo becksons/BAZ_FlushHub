@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.schema.bathroom
-import com.example.flushhubproto.ui.gallery.FindRestroomFragment
 import com.google.gson.Gson
 import io.realm.Realm
 import io.realm.mongodb.App
@@ -26,6 +25,8 @@ class BathroomViewModel : ViewModel() {
     private var realm: Realm? = null
     private val _selectedLocation = MutableLiveData<String>()
     val selectedLocation: LiveData<String> = _selectedLocation
+
+
 
     //Search query listener
     private val _queryReady = MutableLiveData<Boolean>(false)
@@ -173,6 +174,7 @@ class BathroomViewModel : ViewModel() {
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
             }
             MainActivity.isLoading.postValue(false) // Finish Loading
+
         }
     }
     fun queryBathroomsFullQuery(gender: String, area: String, minRating: Double, currLat: Double, currLong: Double) {
@@ -244,8 +246,10 @@ class BathroomViewModel : ViewModel() {
                     }
                 }.sortedBy { it.second })
             }
-           FindRestroomFragment.isQueryLoading.postValue(false) // Finish Loading
+            MainActivity.isQueryLoading.postValue(false)// Finish Loading
+
         }
+
     }
     // ===================================================================
     override fun onCleared() {
