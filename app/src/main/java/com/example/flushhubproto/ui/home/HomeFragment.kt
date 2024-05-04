@@ -264,9 +264,11 @@ class HomeFragment : Fragment() {
 
         tomtomMap.moveCamera(cameraOptions)
     }
+
+    //This function passes lat and long to Google maps and launch it to route the user
     fun openMap(context: Context, lat: Double, long: Double, label: String = "Restroom") {
-        val geoUri = android.net.Uri.parse("geo:0,0?q=$lat,$long($label)")
-        val intent = Intent(Intent.ACTION_VIEW, geoUri)
+        val geoUri = android.net.Uri.parse("geo:0,0?q=$lat,$long($label)") //lat, long, and what you want to call the location
+        val intent = Intent(Intent.ACTION_VIEW, geoUri) //using intent
         intent.setPackage("com.google.android.apps.maps")
         if (intent.resolveActivity(context.packageManager) != null) {
             context.startActivity(intent)
@@ -277,9 +279,10 @@ class HomeFragment : Fragment() {
         }
     }
 
+    //This function adds markers to the TomTomMap API fragment
     private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
-        val loc = GeoPoint(lat, long)
-        val markerOptions = MarkerOptions(
+        val loc = GeoPoint(lat, long) //converting lat and long to GeoPoint type
+        val markerOptions = MarkerOptions( //assigning informations of this marker
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
             tag = "Address: ${address}\n" +
@@ -288,8 +291,10 @@ class HomeFragment : Fragment() {
                     "\nRating: $rating" + requireContext().getString(R.string.stars)
         )
 
+        //adding marker to the map
         tomtomMap.addMarker(markerOptions)
 
+        //making the marker clickable
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
 
@@ -299,6 +304,8 @@ class HomeFragment : Fragment() {
 
 
             Log.d("MarkerClick", "Marker at $address was clicked.")
+
+            //show a UI if click
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
 
         }
