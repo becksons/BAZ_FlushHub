@@ -130,7 +130,12 @@ class QueryResultFragment: Fragment() {
         bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { bathrooms ->
             // Update adapter data
             Log.d("Observing queried bathrooms","Updating data")
-            adapter.updateData(bathrooms)
+            if(bathrooms!=null){
+                Log.d("Observing queried bathrooms","Data not null...")
+
+                adapter.updateData(bathrooms)
+            }
+
         }
     }
 
@@ -145,7 +150,7 @@ class QueryResultFragment: Fragment() {
 //        }
 //    }
     private fun filterMap(area: String = "all", rating: Double = 0.0){
-        Log.d("Find Button call from home frag","filter map called...")
+        Log.d("Find Button call from query res frag","filter map called...")
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
             val processedAddresses = mutableSetOf<String>()
