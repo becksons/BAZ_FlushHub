@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.flushhubproto.LocationInfoAdapter
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
@@ -104,6 +105,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var bathroomViewModel: BathroomViewModel
     private var isBarVisible: Boolean = false
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
 
 
@@ -161,6 +163,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+
         setupRecyclerView(binding)
 
         observeLocationInfos()
@@ -175,10 +178,17 @@ class HomeFragment : Fragment() {
 
 
     private fun setupRecyclerView(binding: FragmentHomeBinding) {
+        swipeRefreshLayout = binding.nearestRestroomSwipeRefreshLayout
         recyclerView = binding.nearestLocationRecyclerView.nearestLocationRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = LocationInfoAdapter(emptyList())
         recyclerView.adapter = adapter
+        //Nearest location review swipe refresh
+        swipeRefreshLayout.setOnRefreshListener {
+
+            Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
 
 
@@ -361,7 +371,7 @@ class HomeFragment : Fragment() {
 
 
     private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
-        val layout = binding.root.findViewById<View>(R.id.go_to_route_layout)
+        val layout = binding.goToRouteLayout
         binding.goToRouteLayout.visibility = VISIBLE
         binding.goToRouteLayout.apply {
             visibility = View.VISIBLE

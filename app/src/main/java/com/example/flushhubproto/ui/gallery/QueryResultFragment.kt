@@ -9,11 +9,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.flushhubproto.LocationInfoAdapter
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
@@ -71,6 +73,7 @@ class QueryResultFragment: Fragment() {
     private val binding get() = _binding!!
 
     private var androidLocationProvider: LocationProvider? = null
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var adapter: LocationInfoAdapter
 
@@ -125,6 +128,13 @@ class QueryResultFragment: Fragment() {
         adapter = LocationInfoAdapter(emptyList())
         binding.queryResRecyclerView.queryResRecyclerList.layoutManager = LinearLayoutManager(context)
         binding.queryResRecyclerView.queryResRecyclerList.adapter = adapter
+        swipeRefreshLayout = binding.queryRecyclerListSwipeRefresh
+        swipeRefreshLayout.setOnRefreshListener {
+
+            Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
+            swipeRefreshLayout.isRefreshing = false
+        }
+
     }
     private fun observeQueriedBathrooms() {
         bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { bathrooms ->

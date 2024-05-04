@@ -20,7 +20,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/query_map_container"
             android:layout_width="match_parent"
-            android:layout_height="430dp"
+            android:layout_height="420dp"
             android:background="@android:color/transparent"
 
             app:layout_constraintStart_toStartOf="parent"
@@ -30,13 +30,16 @@
         <LinearLayout
             android:id="@+id/go_to_route_layout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:background="@color/fh_tool_bar"
             android:elevation="10dp"
             android:translationY="400dp"
             android:visibility="gone"
 
+
+
             android:orientation="vertical"
+
 
 
 
@@ -48,7 +51,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="71dp"
 
 
                 android:orientation="horizontal">
@@ -67,12 +70,13 @@
                 <TextView
                     android:id="@+id/details_text_view"
                     android:layout_width="220dp"
-                    android:layout_height="40dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
                     android:fontFamily="@font/ruda_regular"
 
                     android:text="Details will appear here"
                     android:textColor="#000000"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
 
 
                     android:translationX="-30dp" />
@@ -93,6 +97,7 @@
 
 
                     android:textSize="21sp"
+                    android:translationX="-40dp"
 
 
                     />
@@ -105,14 +110,21 @@
 
         </LinearLayout>
 
-
-        <include
-            android:id="@+id/query_res_recycler_view"
-            layout="@layout/query_res_recycler_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id = "@+id/query_recycler_list_swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:translationY="420dp"
+            android:layout_height="match_parent">
+            <include
+                android:id="@+id/query_res_recycler_view"
+                layout="@layout/query_res_recycler_list"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

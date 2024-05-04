@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val mainLayout: ViewGroup = findViewById(R.id.main_layout)
+        val mainLayout: ViewGroup = binding.mainLayout
 
         mainLayout.setOnTouchListener { _, event ->
             if (isDrawerOpen && !isTouchInsideView(event, topDrawer)) {
@@ -119,27 +119,59 @@ class MainActivity : AppCompatActivity() {
         btnNavHome.setCompoundDrawables(drawable, null, null, null)
 
         btnMenuClose.setOnClickListener {
-            navController.navigate(R.id.nav_home)
             closeTopDrawer()
+
+
         }
 
         btnNavEntertainment.setOnClickListener{
-            navController.navigate(R.id.nav_entertainment)
-            closeTopDrawer()
+            val currentDestinationId = navController.currentDestination?.id
+            if(currentDestinationId!=R.id.nav_entertainment){
+                navController.navigate(R.id.nav_entertainment)
+                closeTopDrawer()
+
+            }else{
+                closeTopDrawer()
+
+            }
 
         }
 
         btnNavHome.setOnClickListener {
-            navController.navigate(R.id.nav_home)
-            closeTopDrawer()
+            val currentDestinationId = navController.currentDestination?.id
+            if(currentDestinationId!=R.id.nav_home){
+                navController.navigate(R.id.nav_home)
+                closeTopDrawer()
+
+            }else{
+
+                closeTopDrawer()
+
+            }
         }
         btnNavFind.setOnClickListener {
-            navController.navigate(R.id.nav_gallery)
-            closeTopDrawer()
+            val currentDestinationId = navController.currentDestination?.id
+            if(currentDestinationId!=R.id.nav_gallery){
+                navController.navigate(R.id.nav_gallery)
+                closeTopDrawer()
+
+            }else{
+
+                closeTopDrawer()
+
+            }
         }
         btnNavRate.setOnClickListener {
-            navController.navigate(R.id.nav_slideshow)
-            closeTopDrawer()
+            val currentDestinationId = navController.currentDestination?.id
+            if(currentDestinationId!=R.id.nav_slideshow){
+                navController.navigate(R.id.nav_slideshow)
+                closeTopDrawer()
+
+            }else{
+
+                closeTopDrawer()
+
+            }
         }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
