@@ -39,7 +39,7 @@
             android:visibility="gone"
 
 
-            tools:context="com.example.flushhubproto.ui.home.GoToRouteFragment">
+            >
 
             <LinearLayout
                 android:id="@+id/go_to_route_banner"

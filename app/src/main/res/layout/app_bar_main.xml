@@ -9,13 +9,25 @@
 
     <include layout="@layout/content_main" android:id="@+id/content_main" />
     <include layout="@layout/nav_header_main" android:id="@+id/nav_header_main" />
+    <TextView
+        android:id="@+id/menu_text"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:text = "@string/menu"
+        android:textSize="20dp"
+        android:elevation="25dp"
+        android:fontFamily="@font/ruda_black"
+        android:textColor="@color/black"
+        android:translationY="150dp"
+        android:translationX="20dp">
 
+    </TextView>
     <ImageButton
         android:id="@+id/open_drawer_button"
         android:layout_width="130dp"
         android:layout_height="90dp"
         android:layout_gravity="end"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:elevation="20dp"
@@ -25,11 +37,11 @@
         android:src="@drawable/tp_menu"
         android:text="@string/menu"
         android:textSize="20sp"
-
-        android:translationX="-255dp"
+        android:translationX="-275dp"
         android:translationY="110dp">
-
     </ImageButton>
+
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -92,12 +104,12 @@
 
                     android:textColor="@color/black"
                     android:textAlignment="center"
-                    android:text="Find Your Restroom"
+                    android:text="@string/find_your_restroom"
 
 
 
                     android:translationX="5dp"
-                    android:translationY="-15dp"
+                    android:translationY="-10dp"
                     >
                 </TextView>
 
