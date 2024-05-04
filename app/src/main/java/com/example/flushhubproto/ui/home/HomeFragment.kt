@@ -20,10 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.flushhubproto.LocationInfoAdapter
+import com.example.flushhubproto.MainActivity
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.gson.Gson
 import com.tomtom.quantity.Distance
 import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
@@ -36,16 +36,9 @@ import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
-import com.tomtom.sdk.map.display.marker.Marker
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import java.io.File
-import java.io.IOException
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 
 interface RouteActionListener {
@@ -119,18 +112,15 @@ class HomeFragment : Fragment() {
             binding.detailsTextView.text = details
         }
 
-
-        androidLocationProvider = AndroidLocationProvider(
-            context = requireContext(),
-            config = androidLocationProviderConfig
-        )
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
-        requestPermissionsIfNecessary()
+        childFragmentManager.beginTransaction()
+        .replace(R.id.map_container, MainActivity.mapFragment)
+        .commit()
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
             val processedAddresses = mutableSetOf<String>()
@@ -152,7 +142,7 @@ class HomeFragment : Fragment() {
 
                 if (address !in processedAddresses) {
                     processedAddresses.add(address)
-                    mapFragment.getMapAsync { tomtomMap ->
+                    MainActivity.mapFragment.getMapAsync { tomtomMap ->
                         markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
                     }
                 }
@@ -161,9 +151,7 @@ class HomeFragment : Fragment() {
 
 
         setupRecyclerView(binding)
-
         observeLocationInfos()
-
         return binding.root
     }
 
@@ -181,9 +169,9 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         //Nearest location review swipe refresh
         swipeRefreshLayout.setOnRefreshListener {
-
+            bathroomViewModel.loadAllBathrooms()
             Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
-            swipeRefreshLayout.isRefreshing = false
+            swipeRefreshLayout.isRefreshing = (MainActivity.swipeLoading.value == true)
         }
     }
 
@@ -198,64 +186,62 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun requestPermissionsIfNecessary() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
-        } else {
-            initializeMapWithLocation()
-        }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_LOCATION_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initializeMapWithLocation()
-                } else {
-                    //TODO: error handle for permission denied
-                }
-            }
-        }
-    }
-
-    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
-    private val mapFragment = MapFragment.newInstance(mapOptions)
-
-
-    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
-        minTimeInterval = Double.MAX_VALUE.milliseconds,
-        minDistance = Distance.meters(20.0)
-    )
-
-
-
-    private fun initializeMapWithLocation() {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.map_container, mapFragment)
-            .commit()
-
-
-        mapFragment.getMapAsync { tomtomMap ->
-            tomtomMap.setLocationProvider(androidLocationProvider)
-            androidLocationProvider?.enable()
-
-            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
-                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
-
-                currentLatitude = location.position.latitude
-                currentLongitude = location.position.longitude
-
-                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
-
-                bathroomViewModel.loadAllBathrooms()
-            }
-
-
-            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
-        }
-    }
+//    private fun requestPermissionsIfNecessary() {
+//        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+//        } else {
+//            initializeMapWithLocation()
+//        }
+//    }
+//
+//    @Deprecated("Deprecated in Java")
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+//        when (requestCode) {
+//            REQUEST_LOCATION_PERMISSION -> {
+//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    initializeMapWithLocation()
+//                } else {
+//                    //TODO: error handle for permission denied
+//                }
+//            }
+//        }
+//    }
+//
+////    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
+////    private val mapFragment = MapFragment.newInstance(mapOptions)
+//
+//
+//    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
+//        minTimeInterval = Double.MAX_VALUE.milliseconds,
+//        minDistance = Distance.meters(20.0)
+//    )
+//
+//
+//
+//    private fun initializeMapWithLocation() {
+//        childFragmentManager.beginTransaction()
+//            .replace(R.id.map_container, mapFragment)
+//            .commit()
+//
+//
+//        mapFragment.getMapAsync { tomtomMap ->
+//            tomtomMap.setLocationProvider(androidLocationProvider)
+//            androidLocationProvider?.enable()
+//
+//            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
+//                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
+//
+//                currentLatitude = location.position.latitude
+//                currentLongitude = location.position.longitude
+//
+//                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
+//                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+//            }
+//
+//
+//            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
+//        }
+//    }
     private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
         val customArrowImage = ImageFactory.fromResource(R.drawable.nav_arrow)
         val file = File("/Users/becksonstein/AndroidStudioProjects/FlushHubProto/app/src/main/assets/custom_nav_arrow.svg")

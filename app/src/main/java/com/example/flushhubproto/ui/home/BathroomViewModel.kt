@@ -91,6 +91,7 @@ class BathroomViewModel : ViewModel() {
             null
         }
 
+        loadAllBathrooms()
     }
 
     // ================== Database Processing Functions ==================
@@ -145,6 +146,8 @@ class BathroomViewModel : ViewModel() {
 
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
+            // Our Loaders
+            MainActivity.swipeLoading.postValue(true)
             val results = bgRealm.where(bathroom::class.java)?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             if (bathrooms != null) { // Do a null check, if null we don't proceed
@@ -157,12 +160,21 @@ class BathroomViewModel : ViewModel() {
                     val longitude: Double = parts[0].toDouble()
                     val latitude: Double = parts[1].toDouble()
 
-                    Log.d("user lat", currentLatitude.toString())
-                    Log.d("user long", currentLongitude.toString())
+                    var defaultLat = 42.350498333333334
+                    var defaultLong = -71.10539833333333
 
+                    if (currentLatitude != 0.0 && currentLongitude != 0.0) {
+                        defaultLat = currentLatitude
+                        defaultLong = currentLongitude
+                    }
+
+//                    Log.d("user lat", currentLatitude.toString())
+//                    Log.d("user long", currentLongitude.toString())
+                    Log.d("user lat", defaultLat.toString())
+                    Log.d("user long", defaultLong.toString())
                     val calculations = calcRange(
-                        currentLatitude,
-                        currentLongitude,
+                        defaultLat,
+                        defaultLong,
                         latitude,
                         longitude
                     )
@@ -178,7 +190,7 @@ class BathroomViewModel : ViewModel() {
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
             }
             MainActivity.isLoading.postValue(false) // Finish Loading
-
+            MainActivity.swipeLoading.postValue(false) // Finish Loading
         }
     }
 

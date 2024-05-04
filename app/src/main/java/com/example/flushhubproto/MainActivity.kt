@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -27,20 +28,40 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.flushhubproto.ui.home.BathroomViewModel
+import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
 import com.example.tomtom.R
 import com.example.tomtom.databinding.ActivityMainBinding
+import com.tomtom.quantity.Distance
+import com.tomtom.sdk.location.GeoLocation
+import com.tomtom.sdk.location.GeoPoint
+import com.tomtom.sdk.location.LocationProvider
+import com.tomtom.sdk.location.OnLocationUpdateListener
+import com.tomtom.sdk.location.android.AndroidLocationProvider
+import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
+import com.tomtom.sdk.map.display.MapOptions
+import com.tomtom.sdk.map.display.TomTomMap
+import com.tomtom.sdk.map.display.camera.CameraOptions
+import com.tomtom.sdk.map.display.image.ImageFactory
+import com.tomtom.sdk.map.display.location.LocationMarkerOptions
+import com.tomtom.sdk.map.display.ui.MapFragment
 import io.realm.Realm
+import java.io.File
+import kotlin.time.Duration.Companion.milliseconds
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         var isLoading = MutableLiveData(true)
+        var swipeLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
+        private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
+        val mapFragment = MapFragment.newInstance(mapOptions)
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
+    private var initStart = true
     private var loadStart = true
 
     private var isDrawerOpen = false
@@ -48,19 +69,23 @@ class MainActivity : AppCompatActivity() {
     private var submitButton:Button? = null
     private var nameEditText :EditText? = null
     private var landingPage :LinearLayout? = null
+    private var androidLocationProvider: LocationProvider? = null
     private lateinit var navController: NavController
     private lateinit var greetingTextView: TextView
     private lateinit var distanceTextView: TextView
     private lateinit var fragmentBannerView: TextView
 
-    private val bathroomViewModel: BathroomViewModel by viewModels()
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Map Init Routine
+        requestPermissionsIfNecessary()
+        androidLocationProvider = AndroidLocationProvider(
+            context = this,
+            config = androidLocationProviderConfig
+        )
+        Realm.init(this) // DB initialization
 
-
-        Realm.init(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -81,6 +106,105 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        setupDrawer()
+
+        submitButton = findViewById<Button>(R.id.submitButton)
+        nameEditText = findViewById<EditText>(R.id.nameEditText)
+        landingPage = findViewById<LinearLayout>(R.id.landing_layout)
+        submitButton?.setOnClickListener {
+            val name = nameEditText?.text.toString()
+            if (name.isNotEmpty()) {
+                saveName(name)
+                greetUser(name,0.01F)
+                landingPage?.visibility = GONE
+            } else {
+                Toast.makeText(this, getString(R.string.ask_name), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        checkAndDisplayUserName()
+        val openButton: ImageButton = findViewById(R.id.open_drawer_button)
+        openButton.setOnClickListener {
+            if (isDrawerOpen) {
+                closeTopDrawer()
+            } else {
+                openTopDrawer()
+            }
+        }
+
+    }
+    private fun requestPermissionsIfNecessary() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+        } else {
+            initializeMapWithLocation()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_LOCATION_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initializeMapWithLocation()
+                } else {
+                    //TODO: error handle for permission denied
+                }
+            }
+        }
+    }
+
+    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
+        minTimeInterval = 1000.milliseconds,
+        minDistance = Distance.meters(10.0)
+    )
+
+    private fun initializeMapWithLocation() {
+        mapFragment.getMapAsync { tomtomMap ->
+            tomtomMap.setLocationProvider(androidLocationProvider)
+            androidLocationProvider?.enable()
+
+            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
+                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
+
+                HomeFragment.currentLatitude = location.position.latitude
+                HomeFragment.currentLongitude = location.position.longitude
+
+                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
+                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+            }
+
+            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
+        }
+    }
+
+    private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
+        val cameraOptions = CameraOptions(
+            position = GeoPoint(lat, long),
+            zoom = 17.0,
+            tilt = 0.0,
+            rotation = 0.0
+        )
+
+        tomtomMap.moveCamera(cameraOptions)
+    }
+
+    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+        val customArrowImage = ImageFactory.fromResource(R.drawable.nav_arrow)
+        val file = File("/Users/becksonstein/AndroidStudioProjects/FlushHubProto/app/src/main/assets/custom_nav_arrow.svg")
+
+        val locationMarkerOptions = LocationMarkerOptions(
+            type = LocationMarkerOptions.Type.Chevron
+//            customModel = android.net.Uri.fromFile(file)
+        )
+
+        tomtomMap.enableLocationMarker(locationMarkerOptions)
     }
 
     private fun setupDrawer() {
@@ -269,37 +393,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-    }
-    override fun onStart() {
-        super.onStart()
-
-        setupDrawer()
-
-        submitButton = findViewById<Button>(R.id.submitButton)
-        nameEditText = findViewById<EditText>(R.id.nameEditText)
-        landingPage = findViewById<LinearLayout>(R.id.landing_layout)
-        submitButton?.setOnClickListener {
-            val name = nameEditText?.text.toString()
-            if (name.isNotEmpty()) {
-                saveName(name)
-                greetUser(name,0.01F)
-                landingPage?.visibility = GONE
-            } else {
-                Toast.makeText(this, getString(R.string.ask_name), Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
-        checkAndDisplayUserName()
-        val openButton: ImageButton = findViewById(R.id.open_drawer_button)
-        openButton.setOnClickListener {
-            if (isDrawerOpen) {
-                closeTopDrawer()
-            } else {
-                openTopDrawer()
-            }
-        }
-
     }
     private fun saveName(name: String) {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
