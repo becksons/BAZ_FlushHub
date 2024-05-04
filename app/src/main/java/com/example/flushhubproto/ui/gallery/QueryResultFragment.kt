@@ -99,18 +99,6 @@ class QueryResultFragment: Fragment() {
 
         val queryRes = bathroomViewModel.searchQuery.value?.second
         filterMap(queryRes.toString())
-
-        setupRecyclerView(binding)
-        observeQueriedBathrooms()
-        //setupRecyclerView()
-        requestPermissionsIfNecessary()
-
-        return binding.root
-    }
-    private fun setupRecyclerView(binding: QueryResFragmentBinding) {
-        adapter = LocationInfoAdapter(emptyList())
-        binding.queryResRecyclerView.queryResRecyclerList.layoutManager = LinearLayoutManager(context)
-        binding.queryResRecyclerView.queryResRecyclerList.adapter = adapter
         swipeRefreshLayout = binding.queryRecyclerListSwipeRefresh
         swipeRefreshLayout.setOnRefreshListener {
 
@@ -118,6 +106,18 @@ class QueryResultFragment: Fragment() {
             swipeRefreshLayout.isRefreshing = false
         }
 
+        setupRecyclerView(binding)
+        observeQueriedBathrooms()
+        //setupRecyclerView()
+        requestPermissionsIfNecessary()
+
+
+        return binding.root
+    }
+    private fun setupRecyclerView(binding: QueryResFragmentBinding) {
+        adapter = LocationInfoAdapter(emptyList())
+        binding.queryResRecyclerView.queryResRecyclerList.layoutManager = LinearLayoutManager(context)
+        binding.queryResRecyclerView.queryResRecyclerList.adapter = adapter
     }
     private fun observeQueriedBathrooms() {
         bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { bathrooms ->

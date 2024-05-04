@@ -20,14 +20,12 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
 import com.example.tomtom.R
@@ -219,10 +217,12 @@ class MainActivity : AppCompatActivity() {
                 binding.appBarMain.appBarBanner.visibility = GONE
                 binding.appBarMain.navHeaderMain.root.visibility = GONE
                 binding.appBarMain.openDrawerButton.visibility = GONE
+                binding.appBarMain.menuText.visibility = GONE
             } else {
                 binding.appBarMain.appBarBanner.visibility =  VISIBLE
                 binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
+                binding.appBarMain.menuText.visibility = VISIBLE
 
                 navController.navigate(R.id.nav_home)
                 binding.root.isClickable = true

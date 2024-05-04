@@ -10,7 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_find">Find Your Restroom</string>
     <string name="menu_rate">Review Restrooms</string>
-    <string name="menu">Menu</string>
+    <string name="menu">MENU</string>
     <string name="the_flushhub" translatable="false">The FlushHub</string>
     <string name="greet_user_default">Don\'t worry, user!</string>
     <string name="nearest_restroom_is_x_miles_away">The nearest restroom is .01 miles away </string>
