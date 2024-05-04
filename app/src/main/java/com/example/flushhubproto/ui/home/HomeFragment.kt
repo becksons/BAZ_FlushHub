@@ -115,10 +115,6 @@ class HomeFragment : Fragment() {
             isBarVisible = !isBarVisible
         }
 
-//        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
-//            filterMap(criteria)
-//        }
-
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
         }
@@ -228,7 +224,7 @@ class HomeFragment : Fragment() {
 
 
     private val androidLocationProviderConfig = AndroidLocationProviderConfig(
-        minTimeInterval = 250L.milliseconds,
+        minTimeInterval = Double.MAX_VALUE.milliseconds,
         minDistance = Distance.meters(20.0)
     )
 
@@ -250,10 +246,10 @@ class HomeFragment : Fragment() {
                 currentLatitude = location.position.latitude
                 currentLongitude = location.position.longitude
 
-
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
-                //calRange(location.position.latitude, location.position.longitude, 42.350026020986256, -71.10326632227299)
+
+                bathroomViewModel.loadAllBathrooms()
             }
 
 
@@ -306,7 +302,7 @@ class HomeFragment : Fragment() {
                     "\nRating: $rating" + requireContext().getString(R.string.stars)
         )
 
-        val marker = tomtomMap.addMarker(markerOptions)
+        tomtomMap.addMarker(markerOptions)
 
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
@@ -321,54 +317,6 @@ class HomeFragment : Fragment() {
 
         }
     }
-
-
-    private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
-        val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z&travelMode=pedestrian"
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        var routeLength = 0
-        var routeTime = 0
-
-        val executor = Executors.newSingleThreadExecutor()
-
-        val task: Callable<List<Int>> = Callable<List<Int>> {
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-                val responseData = response.body?.string()
-                if (responseData != null) {
-                    val routeResponse = parseRouteData(responseData)
-                    routeResponse.routes.forEach { route ->
-                        routeLength = route.summary.lengthInMeters
-                        routeTime = (route.summary.travelTimeInSeconds/60.0).roundToInt()
-                    }
-                    return@Callable listOf(routeLength, routeTime)
-                }
-                throw IllegalStateException("Response Data is Null!")
-            }
-        }
-
-        val future = executor.submit(task)
-        val results: List<Int>? = try {
-            future.get()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        } finally {
-            executor.shutdown()
-        }
-
-        return results
-    }
-
-    private fun parseRouteData(jsonData: String): HomeFragment.RouteResponse {
-        val gson = Gson()
-        return gson.fromJson(jsonData, HomeFragment.RouteResponse::class.java)
-    }
-
 
     private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
         val layout = binding.goToRouteLayout
@@ -398,24 +346,6 @@ class HomeFragment : Fragment() {
 
         binding.goToRouteLayout.visibility = GONE
     }
-
-
-    private fun openDetailFragment(marker: Marker) {
-        val lat = marker.coordinate.latitude
-        val long = marker.coordinate.longitude
-        val data = "$lat,$long"
-        val detailFragment = GoToRouteFragment.newInstance(data)
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_content_main, detailFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-    fun onItemClick(position: Int) {
-
-        Toast.makeText(context, "Item clicked at position $position", Toast.LENGTH_SHORT).show()
-    }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
