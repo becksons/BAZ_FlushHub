@@ -76,12 +76,6 @@ class QueryResultFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
-
-
-
 //        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
 //            filterMap(criteria)
 //        }
@@ -89,7 +83,6 @@ class QueryResultFragment: Fragment() {
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
         }
-
 
         androidLocationProvider = AndroidLocationProvider(
             context = requireContext(),
@@ -101,23 +94,13 @@ class QueryResultFragment: Fragment() {
         _binding = QueryResFragmentBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
 
-
         val queryRes = bathroomViewModel.searchQuery.value?.second
         filterMap(queryRes.toString())
-
-
 
         setupRecyclerView(binding)
         observeQueriedBathrooms()
         //setupRecyclerView()
         requestPermissionsIfNecessary()
-
-
-
-
-
-
-
 
         return binding.root
     }
@@ -135,7 +118,6 @@ class QueryResultFragment: Fragment() {
 
                 adapter.updateData(bathrooms)
             }
-
         }
     }
 
@@ -231,7 +213,6 @@ class QueryResultFragment: Fragment() {
             .replace(R.id.query_map_container, mapFragment)
             .commit()
 
-
         mapFragment.getMapAsync { tomtomMap ->
             tomtomMap.setLocationProvider(androidLocationProvider)
             androidLocationProvider?.enable()
@@ -242,11 +223,9 @@ class QueryResultFragment: Fragment() {
                 HomeFragment.currentLatitude = location.position.latitude
                 HomeFragment.currentLongitude = location.position.longitude
 
-
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
             }
-
 
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
         }
@@ -293,8 +272,6 @@ class QueryResultFragment: Fragment() {
                 .setDuration(500)
                 .setListener(null)
         }
-
-
 
         binding.detailsTextView.text = null
         binding.detailsTextView.text = address
@@ -350,14 +327,5 @@ class QueryResultFragment: Fragment() {
         super.onDestroyView()
         _binding = null
         androidLocationProvider = null
-
     }
-
-
-
-
-
-
-
-
 }

@@ -40,8 +40,6 @@ class FindRestroomFragment : Fragment() {
                 else -> "All Gender"
             }
             handleGenderSelection(gender)
-
-
         }
 
         bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { dataList ->
@@ -54,7 +52,6 @@ class FindRestroomFragment : Fragment() {
                 Log.d("QUERY INFO","[FLUSHUB QUERY] Found Bathroom at $longitude, $latitude at $address with $stars stars.")
             }
         }
-
 
         setupListeners()
         return root
@@ -85,8 +82,7 @@ class FindRestroomFragment : Fragment() {
             Log.d("Find Button","Find Button Clicked!")
             Log.d("Find Button","Current Query: $currentQuery")
 
-
-           MainActivity.isQueryLoading.postValue(true)
+            MainActivity.isQueryLoading.postValue(true)
 
             bathroomViewModel.queryBathroomsFullQuery(
                 currentQuery[0],
@@ -96,20 +92,15 @@ class FindRestroomFragment : Fragment() {
                 -71.10539833333333
             )
             bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
-
         }
     }
 
     private fun handleCampusSelection(campus: String) {
         currentQuery[1] = campus
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
     }
 
     private fun updateButtonState(selectedButton: View) {
@@ -127,7 +118,6 @@ class FindRestroomFragment : Fragment() {
 
     private fun handleRatingChange(rating: Float) {
         currentQuery[2] = rating.toString()
-
     }
 
     override fun onDestroyView() {

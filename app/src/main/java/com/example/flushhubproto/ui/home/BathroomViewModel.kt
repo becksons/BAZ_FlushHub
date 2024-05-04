@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.schema.bathroom
+import com.example.flushhubproto.ui.home.HomeFragment.Companion.currentLatitude
+import com.example.flushhubproto.ui.home.HomeFragment.Companion.currentLongitude
 import com.google.gson.Gson
 import io.realm.Realm
 import io.realm.mongodb.App
@@ -89,7 +91,6 @@ class BathroomViewModel : ViewModel() {
             null
         }
 
-        loadAllBathrooms()
     }
 
     // ================== Database Processing Functions ==================
@@ -142,7 +143,7 @@ class BathroomViewModel : ViewModel() {
         return gson.fromJson(jsonData, HomeFragment.RouteResponse::class.java)
     }
 
-    private fun loadAllBathrooms() {
+    fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
             val results = bgRealm.where(bathroom::class.java)?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
@@ -156,9 +157,12 @@ class BathroomViewModel : ViewModel() {
                     val longitude: Double = parts[0].toDouble()
                     val latitude: Double = parts[1].toDouble()
 
+                    Log.d("user lat", currentLatitude.toString())
+                    Log.d("user long", currentLongitude.toString())
+
                     val calculations = calcRange(
-                        42.350498333333334,
-                        -71.10539833333333,
+                        currentLatitude,
+                        currentLongitude,
                         latitude,
                         longitude
                     )
@@ -177,6 +181,7 @@ class BathroomViewModel : ViewModel() {
 
         }
     }
+
     fun queryBathroomsFullQuery(gender: String, area: String, minRating: Double, currLat: Double, currLong: Double) {
         realm?.executeTransactionAsync { bgRealm ->
             val results = bgRealm.where(bathroom::class.java)
