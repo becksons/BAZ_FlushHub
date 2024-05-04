@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.flushhubproto.QueryAdapter
+import com.example.flushhubproto.LocationInfoAdapter
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
@@ -72,7 +72,7 @@ class QueryResultFragment: Fragment() {
 
     private var androidLocationProvider: LocationProvider? = null
 
-    private lateinit var adapter: QueryAdapter
+    private lateinit var adapter: LocationInfoAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -104,18 +104,10 @@ class QueryResultFragment: Fragment() {
 
         val queryRes = bathroomViewModel.searchQuery.value?.second
         filterMap(queryRes.toString())
-        adapter = QueryAdapter(emptyList())
-
-        adapter.updateData(queryList)
-
-        binding.queryResRecyclerView.queryResRecyclerList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@QueryResultFragment.adapter
 
 
-        }
 
-
+        setupRecyclerView(binding)
         observeQueriedBathrooms()
         //setupRecyclerView()
         requestPermissionsIfNecessary()
@@ -129,17 +121,21 @@ class QueryResultFragment: Fragment() {
 
         return binding.root
     }
-
-    private fun setupRecyclerView() {
-
-
+    private fun setupRecyclerView(binding: QueryResFragmentBinding) {
+        adapter = LocationInfoAdapter(emptyList())
+        binding.queryResRecyclerView.queryResRecyclerList.layoutManager = LinearLayoutManager(context)
+        binding.queryResRecyclerView.queryResRecyclerList.adapter = adapter
     }
     private fun observeQueriedBathrooms() {
-        Log.d("Queried bathroom data in Query Res", "Observing live data...")
-        // Make sure you observe the queriedBathrooms LiveData to update the RecyclerView
-        Log.d("Query recycler length", "${bathroomViewModel.queriedBathrooms.value?.size}")
-
+        bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { bathrooms ->
+            // Update adapter data
+            Log.d("Observing queried bathrooms","Updating data")
+            adapter.updateData(bathrooms)
+        }
     }
+
+
+
 
     //    private fun observeLocationInfos() {
 //        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
