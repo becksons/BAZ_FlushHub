@@ -241,10 +241,12 @@ class MainActivity : AppCompatActivity() {
                 binding.appBarMain.appBarBanner.visibility = GONE
                 binding.appBarMain.navHeaderMain.root.visibility = GONE
                 binding.appBarMain.openDrawerButton.visibility = GONE
+                binding.appBarMain.menuText.visibility = GONE
             } else {
                 binding.appBarMain.appBarBanner.visibility =  VISIBLE
                 binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
+                binding.appBarMain.menuText.visibility = VISIBLE
 
                 navController.navigate(R.id.nav_home)
                 binding.root.isClickable = true
