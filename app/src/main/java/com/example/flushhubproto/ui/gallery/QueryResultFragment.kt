@@ -87,6 +87,7 @@ class QueryResultFragment: Fragment() {
             binding.detailsTextView.text = details
         }
 
+        //setting up new instances of the same stuffs we did in HomeFragment/MainActivity
         androidLocationProvider = AndroidLocationProvider(
             context = requireContext(),
             config = androidLocationProviderConfig
@@ -141,6 +142,8 @@ class QueryResultFragment: Fragment() {
 //            }
 //        }
 //    }
+
+    //filters to get only the bathrooms with specifications user want
     private fun filterMap(area: String = "all", rating: Double = 0.0){
         Log.d("Find Button call from query res frag","filter map called...")
 
@@ -152,10 +155,11 @@ class QueryResultFragment: Fragment() {
                 val longitude: Double = parts[0].toDouble()
                 val latitude: Double = parts[1].toDouble()
                 val address: String = data.first.Location
-                var distance = "N/A"
-                var time = "N/A"
-                var stars = 0.0
+                var distance = "N/A" //default value
+                var time = "N/A" //default value
+                var stars = 0.0 //default value
 
+                //if the distance is gotten, then it implies other fields are also gotten
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
                     time = data.third.toString()
@@ -166,17 +170,20 @@ class QueryResultFragment: Fragment() {
                     processedAddresses.add(address)
                     mapFragment.getMapAsync{tomtomMap ->
                         if(area == "west"){
+                            //-71.110940 is the line we drew to mark the start of west campus
                             if(longitude < -71.110940 && stars >= rating){
                                 Log.d("remove", longitude.toString())
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
                             }
                         }else if(area == "central"){
                             Log.d("remove", "central")
+                            //central campus in between the two lines
                             if(longitude >= -71.110940 && longitude <= -71.100546 && stars >= rating){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
                             }
                         }else if(area == "east"){
                             Log.d("remove", "east")
+                            //-71.100546 is the line we drew to mark the start of east campus
                             if(longitude > -71.100546 && stars >= rating){
                                 markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
                             }
@@ -191,7 +198,7 @@ class QueryResultFragment: Fragment() {
         }
     }
 
-
+    //Ask for gps location permission from user
     private fun requestPermissionsIfNecessary() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -202,6 +209,7 @@ class QueryResultFragment: Fragment() {
         }
     }
 
+    //Handle permission response
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
@@ -244,6 +252,8 @@ class QueryResultFragment: Fragment() {
         val conversionFactor = 0.000621371
         return String.format("%.1f", meters * conversionFactor)
     }
+
+    //This function adds markers to the TomTomMap API fragment
     private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
         val loc = GeoPoint(lat, long)
         val markerOptions = MarkerOptions(
@@ -271,6 +281,8 @@ class QueryResultFragment: Fragment() {
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
         }
     }
+
+    //This function reveals a layout for the user to launch Google Maps to route them
     private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
         val layout = binding.goToRouteLayout
         binding.goToRouteLayout.visibility = View.VISIBLE
@@ -293,6 +305,8 @@ class QueryResultFragment: Fragment() {
         }
         bathroomViewModel.updateSelectedLocation(address)
     }
+
+    //This function passes lat and long to Google maps and launch it to route the user
     fun openMap(context: Context, lat: Double, long: Double, label: String = "Restroom") {
         val geoUri = android.net.Uri.parse("geo:0,0?q=$lat,$long($label)")
         val intent = Intent(Intent.ACTION_VIEW, geoUri)
@@ -318,6 +332,8 @@ class QueryResultFragment: Fragment() {
 
         tomtomMap.enableLocationMarker(locationMarkerOptions)
     }
+
+    //Move the map to the current user location
     private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
         val cameraOptions = CameraOptions(
             position = GeoPoint(lat, long),

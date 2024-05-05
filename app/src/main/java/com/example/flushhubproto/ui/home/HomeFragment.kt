@@ -190,6 +190,7 @@ class HomeFragment : Fragment() {
         tomtomMap.enableLocationMarker(locationMarkerOptions)
     }
 
+    //Move the map to the current user location
     private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
         val cameraOptions = CameraOptions(
             position = GeoPoint(lat, long),
@@ -247,6 +248,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    //This function reveals a layout for the user to launch Google Maps to route them
     private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
         val layout = binding.goToRouteLayout
         binding.goToRouteLayout.visibility = VISIBLE
