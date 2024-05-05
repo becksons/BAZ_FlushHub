@@ -73,8 +73,6 @@ class HomeFragment : Fragment() {
         val longitude: Double
     )
 
-
-
     companion object {
         const val REQUEST_LOCATION_PERMISSION = 1
 
@@ -100,18 +98,14 @@ class HomeFragment : Fragment() {
     private var isBarVisible: Boolean = false
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fun toggleBar() {
             isBarVisible = !isBarVisible
         }
-
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
         }
-
     }
 
 
@@ -175,7 +169,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     private fun observeLocationInfos() {
         Log.d("Home recycler length", "${bathroomViewModel.bathrooms.value?.size}")
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
@@ -185,63 +178,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-//    private fun requestPermissionsIfNecessary() {
-//        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
-//        } else {
-//            initializeMapWithLocation()
-//        }
-//    }
-//
-//    @Deprecated("Deprecated in Java")
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-//        when (requestCode) {
-//            REQUEST_LOCATION_PERMISSION -> {
-//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    initializeMapWithLocation()
-//                } else {
-//                    //TODO: error handle for permission denied
-//                }
-//            }
-//        }
-//    }
-//
-////    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
-////    private val mapFragment = MapFragment.newInstance(mapOptions)
-//
-//
-//    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
-//        minTimeInterval = Double.MAX_VALUE.milliseconds,
-//        minDistance = Distance.meters(20.0)
-//    )
-//
-//
-//
-//    private fun initializeMapWithLocation() {
-//        childFragmentManager.beginTransaction()
-//            .replace(R.id.map_container, mapFragment)
-//            .commit()
-//
-//
-//        mapFragment.getMapAsync { tomtomMap ->
-//            tomtomMap.setLocationProvider(androidLocationProvider)
-//            androidLocationProvider?.enable()
-//
-//            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
-//                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
-//
-//                currentLatitude = location.position.latitude
-//                currentLongitude = location.position.longitude
-//
-//                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-//                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
-//            }
-//
-//
-//            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
-//        }
-//    }
     private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
         val customArrowImage = ImageFactory.fromResource(R.drawable.nav_arrow)
         val file = File("/Users/becksonstein/AndroidStudioProjects/FlushHubProto/app/src/main/assets/custom_nav_arrow.svg")

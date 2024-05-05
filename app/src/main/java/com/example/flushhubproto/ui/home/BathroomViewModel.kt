@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.schema.bathroom
-import com.example.flushhubproto.ui.home.HomeFragment.Companion.currentLatitude
-import com.example.flushhubproto.ui.home.HomeFragment.Companion.currentLongitude
 import com.google.gson.Gson
 import io.realm.Realm
 import io.realm.mongodb.App
@@ -28,8 +26,6 @@ class BathroomViewModel : ViewModel() {
     private val _selectedLocation = MutableLiveData<String>()
     val selectedLocation: LiveData<String> = _selectedLocation
 
-
-
     //Search query listener
     private val _queryReady = MutableLiveData<Boolean>(false)
     val queryReady :MutableLiveData<Boolean> get() = _queryReady
@@ -44,15 +40,9 @@ class BathroomViewModel : ViewModel() {
     private val _queriedBathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
     val queriedBathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get()  = _queriedBathrooms
 
-
-
     init {
         initializeMongoDBRealm()
     }
-    fun selectLocation(address: String) {
-        _selectedLocation.value = address
-    }
-
 
 
     private fun initializeMongoDBRealm() {
@@ -88,10 +78,10 @@ class BathroomViewModel : ViewModel() {
         realm = try {
             Realm.getInstance(flexibleSyncConfig)
         } catch (e: Exception) {
+            Log.i("FlUSHHUB", "COULD NOT GET REALM!")
             null
         }
-
-        loadAllBathrooms()
+        MainActivity.isRealmInit.postValue(1)
     }
 
     // ================== Database Processing Functions ==================
@@ -146,8 +136,7 @@ class BathroomViewModel : ViewModel() {
 
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
-            // Our Loaders
-            MainActivity.swipeLoading.postValue(true)
+            MainActivity.swipeLoading.postValue(true) // Our Loaders
             val results = bgRealm.where(bathroom::class.java)?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             if (bathrooms != null) { // Do a null check, if null we don't proceed
@@ -163,15 +152,11 @@ class BathroomViewModel : ViewModel() {
                     var defaultLat = 42.350498333333334
                     var defaultLong = -71.10539833333333
 
-                    if (currentLatitude != 0.0 && currentLongitude != 0.0) {
-                        defaultLat = currentLatitude
-                        defaultLong = currentLongitude
+                    if (MainActivity.currentLongitude != 0.0 && MainActivity.currentLatitude != 0.0) {
+                        defaultLat = MainActivity.currentLatitude!!
+                        defaultLong = MainActivity.currentLongitude!!
                     }
 
-//                    Log.d("user lat", currentLatitude.toString())
-//                    Log.d("user long", currentLongitude.toString())
-                    Log.d("user lat", defaultLat.toString())
-                    Log.d("user long", defaultLong.toString())
                     val calculations = calcRange(
                         defaultLat,
                         defaultLong,

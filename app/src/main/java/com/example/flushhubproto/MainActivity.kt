@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -20,13 +22,14 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.example.flushhubproto.schema.bathroom
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
@@ -42,30 +45,29 @@ import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
-import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import io.realm.Realm
-import java.io.File
 import kotlin.time.Duration.Companion.milliseconds
 
-class MainActivity : AppCompatActivity() {
 
+class MainActivity : AppCompatActivity() {
     companion object {
         var isLoading = MutableLiveData(true)
         var swipeLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
+        var isRealmInit = MutableLiveData(0)
         private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
         val mapFragment = MapFragment.newInstance(mapOptions)
+        var currentLongitude: Double? = 0.0
+        var currentLatitude: Double? = 0.0
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
-    private var initStart = true
     private var loadStart = true
 
     private var isDrawerOpen = false
-    private var greetBuilder : StringBuilder? = null
     private var submitButton:Button? = null
     private var nameEditText :EditText? = null
     private var landingPage :LinearLayout? = null
@@ -73,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var greetingTextView: TextView
     private lateinit var distanceTextView: TextView
-    private lateinit var fragmentBannerView: TextView
+    private lateinit var bathroomViewModel: BathroomViewModel
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,8 +87,9 @@ class MainActivity : AppCompatActivity() {
             config = androidLocationProviderConfig
         )
         Realm.init(this) // DB initialization
+        bathroomViewModel = ViewModelProvider(this)[BathroomViewModel::class.java]
 
-
+        // Get users current location and set the location (once)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         isQueryLoading.postValue(false)
@@ -110,7 +113,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         setupDrawer()
 
         submitButton = findViewById<Button>(R.id.submitButton)
@@ -153,12 +155,36 @@ class MainActivity : AppCompatActivity() {
             REQUEST_LOCATION_PERMISSION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initializeMapWithLocation()
+                    val lm = getSystemService(LOCATION_SERVICE) as LocationManager
+                    if (ActivityCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        lm.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            Long.MAX_VALUE,
+                            Float.MAX_VALUE,
+                            locationListener
+                        )
+                    }
                 } else {
                     //TODO: error handle for permission denied
                 }
             }
         }
     }
+
+    // One time location listener
+    private val locationListener: LocationListener = LocationListener { location ->
+        currentLongitude = location.longitude
+        currentLatitude = location.latitude
+        isRealmInit.postValue(2)
+    }
+
 
     private val androidLocationProviderConfig = AndroidLocationProviderConfig(
         minTimeInterval = 1000.milliseconds,
@@ -196,12 +222,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
-        val customArrowImage = ImageFactory.fromResource(R.drawable.nav_arrow)
-        val file = File("/Users/becksonstein/AndroidStudioProjects/FlushHubProto/app/src/main/assets/custom_nav_arrow.svg")
-
         val locationMarkerOptions = LocationMarkerOptions(
             type = LocationMarkerOptions.Type.Chevron
-//            customModel = android.net.Uri.fromFile(file)
         )
 
         tomtomMap.enableLocationMarker(locationMarkerOptions)
@@ -214,7 +236,7 @@ class MainActivity : AppCompatActivity() {
         // Kickstart Loading Screen
         isLoading.observe(this) { isLoading ->
             if (isLoading) {
-                navController.navigate(R.id.loadingFragment)
+                navController.navigate(R.id.initLoadingFragment)
                 binding.root.isClickable = false
                 binding.appBarMain.appBarBanner.visibility = GONE
                 binding.appBarMain.navHeaderMain.root.visibility = GONE
@@ -244,8 +266,6 @@ class MainActivity : AppCompatActivity() {
 
         btnMenuClose.setOnClickListener {
             closeTopDrawer()
-
-
         }
 
         btnNavEntertainment.setOnClickListener{
@@ -256,9 +276,7 @@ class MainActivity : AppCompatActivity() {
 
             }else{
                 closeTopDrawer()
-
             }
-
         }
 
         btnNavHome.setOnClickListener {
@@ -266,11 +284,8 @@ class MainActivity : AppCompatActivity() {
             if(currentDestinationId!=R.id.nav_home){
                 navController.navigate(R.id.nav_home)
                 closeTopDrawer()
-
             }else{
-
                 closeTopDrawer()
-
             }
         }
         btnNavFind.setOnClickListener {
@@ -278,11 +293,8 @@ class MainActivity : AppCompatActivity() {
             if(currentDestinationId!=R.id.nav_gallery){
                 navController.navigate(R.id.nav_gallery)
                 closeTopDrawer()
-
             }else{
-
                 closeTopDrawer()
-
             }
         }
         btnNavRate.setOnClickListener {
@@ -290,11 +302,8 @@ class MainActivity : AppCompatActivity() {
             if(currentDestinationId!=R.id.nav_slideshow){
                 navController.navigate(R.id.nav_slideshow)
                 closeTopDrawer()
-
             }else{
-
                 closeTopDrawer()
-
             }
         }
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -307,7 +316,6 @@ class MainActivity : AppCompatActivity() {
                         translationX = 2.0F
                         translationY = 10.0F
                         gravity = Gravity.CENTER
-
                     }
                     greetingTextView.visibility = GONE
                     distanceTextView.visibility = GONE
@@ -319,7 +327,6 @@ class MainActivity : AppCompatActivity() {
                         text = "\n" + getString(R.string.find_your_restroom)
                         textSize = 22.0F
                     }
-
                     greetingTextView.visibility = GONE
                     distanceTextView.visibility = GONE
                 }
@@ -338,7 +345,6 @@ class MainActivity : AppCompatActivity() {
                         translationX = -6.0F
                         translationY= -60.0F
                         gravity = Gravity.CENTER
-
                     }
                     greetingTextView.visibility = GONE
                     distanceTextView.visibility = GONE
@@ -364,35 +370,31 @@ class MainActivity : AppCompatActivity() {
         distanceTextView.visibility = GONE
     }
 
-
     private fun isTouchInsideView(event: MotionEvent, view: View): Boolean {
-//    Checking if touch event in range to close top drawer
-    val viewLocation = IntArray(2)
-    view.getLocationOnScreen(viewLocation)
-    val viewX = viewLocation[0]
-    val viewY = viewLocation[1]
-    val viewWidth = view.width
-    val viewHeight = view.height
+        // Checking if touch event in range to close top drawer
+        val viewLocation = IntArray(2)
+        view.getLocationOnScreen(viewLocation)
+        val viewX = viewLocation[0]
+        val viewY = viewLocation[1]
+        val viewWidth = view.width
+        val viewHeight = view.height
 
-    val touchX = event.rawX.toInt()
-    val touchY = event.rawY.toInt()
+        val touchX = event.rawX.toInt()
+        val touchY = event.rawY.toInt()
 
-    return touchX >= viewX && touchX <= (viewX + viewWidth) &&
-            touchY >= viewY && touchY <= (viewY + viewHeight)
-}
+        return touchX >= viewX && touchX <= (viewX + viewWidth) &&
+                touchY >= viewY && touchY <= (viewY + viewHeight)
+    }
     private fun observeLoadingState() {
        isQueryLoading.observe(this) { isLoading ->
             if (isLoading) {
-                navController.navigate(R.id.loadingFragment)
+                navController.navigate(R.id.initLoadingFragment)
             } else {
-                if (navController.currentDestination?.id == R.id.loadingFragment && !loadStart) {
+                if (navController.currentDestination?.id == R.id.initLoadingFragment && !loadStart) {
                     navController.navigate(R.id.queryResultFragment)
                 }
-
-
-
             }
-        }
+       }
     }
     private fun saveName(name: String) {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
@@ -401,7 +403,6 @@ class MainActivity : AppCompatActivity() {
             putBoolean("is_first_launch", false)
             apply()
         }
-
     }
     private fun checkAndDisplayUserName() {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
@@ -421,19 +422,11 @@ class MainActivity : AppCompatActivity() {
     private fun greetUser(name: String, milesAway: Float) {
         greetingTextView = findViewById(R.id.greeting_text_name)
         distanceTextView = findViewById(R.id.greeting_miles_away)
-        //val greetingText = SpannableString(getString(R.string.dont_worry) + " $name!")
-        //greetingText.setSpan(StyleSpan(Typeface.BOLD), 12, 12 + name.length+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        //val distanceText = SpannableString("       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away))
-        //distanceText.setSpan(StyleSpan(Typeface.BOLD), 24, 24 + milesAway.toString().length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
         greetingTextView.text = getString(R.string.dont_worry) + " $name!"
         distanceTextView.text = "       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away)
 
         greetingTextView.visibility = VISIBLE
         distanceTextView.visibility = VISIBLE
-
-
-
     }
     private fun openTopDrawer() {
         topDrawer.animate().translationY(0f).setDuration(300).start()
