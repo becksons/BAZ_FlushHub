@@ -20,7 +20,7 @@ class FindRestroomFragment : Fragment() {
     private var _binding: FragmentFindBinding? = null
     private lateinit var bathroomViewModel: BathroomViewModel
     private val binding get() = _binding!!
-    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "all", "0.0")
+    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "all", "0.0") //default values
     companion object{
         var isQueryLoading = MutableLiveData(false)
     }
@@ -33,7 +33,7 @@ class FindRestroomFragment : Fragment() {
         val root: View = binding.root
 
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
-        binding.genderRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.genderRadioGroup.setOnCheckedChangeListener { group, checkedId -> //check user input for gender
             val gender = when (checkedId) {
                 R.id.gender_male -> "Male"
                 R.id.gender_female -> "Female"
@@ -43,7 +43,7 @@ class FindRestroomFragment : Fragment() {
             handleGenderSelection(gender)
         }
 
-        bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { dataList ->
+        bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { dataList -> //getting the bathrooms data
             dataList?.forEach { data->
                 val parts = data.first.Coordinates.split(',')
                 val longitude: Double = parts[0].toDouble()
@@ -62,6 +62,7 @@ class FindRestroomFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        //handling user input for campus area
         binding.campusEast.setOnClickListener {
             handleCampusSelection("east")
             updateButtonState(it)
@@ -104,6 +105,7 @@ class FindRestroomFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
+    //Updating button UI's when one is clicked
     private fun updateButtonState(selectedButton: View) {
         listOf(binding.campusEast, binding.campusCentral, binding.campusWest).forEach {
             it.isEnabled = it != selectedButton

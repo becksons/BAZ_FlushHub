@@ -62,4 +62,22 @@
     <string name="miles_away">ไมล์จากคุณ</string>
     <string name="stars">ดาว</string>
     <string name="your_restrooms">ห้องน้ำของคุณ:</string>
+    <string name="cute_animals">สัตว์น่ารัก</string>
+    <string name="play_boggle">เล่น Boggle</string>
+    <string name="play_hangman">เล่น Hangman</string>
+    <string name="elevate_your_restroom_experience_with">เพิ่มเติมประสบการณ์การเข้าห้องน้ำ</string>
+    <string name="click_for_a_random_cat">กดเพื่อดูแมว</string>
+    <string name="click_for_a_random_dog">กดเพื่อดูหมา</string>
+    <string name="click_for_a_random_fox">กดเพื่อดูจิ้งจอก</string>
+    <string name="enter_a_word_then_hit_submit">กดตัวอักษรเพื่อสะกดคำ \n แล้วกดบันทึก</string>
+    <string name="clear">ลบหมด</string>
+    <string name="score">คะแนน:</string>
+    <string name="submit_button">สง</string>
+    <string name="new_game">เกมใหม่</string>
+    <string name="word">คำ</string>
+    <string name="browse_the_news">หาข่าว</string>
+    <string name="query_greeting">ไม่ต้องห่วง Flushhubs ช่วยคุณได้</string>
+    <string name="query_progress_1">ค้นหาห้องน้ำที่ดีที่สุด</string>
+    <string name="query_progress_2">กดคาวคิดเห็นที่ไม่ดี</string>
+    <string name="query_progress_3">วิเคราะห์ห้องน้ำตามความต้องการ</string>
 </resources>

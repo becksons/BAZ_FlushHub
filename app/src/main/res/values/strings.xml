@@ -88,10 +88,10 @@
     <string name="enter_a_word_then_hit_submit">Tap the letters together to form a word, \n then press enter</string>
     <string name="clear">Clear</string>
     <string name="score">Score:</string>
-    <string name="default_score">0</string>
+    <string name="default_score" translatable="false">0</string>
     <string name="submit_button">Submit</string>
     <string name="new_game">New Game</string>
-    <string name="boggle">Boggle!</string>
+    <string name="boggle" translatable="false">Boggle!</string>
     <string name="word">WORD</string>
     <string name="browse_the_news">BROWSE THE NEWS</string>
 </resources>
