@@ -79,17 +79,21 @@
 
 
         </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
         <TextView
             android:id="@+id/articleContent"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:fontFamily="@font/ruda_regular"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:text="@string/details" />
+        </ScrollView>
 
         <Button
             android:id="@+id/back_button"

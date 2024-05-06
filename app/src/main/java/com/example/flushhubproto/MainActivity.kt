@@ -50,7 +50,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        var isLoading = MutableLiveData(true)
+        var isLoading = MutableLiveData(false)
         var swipeLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
         private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
@@ -316,8 +316,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_slideshow -> {
                     fragmentBannerView.visibility = VISIBLE
                     fragmentBannerView.apply {
-                        text = "\n" + getString(R.string.find_your_restroom)
-                        textSize = 22.0F
+                        text =  getString(R.string.find_your_restroom)
+                        textSize = 23.0F
+                        translationX = 2.0F
+                        translationY = 10.0F
+                        gravity = Gravity.CENTER
                     }
 
                     greetingTextView.visibility = GONE
@@ -330,18 +333,61 @@ class MainActivity : AppCompatActivity() {
                     distanceTextView.visibility = VISIBLE
                     fragmentBannerView.visibility = GONE
                 }
-                R.id.nav_entertainment -> {
+                R.id.randomAnimalFragment -> {
                     fragmentBannerView.visibility = VISIBLE
                     fragmentBannerView.apply {
-                        text = "\n" + getString(R.string.news)
-                        textSize = 23.0F
-                        translationX = -6.0F
-                        translationY= -60.0F
+                        text = getString(R.string.entertainment_banner)
+                        textSize = 24.0F
+                        translationX = 2.0F
+                        translationY = 10.0F
                         gravity = Gravity.CENTER
 
                     }
                     greetingTextView.visibility = GONE
                     distanceTextView.visibility = GONE
+
+                }
+                R.id.flushHubBoggle ->{
+                    fragmentBannerView.visibility = VISIBLE
+                    fragmentBannerView.apply {
+                        text =getString(R.string.entertainment_banner)
+                        textSize = 24.0F
+                        translationX = 2.0F
+                        translationY = 10.0F
+                        gravity = Gravity.CENTER
+
+                    }
+                    greetingTextView.visibility = GONE
+                    distanceTextView.visibility = GONE
+
+                }
+                R.id.nav_entertainment ->{
+                    fragmentBannerView.visibility = VISIBLE
+                    fragmentBannerView.apply {
+                        text = getString(R.string.entertainment_banner)
+                        textSize = 24.0F
+                        translationX = 2.0F
+                        translationY = 10.0F
+                        gravity = Gravity.CENTER
+
+                    }
+                    greetingTextView.visibility = GONE
+                    distanceTextView.visibility = GONE
+
+                }
+                R.id.newsListFragment ->{
+                    fragmentBannerView.visibility = VISIBLE
+                    fragmentBannerView.apply {
+                        text = getString(R.string.news_banner)
+                        textSize = 24.0F
+                        translationX = 2.0F
+                        translationY = 10.0F
+                        gravity = Gravity.CENTER
+
+                    }
+                    greetingTextView.visibility = GONE
+                    distanceTextView.visibility = GONE
+
                 }
 
             }
@@ -428,6 +474,7 @@ class MainActivity : AppCompatActivity() {
 
         greetingTextView.text = getString(R.string.dont_worry) + " $name!"
         distanceTextView.text = "       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away)
+        distanceTextView.textAlignment = View.TEXT_ALIGNMENT_INHERIT
 
         greetingTextView.visibility = VISIBLE
         distanceTextView.visibility = VISIBLE

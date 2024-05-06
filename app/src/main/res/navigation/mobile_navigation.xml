@@ -70,9 +70,9 @@
     </fragment>
     <fragment
         android:id="@+id/nav_entertainment"
-        android:name="com.example.flushhubproto.ui.entertainment.EntertainmentFragment"
-        android:layout = "@layout/fragmnet_entertainment"
-        android:label="EntertainmentFragment">
+        android:name="com.example.flushhubproto.ui.entertainment.EntertainmentHomeFragment"
+        android:layout = "@layout/flushhub_entertainment_home_fragment"
+        android:label="EntertainmentHomeFragment">
     <action
         android:id="@+id/list_to_detail"
         app:destination="@id/detailFragment">
@@ -133,6 +133,15 @@
             android:id="@+id/action_queryResultFragment_to_nav_gallery"
             app:destination="@id/nav_gallery" />
     </fragment>
+    <fragment
+        android:id="@+id/randomAnimalFragment"
+        android:name="com.example.flushhubproto.ui.entertainment.RandomAnimalFragment"
+        android:label="RandomAnimalFragment" />
+    <fragment
+        android:id="@+id/flushHubBoggle"
+        android:name="com.example.flushhubproto.ui.entertainment.fhboggle.FlushHubBoggle"
+        android:label="FlushHubBoggle"
+        tools:layout="@layout/fh_boggle"/>
 
 
 </navigation>

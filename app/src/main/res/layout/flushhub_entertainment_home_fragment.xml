@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fh_background"
+    tools:context="com.example.flushhubproto.ui.entertainment.EntertainmentHomeFragment">
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:elevation="10dp"
+        android:background="@color/fh_tool_bar"
+        android:orientation="vertical"
+        android:translationY="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="120dp"
+
+            android:layout_gravity="center"
+
+            android:src = "@drawable/entertainment_homepage_icon"
+            android:scaleY="2.2"
+            android:scaleX="2.2"
+            android:translationY="80dp"
+          >
+
+        </ImageView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            >
+
+        </View>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/ruda_black"
+            android:text="FLUSHHUB ENTERTAINMENT"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textAlignment="center">
+
+        </TextView>
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:fontFamily="@font/ruda_bold"
+            android:text="@string/elevate_your_restroom_experience_with"
+            android:textColor="@color/purple_500"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout3">
+
+        </TextView>
+        <View
+            android:layout_width="350dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:background="@color/black">
+
+        </View>
+        <Button
+            android:id="@+id/nav_entertainment_animals"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:background="@drawable/find_button"
+
+            android:fontFamily="@font/ruda_black"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:layout_marginTop="30dp"
+
+            android:text = "@string/cute_animals"
+            >
+
+        </Button>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            >
+
+        </View>
+        <Button
+            android:id="@+id/nav_entertainment_boggle"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:background="@drawable/find_button"
+            android:fontFamily="@font/ruda_black"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:layout_gravity="center"
+            android:text = "@string/play_boggle"
+            >
+
+        </Button>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            >
+
+        </View>
+        <Button
+            android:id="@+id/nav_entertainment_hangman"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:background="@drawable/find_button"
+            android:fontFamily="@font/ruda_black"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+
+            android:text = "@string/browse_the_news"
+            >
+
+        </Button>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

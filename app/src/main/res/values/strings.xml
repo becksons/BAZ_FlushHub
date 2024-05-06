@@ -23,7 +23,7 @@
     <string name="what_is_your_name">What is your name?</string>
     <string name="submit">Enter</string>
     <string name="landing_app_description">Boston University\'s #1 restroom finder tool!</string>
-    <string name="find_your_restroom">Find Your Restroom:</string>
+    <string name="find_your_restroom">FIND YOUR RESTROOM</string>
     <string name="gender">GENDER:</string>
     <string name="campus">CAMPUS AREA:</string>
     <string name="rating">RESTROOM RATING:</string>
@@ -64,12 +64,30 @@
     <string name="miles">mil</string>
     <string name="minutes">min</string>
     <string name="top_restroom">BU\'S TOP RESTROOMS</string>
-    <string name="news">FLUSH HUB NEWS</string>
+    <string name="entertainment_banner">FLUSH HUB FUN</string>
+    <string name="news_banner" translatable="false">FLUSH HUB NEWS</string>
     <string name="ask_name">Please enter your name</string>
     <string name="dont_worry">Don\'t worry,</string>
     <string name="nearest">The nearest restroom is</string>
     <string name="miles_away">miles away!</string>
     <string name="your_restrooms">Your Restrooms: </string>
     <string name="stars">stars</string>
-    <string name="back">Back</string>
+    <string name="back" translatable="false">Back</string>
+    <string name="generate_meme" translatable="false">Click for a random meme</string>
+    <string name="cute_animals">CUTE ANIMALS</string>
+    <string name="play_boggle">PLAY BOGGLE</string>
+    <string name="play_hangman">PLAY HANGMAN</string>
+    <string name="elevate_your_restroom_experience_with">Elevate your restroom experience</string>
+    <string name="click_for_a_random_cat">Click for a random cat!</string>
+    <string name="click_for_a_random_dog">Click for a random dog!</string>
+    <string name="click_for_a_random_fox">Click for a random fox!</string>
+    <string name="enter_a_word_then_hit_submit">Tap the letters together to form a word, \n then press enter</string>
+    <string name="clear">Clear</string>
+    <string name="score">Score:</string>
+    <string name="default_score">0</string>
+    <string name="submit_button">Submit</string>
+    <string name="new_game">New Game</string>
+    <string name="boggle">Boggle!</string>
+    <string name="word">WORD</string>
+    <string name="browse_the_news">BROWSE THE NEWS</string>
 </resources>
