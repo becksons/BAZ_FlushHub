@@ -122,6 +122,7 @@
             android:id="@+id/action_loadingFragment_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
+
     <fragment
         android:id="@+id/queryResultFragment"
         android:name="com.example.flushhubproto.ui.gallery.QueryResultFragment"

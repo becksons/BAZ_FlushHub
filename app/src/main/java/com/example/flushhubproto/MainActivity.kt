@@ -29,7 +29,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.example.flushhubproto.schema.bathroom
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
@@ -53,7 +52,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        var isLoading = MutableLiveData(false)
+        var isLoading = MutableLiveData(true)
         var swipeLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
         var isRealmInit = MutableLiveData(0)
