@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
+import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentFindBinding
 
@@ -88,8 +89,8 @@ class FindRestroomFragment : Fragment() {
                 currentQuery[0],
                 currentQuery[1],
                 currentQuery[2].toDouble(),
-                42.350498333333334,
-                -71.10539833333333
+                HomeFragment.currentLatitude,
+                HomeFragment.currentLongitude
             )
             bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
         }
@@ -105,16 +106,9 @@ class FindRestroomFragment : Fragment() {
 
     private fun updateButtonState(selectedButton: View) {
         listOf(binding.campusEast, binding.campusCentral, binding.campusWest).forEach {
-            if (it == selectedButton) {
-                it.isEnabled = false
-            } else {
-                it.isEnabled = true
-            }
+            it.isEnabled = it != selectedButton
         }
     }
-//    fun applyFilter(criteria: String) {
-//        bathroomViewModel.setFilterCriteria(criteria)
-//    }
 
     private fun handleRatingChange(rating: Float) {
         currentQuery[2] = rating.toString()

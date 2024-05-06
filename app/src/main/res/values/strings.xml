@@ -20,6 +20,10 @@
     <string name="item_dist_default">0.2 miles</string>
     <string name="item_minaway_default">4 mins</string>
     <string name="landing_greeting">Welcome to the FlushHub!</string>
+    <string name="query_greeting">Don\'t worry Flushhubs got you!</string>
+    <string name="query_progress_1">Finding the Perfect Bathrooms…</string>
+    <string name="query_progress_2">Flushing Bad Reviews…</string>
+    <string name="query_progress_3">Calculating Bathroom Criteria…</string>
     <string name="what_is_your_name">What is your name?</string>
     <string name="submit">Enter</string>
     <string name="landing_app_description">Boston University\'s #1 restroom finder tool!</string>
