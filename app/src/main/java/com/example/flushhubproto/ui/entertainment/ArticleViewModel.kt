@@ -2,18 +2,16 @@ package com.example.flushhubproto.ui.entertainment
 
 
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-
+import com.example.flushhubproto.ui.newsapi.Article
 import com.example.flushhubproto.ui.newsapi.RetrofitInstance
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import android.content.Context
-import androidx.lifecycle.ViewModelProvider
-import com.example.flushhubproto.ui.newsapi.Article
 
 
 class ArticleViewModel : ViewModel() {
@@ -22,8 +20,6 @@ class ArticleViewModel : ViewModel() {
 
     fun fetchArticles(category: String) {
         viewModelScope.launch {
-
-
             try {
                 val response =
                     RetrofitInstance.api.fetchHeadlines(
