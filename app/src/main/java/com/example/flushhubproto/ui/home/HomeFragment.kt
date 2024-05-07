@@ -170,6 +170,11 @@ class HomeFragment : Fragment() {
             )
 
             tomtomMap.addMarker(markerOptions)
+
+            tomtomMap.addMapClickListener {
+                hideGoToRouteLayout()
+                return@addMapClickListener true
+            }
         }
     }
     private fun initializeMapWithLocation() {
@@ -191,6 +196,11 @@ class HomeFragment : Fragment() {
 
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+            }
+
+            tomtomMap.addMapClickListener {
+                hideGoToRouteLayout()
+                return@addMapClickListener true
             }
 
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
