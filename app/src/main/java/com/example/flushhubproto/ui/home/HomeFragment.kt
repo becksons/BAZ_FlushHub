@@ -189,9 +189,9 @@ class HomeFragment : Fragment() {
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
             tag = "Address: ${address}\n" +
-                    "Distance: $distance" + requireContext().getString(R.string.miles) +
-                    "\nETA: $eta" + requireContext().getString(R.string.minutes) +
-                    "\nRating: $rating" + requireContext().getString(R.string.stars)
+                    "Distance: $distance" + " " +  requireContext().getString(R.string.miles) +
+                    "\nETA: $eta" + " " + requireContext().getString(R.string.minutes) +
+                    "\nRating: $rating" + " " + requireContext().getString(R.string.stars)
         )
 
         markerTags.add(markerOptions.tag.toString())
@@ -204,13 +204,12 @@ class HomeFragment : Fragment() {
         //making the marker clickable
         tomtomMap.addMarkerClickListener { clickedMarker ->
             val detailText = clickedMarker.tag
-
             if (detailText != null) {
                 bathroomViewModel.updateSelectedLocation(detailText)
             }
 
-            Log.d("MarkerClick", clickedMarker.id.toString())
 
+            Log.d("MarkerClick", clickedMarker.id.toString())
             //show a UI if click
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
         }
@@ -218,7 +217,6 @@ class HomeFragment : Fragment() {
 
     //This function reveals a layout for the user to launch Google Maps to route them
     private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
-        val layout = binding.goToRouteLayout
         binding.goToRouteLayout.visibility = VISIBLE
         binding.goToRouteLayout.apply {
             visibility = View.VISIBLE

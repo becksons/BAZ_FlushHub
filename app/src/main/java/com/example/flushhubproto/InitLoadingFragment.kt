@@ -19,6 +19,7 @@ class InitLoadingFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = InitLoadingPageBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
+        MainActivity.loadStart = true
 
         MainActivity.isRealmInit.observe(viewLifecycleOwner) {
             if (ActivityCompat.checkSelfPermission(

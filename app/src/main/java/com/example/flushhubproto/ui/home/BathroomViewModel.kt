@@ -245,6 +245,7 @@ class BathroomViewModel : ViewModel() {
                     }
 
                     if (distance != -1.0 && time != -1.0) {
+                        MainActivity.queryEmpty = false // We don't have an empty query!
                         Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
                         Triple(queryRes, distance, time)
                     } else {
