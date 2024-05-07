@@ -78,9 +78,6 @@ class QueryResultFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
-//            filterMap(criteria)
-//        }
 
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
@@ -199,6 +196,8 @@ class QueryResultFragment: Fragment() {
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
         }
     }
+
+    //Converting meters to miles
     private fun metersToMiles(meters: Double): String {
         val conversionFactor = 0.000621371
         return String.format("%.1f", meters * conversionFactor)
