@@ -4,12 +4,14 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.flushhubproto.LocationInfoAdapter
+import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
@@ -93,6 +96,7 @@ class QueryResultFragment: Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = QueryResFragmentBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
+        requestPermissionsIfNecessary()
 
         val queryRes = bathroomViewModel.searchQuery.value?.second
         filterMap(queryRes.toString())
@@ -168,6 +172,28 @@ class QueryResultFragment: Fragment() {
                 }
             }
 
+        }
+    }
+
+    private fun requestPermissionsIfNecessary() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                HomeFragment.REQUEST_LOCATION_PERMISSION
+            )
+        } else {
+            initializeMapWithLocation()
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            HomeFragment.REQUEST_LOCATION_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initializeMapWithLocation()
+                }
+            }
         }
     }
 

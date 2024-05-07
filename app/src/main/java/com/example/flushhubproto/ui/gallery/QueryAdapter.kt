@@ -19,7 +19,6 @@ class QueryAdapter(private var locationList: List<Marker>) : RecyclerView.Adapte
 
 
     interface QueryAdapterListener {
-
         fun onItemClick(position: Int, item: Triple<bathroom, Double, Double>)
     }
     @SuppressLint("NotifyDataSetChanged")
@@ -31,9 +30,6 @@ class QueryAdapter(private var locationList: List<Marker>) : RecyclerView.Adapte
 
 
     }
-
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QueryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.location_info_item, parent, false)
@@ -47,7 +43,6 @@ class QueryAdapter(private var locationList: List<Marker>) : RecyclerView.Adapte
     }
 
     override fun getItemCount() = locationList.size
-
 
     inner class QueryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val addressTextView: TextView = itemView.findViewById(R.id.address_text_view)

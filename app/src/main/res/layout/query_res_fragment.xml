@@ -37,14 +37,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="440dp"
                 android:background="@android:color/transparent"
-
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:context="com.example.flushhubproto.ui.home.HomeFragment" />
-
-
-
-
         <LinearLayout
             android:id="@+id/go_to_route_layout"
             android:layout_width="match_parent"
@@ -53,19 +48,11 @@
             android:elevation="10dp"
             android:translationY="400dp"
             android:visibility="gone"
-
-
-
             android:orientation="vertical"
-
-
-
-
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context="com.example.flushhubproto.ui.home.GoToRouteFragment">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,12 +78,9 @@
                     android:layout_height="60dp"
                     android:layout_margin="10dp"
                     android:fontFamily="@font/ruda_regular"
-
                     android:text="Details will appear here"
                     android:textColor="#000000"
                     android:textSize="12sp"
-
-
                     android:translationX="-30dp" />
 
                 <Button
@@ -106,29 +90,16 @@
                     android:layout_gravity="center"
                     android:background="@drawable/find_button"
                     android:drawableLeft="@drawable/walk_icon"
-
                     android:elevation="8dp"
                     android:fontFamily="@font/ruda_black"
-
                     android:text="GO"
                     android:textColor="@color/black"
-
-
                     android:textSize="21sp"
                     android:translationX="-40dp"
-
-
                     />
-
-
             </LinearLayout>
-
             <!-- TextView for displaying route details like coordinates, distance, and time -->
-
-
         </LinearLayout>
-
-
             <include
                 android:id="@+id/query_res_recycler_view"
                 layout="@layout/query_res_recycler_list"
@@ -136,12 +107,6 @@
                 android:layout_height="300dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
