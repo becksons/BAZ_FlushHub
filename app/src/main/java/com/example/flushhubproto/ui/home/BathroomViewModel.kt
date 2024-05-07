@@ -81,7 +81,9 @@ class BathroomViewModel : ViewModel() {
             Log.i("FlUSHHUB", "COULD NOT GET REALM!")
             null
         }
-        MainActivity.isRealmInit.postValue(1)
+
+        Log.d("INIT", "Fetched Realm Instance. Posting Value!")
+        MainActivity.isRealmInit.postValue(true)
     }
 
     // ================== Database Processing Functions ==================
@@ -174,7 +176,9 @@ class BathroomViewModel : ViewModel() {
                     Triple(test, distance, time)
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
             }
-            MainActivity.isLoading.postValue(false) // Finish Loading
+            if (MainActivity.isInitLoading.value == true) {
+                MainActivity.isInitLoading.postValue(false) // Finish Loading for Initial Loading
+            }
             MainActivity.swipeLoading.postValue(false) // Finish Loading
         }
     }
@@ -248,11 +252,8 @@ class BathroomViewModel : ViewModel() {
                     }
                 }.sortedBy { it.second })
             }
-            MainActivity.isQueryLoading.postValue(false)// Finish Loading
-
-
+            MainActivity.isQueryLoading.postValue(false)// Finish Loading after gathering Query
         }
-
     }
     // ===================================================================
     override fun onCleared() {
