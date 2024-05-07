@@ -62,8 +62,6 @@ class MainActivity : AppCompatActivity() {
         var loadStart = true
         var currentLongitude: Double = 0.0
         var currentLatitude: Double = 0.0
-
-//        var androidLocationProvider: LocationProvider? = null
     }
 
     private var androidLocationProvider: LocationProvider? = null
@@ -83,12 +81,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Map Init Routine
         requestPermissionsIfNecessary()
-        androidLocationProvider = AndroidLocationProvider(
-            context = this,
-            config = androidLocationProviderConfig
-        )
         Realm.init(this) // DB initialization
         bathroomViewModel = ViewModelProvider(this)[BathroomViewModel::class.java]
 
@@ -147,8 +140,7 @@ class MainActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
         } else {
-            Log.d("INIT", "User Already Gave Existing Permssions!")
-            //initializeMapWithLocation()
+            Log.d("INIT", "User Already Gave Existing Permissions!")
             val lm = getSystemService(LOCATION_SERVICE) as LocationManager
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -182,7 +174,6 @@ class MainActivity : AppCompatActivity() {
             REQUEST_LOCATION_PERMISSION -> {
                 Log.d("INIT", "Getting Request Code...")
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    HomeFragment.initializeMapWithLocation()
                     val lm = getSystemService(LOCATION_SERVICE) as LocationManager
                     if (ActivityCompat.checkSelfPermission(
                             this,
@@ -192,7 +183,7 @@ class MainActivity : AppCompatActivity() {
                             Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        Log.d("INIT", "Permissions Checked. Fetching Current Location...")
+                        Log.d("INIT", "Permissions Checked. Allowed. Fetching Current Location...")
                         lm.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             Long.MAX_VALUE,
@@ -201,8 +192,6 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                 } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    //Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
-                    //initializeMapWithoutLocation()
                     currentLatitude = 42.3505
                     currentLongitude = -71.1054
                     isRealmInit.postValue(true)
@@ -225,65 +214,6 @@ class MainActivity : AppCompatActivity() {
 
         isRealmInit.postValue(true)
     }
-
-
-    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
-        minTimeInterval = 1000.milliseconds,
-        minDistance = Distance.meters(10.0)
-    )
-
-
-//    private fun initializeMapWithoutLocation() {
-//        mapFragment.getMapAsync { tomtomMap ->
-//            moveMap(tomtomMap, currentLatitude, currentLongitude)
-//            val loc = GeoPoint(currentLatitude, currentLongitude) //converting lat and long to GeoPoint type
-//            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move
-//                coordinate = loc,
-//                pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
-//            )
-//
-//            tomtomMap.addMarker(markerOptions)
-//        }
-//    }
-//
-//    //for if we do have gps permission
-//    private fun initializeMapWithLocation() {
-//        mapFragment.getMapAsync { tomtomMap ->
-//            tomtomMap.setLocationProvider(androidLocationProvider)
-//            androidLocationProvider?.enable()
-//
-//            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
-//                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
-//
-//                currentLatitude = location.position.latitude
-//                currentLongitude = location.position.longitude
-//
-//                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-//                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
-//            }
-//
-//            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
-//        }
-//    }
-
-//    private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
-//        val cameraOptions = CameraOptions(
-//            position = GeoPoint(lat, long),
-//            zoom = 17.0,
-//            tilt = 0.0,
-//            rotation = 0.0
-//        )
-//
-//        tomtomMap.moveCamera(cameraOptions)
-//    }
-//
-//    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
-//        val locationMarkerOptions = LocationMarkerOptions(
-//            type = LocationMarkerOptions.Type.Chevron
-//        )
-//
-//        tomtomMap.enableLocationMarker(locationMarkerOptions)
-//    }
 
     private fun setupDrawer() {
         topDrawer = findViewById(R.id.topDrawer)
@@ -319,9 +249,6 @@ class MainActivity : AppCompatActivity() {
         val btnNavFind: Button = findViewById(R.id.btn_nav_find)
         val btnNavRate: Button = findViewById(R.id.btn_nav_rate)
         val btnNavEntertainment: Button = findViewById(R.id.btn_nav_entertainment)
-//        val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.home_icon)
-//        drawable?.setBounds(0, 0, (drawable.intrinsicWidth * 0.5).toInt(), (drawable.intrinsicHeight * 0.5).toInt())
-//        btnNavHome.setCompoundDrawables(drawable, null, null, null)
 
         btnMenuClose.setOnClickListener {
             closeTopDrawer()

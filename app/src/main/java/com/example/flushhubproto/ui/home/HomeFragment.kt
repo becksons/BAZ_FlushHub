@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,6 +31,7 @@ import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
+import com.tomtom.sdk.location.android.AndroidLocationProvider
 import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
@@ -118,6 +117,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
+        Log.d("DEBUG", "CURRENT LONGITUDE: ${MainActivity.currentLongitude}, CURRENT LATITUDE: ${MainActivity.currentLatitude}")
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         childFragmentManager.beginTransaction()
@@ -125,9 +125,7 @@ class HomeFragment : Fragment() {
         .commit()
 
         requestPermissionsIfNecessary()
-
         addMarkers()
-
         setupRecyclerView(binding)
         observeLocationInfos()
         return binding.root
@@ -156,31 +154,11 @@ class HomeFragment : Fragment() {
 
     private fun requestPermissionsIfNecessary() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+            initializeMapWithoutLocation()
+        } else {
+            initializeMapWithLocation()
         }
     }
-
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_LOCATION_PERMISSION -> {
-                Log.d("INIT", "Getting Request Code...")
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    androidLocationProviderConfig
-                    initializeMapWithLocation()
-                } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    Toast.makeText(requireContext(), R.string.permission_denied, Toast.LENGTH_LONG).show()
-                    initializeMapWithoutLocation()
-                }
-            }
-        }
-    }
-
-    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
-        minTimeInterval = 250L.milliseconds,
-        minDistance = Distance.meters(20.0)
-    )
 
     private fun initializeMapWithoutLocation() {
         mapFragment.getMapAsync { tomtomMap ->
@@ -194,12 +172,16 @@ class HomeFragment : Fragment() {
             tomtomMap.addMarker(markerOptions)
         }
     }
-
-    //for if we do have gps permission
     private fun initializeMapWithLocation() {
         mapFragment.getMapAsync { tomtomMap ->
+            androidLocationProvider = AndroidLocationProvider(
+                context = requireContext(),
+                config = androidLocationProviderConfig
+            )
             tomtomMap.setLocationProvider(androidLocationProvider)
             androidLocationProvider?.enable()
+
+            Log.d("INIT", "Setting TOM TOM Map...")
 
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
@@ -214,6 +196,11 @@ class HomeFragment : Fragment() {
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
         }
     }
+
+    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
+        minTimeInterval = 1000.milliseconds,
+        minDistance = Distance.meters(10.0)
+    )
 
     private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
         val cameraOptions = CameraOptions(
