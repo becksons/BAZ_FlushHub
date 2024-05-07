@@ -52,10 +52,10 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        var isLoading = MutableLiveData(true)
+        var isInitLoading = MutableLiveData(true)
         var swipeLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
-        var isRealmInit = MutableLiveData(0)
+        var isRealmInit = MutableLiveData(false)
         private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
         val mapFragment = MapFragment.newInstance(mapOptions)
         var currentLongitude: Double? = 0.0
@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
-    private var loadStart = true
 
+    private var loadStart = true
     private var isDrawerOpen = false
     private var submitButton:Button? = null
     private var nameEditText :EditText? = null
@@ -91,7 +91,6 @@ class MainActivity : AppCompatActivity() {
         // Get users current location and set the location (once)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        isQueryLoading.postValue(false)
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -152,6 +151,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_LOCATION_PERMISSION -> {
+                Log.d("INIT", "Getting Request Code...")
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initializeMapWithLocation()
                     val lm = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -163,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                             Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
+                        Log.d("INIT", "Permissions Checked. Fetching Current Location...")
                         lm.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             Long.MAX_VALUE,
@@ -184,7 +185,8 @@ class MainActivity : AppCompatActivity() {
     private val locationListener: LocationListener = LocationListener { location ->
         currentLongitude = location.longitude
         currentLatitude = location.latitude
-        isRealmInit.postValue(2)
+        Log.d("INIT", "Fetched Current Location. Posting Value!")
+        isRealmInit.postValue(true)
     }
 
 
@@ -236,15 +238,16 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_content_main)
 
         // Kickstart Loading Screen
-        isLoading.observe(this) { isLoading ->
+        isInitLoading.observe(this) { isLoading ->
             if (isLoading) {
+                Log.d("INIT", "Initializing...")
                 navController.navigate(R.id.initLoadingFragment)
                 binding.root.isClickable = false
                 binding.appBarMain.appBarBanner.visibility = GONE
                 binding.appBarMain.navHeaderMain.root.visibility = GONE
                 binding.appBarMain.openDrawerButton.visibility = GONE
                 binding.appBarMain.menuText.visibility = GONE
-            } else {
+            } else if (loadStart) {
                 binding.appBarMain.appBarBanner.visibility =  VISIBLE
                 binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
@@ -397,7 +400,6 @@ class MainActivity : AppCompatActivity() {
                     }
                     greetingTextView.visibility = GONE
                     distanceTextView.visibility = GONE
-
                 }
 
             }
@@ -411,13 +413,6 @@ class MainActivity : AppCompatActivity() {
     private fun getUserName(): String {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("user_name", "User") ?: "User"
-    }
-
-    private fun updateBannerText(text: String) {
-        greetingTextView = findViewById(R.id.greeting_text_name)
-        distanceTextView = findViewById(R.id.greeting_miles_away)
-        greetingTextView.text = text
-        distanceTextView.visibility = GONE
     }
 
     private fun isTouchInsideView(event: MotionEvent, view: View): Boolean {
@@ -436,16 +431,26 @@ class MainActivity : AppCompatActivity() {
                 touchY >= viewY && touchY <= (viewY + viewHeight)
     }
     private fun observeLoadingState() {
-       isQueryLoading.observe(this) { isLoading ->
-            if (isLoading) {
-                navController.navigate(R.id.initLoadingFragment)
-            } else {
-                if (navController.currentDestination?.id == R.id.initLoadingFragment && !loadStart) {
-                    navController.navigate(R.id.queryResultFragment)
-                }
+       isQueryLoading.observe(this) { queryLoading ->
+            if (queryLoading) {
+                navController.navigate(R.id.queryLoadingFragment)
+                binding.root.isClickable = false
+                binding.appBarMain.appBarBanner.visibility = GONE
+                binding.appBarMain.navHeaderMain.root.visibility = GONE
+                binding.appBarMain.openDrawerButton.visibility = GONE
+                binding.appBarMain.menuText.visibility = GONE
+            } else if (!loadStart) {
+                binding.appBarMain.appBarBanner.visibility =  VISIBLE
+                binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
+                binding.appBarMain.openDrawerButton.visibility = VISIBLE
+                binding.appBarMain.menuText.visibility = VISIBLE
+
+                navController.navigate(R.id.queryResultFragment)
+                binding.root.isClickable = true
             }
        }
     }
+
     private fun saveName(name: String) {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {

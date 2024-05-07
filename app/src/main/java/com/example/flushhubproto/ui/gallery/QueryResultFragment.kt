@@ -73,7 +73,6 @@ class QueryResultFragment: Fragment() {
     private val binding get() = _binding!!
 
     private var androidLocationProvider: LocationProvider? = null
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var adapter: LocationInfoAdapter
 
@@ -97,19 +96,10 @@ class QueryResultFragment: Fragment() {
 
         val queryRes = bathroomViewModel.searchQuery.value?.second
         filterMap(queryRes.toString())
-        swipeRefreshLayout = binding.queryRecyclerListSwipeRefresh
-        swipeRefreshLayout.setOnRefreshListener {
-
-            Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
-            swipeRefreshLayout.isRefreshing = false
-        }
 
         setupRecyclerView(binding)
         observeQueriedBathrooms()
         //setupRecyclerView()
-        requestPermissionsIfNecessary()
-
-
         return binding.root
     }
     private fun setupRecyclerView(binding: QueryResFragmentBinding) {
@@ -122,18 +112,15 @@ class QueryResultFragment: Fragment() {
             // Update adapter data
             Log.d("Observing queried bathrooms","Updating data")
             if(bathrooms!=null){
-                Log.d("Observing queried bathrooms","Data not null...")
-
                 adapter.updateData(bathrooms)
             }
         }
     }
-
     //filters to get only the bathrooms with specifications user want
     private fun filterMap(area: String = "all", rating: Double = 0.0){
         Log.d("Find Button call from query res frag","filter map called...")
 
-        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
+        bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { dataList ->
             val processedAddresses = mutableSetOf<String>()
 
             dataList?.forEach { data ->
@@ -181,31 +168,6 @@ class QueryResultFragment: Fragment() {
                 }
             }
 
-        }
-    }
-
-    //Ask for gps location permission from user
-    private fun requestPermissionsIfNecessary() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                HomeFragment.REQUEST_LOCATION_PERMISSION
-            )
-        } else {
-            initializeMapWithLocation()
-        }
-    }
-
-    //Handle permission response
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            HomeFragment.REQUEST_LOCATION_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initializeMapWithLocation()
-                } else {
-                    //TODO: error handle for permission denied
-                }
-            }
         }
     }
 
