@@ -60,11 +60,13 @@ class MainActivity : AppCompatActivity() {
         var isRealmInit = MutableLiveData(false)
         var queryEmpty = true
         var loadStart = true
-        private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
-        val mapFragment = MapFragment.newInstance(mapOptions)
         var currentLongitude: Double = 0.0
         var currentLatitude: Double = 0.0
+
+//        var androidLocationProvider: LocationProvider? = null
     }
+
+    private var androidLocationProvider: LocationProvider? = null
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
@@ -73,7 +75,6 @@ class MainActivity : AppCompatActivity() {
     private var submitButton:Button? = null
     private var nameEditText :EditText? = null
     private var landingPage :LinearLayout? = null
-    private var androidLocationProvider: LocationProvider? = null
     private lateinit var navController: NavController
     private lateinit var greetingTextView: TextView
     private lateinit var distanceTextView: TextView
@@ -147,7 +148,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
         } else {
             Log.d("INIT", "User Already Gave Existing Permssions!")
-            initializeMapWithLocation()
+            //initializeMapWithLocation()
             val lm = getSystemService(LOCATION_SERVICE) as LocationManager
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -181,7 +182,7 @@ class MainActivity : AppCompatActivity() {
             REQUEST_LOCATION_PERMISSION -> {
                 Log.d("INIT", "Getting Request Code...")
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initializeMapWithLocation()
+//                    HomeFragment.initializeMapWithLocation()
                     val lm = getSystemService(LOCATION_SERVICE) as LocationManager
                     if (ActivityCompat.checkSelfPermission(
                             this,
@@ -200,8 +201,8 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                 } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
-                    initializeMapWithoutLocation()
+                    //Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
+                    //initializeMapWithoutLocation()
                     currentLatitude = 42.3505
                     currentLongitude = -71.1054
                     isRealmInit.postValue(true)
@@ -232,57 +233,57 @@ class MainActivity : AppCompatActivity() {
     )
 
 
-    private fun initializeMapWithoutLocation() {
-        mapFragment.getMapAsync { tomtomMap ->
-            moveMap(tomtomMap, currentLatitude, currentLongitude)
-            val loc = GeoPoint(currentLatitude, currentLongitude) //converting lat and long to GeoPoint type
-            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move
-                coordinate = loc,
-                pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
-            )
+//    private fun initializeMapWithoutLocation() {
+//        mapFragment.getMapAsync { tomtomMap ->
+//            moveMap(tomtomMap, currentLatitude, currentLongitude)
+//            val loc = GeoPoint(currentLatitude, currentLongitude) //converting lat and long to GeoPoint type
+//            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move
+//                coordinate = loc,
+//                pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
+//            )
+//
+//            tomtomMap.addMarker(markerOptions)
+//        }
+//    }
+//
+//    //for if we do have gps permission
+//    private fun initializeMapWithLocation() {
+//        mapFragment.getMapAsync { tomtomMap ->
+//            tomtomMap.setLocationProvider(androidLocationProvider)
+//            androidLocationProvider?.enable()
+//
+//            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
+//                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
+//
+//                currentLatitude = location.position.latitude
+//                currentLongitude = location.position.longitude
+//
+//                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
+//                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+//            }
+//
+//            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
+//        }
+//    }
 
-            tomtomMap.addMarker(markerOptions)
-        }
-    }
-
-    //for if we do have gps permission
-    private fun initializeMapWithLocation() {
-        mapFragment.getMapAsync { tomtomMap ->
-            tomtomMap.setLocationProvider(androidLocationProvider)
-            androidLocationProvider?.enable()
-
-            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
-                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
-
-                currentLatitude = location.position.latitude
-                currentLongitude = location.position.longitude
-
-                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
-            }
-
-            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
-        }
-    }
-
-    private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
-        val cameraOptions = CameraOptions(
-            position = GeoPoint(lat, long),
-            zoom = 17.0,
-            tilt = 0.0,
-            rotation = 0.0
-        )
-
-        tomtomMap.moveCamera(cameraOptions)
-    }
-
-    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
-        val locationMarkerOptions = LocationMarkerOptions(
-            type = LocationMarkerOptions.Type.Chevron
-        )
-
-        tomtomMap.enableLocationMarker(locationMarkerOptions)
-    }
+//    private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
+//        val cameraOptions = CameraOptions(
+//            position = GeoPoint(lat, long),
+//            zoom = 17.0,
+//            tilt = 0.0,
+//            rotation = 0.0
+//        )
+//
+//        tomtomMap.moveCamera(cameraOptions)
+//    }
+//
+//    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+//        val locationMarkerOptions = LocationMarkerOptions(
+//            type = LocationMarkerOptions.Type.Chevron
+//        )
+//
+//        tomtomMap.enableLocationMarker(locationMarkerOptions)
+//    }
 
     private fun setupDrawer() {
         topDrawer = findViewById(R.id.topDrawer)

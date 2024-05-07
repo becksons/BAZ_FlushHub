@@ -1,7 +1,11 @@
 package com.example.flushhubproto.ui.home
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +14,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,12 +28,21 @@ import com.example.flushhubproto.MainActivity
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tomtom.quantity.Distance
+import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
+import com.tomtom.sdk.location.OnLocationUpdateListener
+import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
+import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
+import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
+import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.marker.Marker
 import com.tomtom.sdk.map.display.marker.MarkerOptions
+import com.tomtom.sdk.map.display.ui.MapFragment
+import kotlin.time.Duration.Companion.milliseconds
 
 interface RouteActionListener {
     fun onRouteClosed()
@@ -71,7 +88,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var androidLocationProvider: LocationProvider? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: LocationInfoAdapter
 
@@ -80,6 +96,11 @@ class HomeFragment : Fragment() {
     private lateinit var bathroomViewModel: BathroomViewModel
     private var isBarVisible: Boolean = false
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    var androidLocationProvider: LocationProvider? = null
+
+    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
+    val mapFragment = MapFragment.newInstance(mapOptions)
 
     private val markerOptionsList: MutableList<MarkerOptions> = mutableListOf()
     private var markerTags: MutableList<String> = mutableListOf()
@@ -100,8 +121,10 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         childFragmentManager.beginTransaction()
-        .replace(R.id.map_container, MainActivity.mapFragment)
+        .replace(R.id.map_container, mapFragment)
         .commit()
+
+        requestPermissionsIfNecessary()
 
         addMarkers()
 
@@ -129,6 +152,86 @@ class HomeFragment : Fragment() {
             Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
             swipeRefreshLayout.isRefreshing = (MainActivity.swipeLoading.value == true)
         }
+    }
+
+    private fun requestPermissionsIfNecessary() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_LOCATION_PERMISSION -> {
+                Log.d("INIT", "Getting Request Code...")
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    androidLocationProviderConfig
+                    initializeMapWithLocation()
+                } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(requireContext(), R.string.permission_denied, Toast.LENGTH_LONG).show()
+                    initializeMapWithoutLocation()
+                }
+            }
+        }
+    }
+
+    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
+        minTimeInterval = 250L.milliseconds,
+        minDistance = Distance.meters(20.0)
+    )
+
+    private fun initializeMapWithoutLocation() {
+        mapFragment.getMapAsync { tomtomMap ->
+            moveMap(tomtomMap, MainActivity.currentLatitude, MainActivity.currentLongitude)
+            val loc = GeoPoint(MainActivity.currentLatitude, MainActivity.currentLongitude) //converting lat and long to GeoPoint type
+            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move
+                coordinate = loc,
+                pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
+            )
+
+            tomtomMap.addMarker(markerOptions)
+        }
+    }
+
+    //for if we do have gps permission
+    private fun initializeMapWithLocation() {
+        mapFragment.getMapAsync { tomtomMap ->
+            tomtomMap.setLocationProvider(androidLocationProvider)
+            androidLocationProvider?.enable()
+
+            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
+                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
+
+                MainActivity.currentLatitude = location.position.latitude
+                MainActivity.currentLongitude = location.position.longitude
+
+                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
+                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+            }
+
+            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
+        }
+    }
+
+    private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
+        val cameraOptions = CameraOptions(
+            position = GeoPoint(lat, long),
+            zoom = 17.0,
+            tilt = 0.0,
+            rotation = 0.0
+        )
+
+        tomtomMap.moveCamera(cameraOptions)
+    }
+
+    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+        val locationMarkerOptions = LocationMarkerOptions(
+            type = LocationMarkerOptions.Type.Chevron
+        )
+
+        tomtomMap.enableLocationMarker(locationMarkerOptions)
     }
 
     private fun observeLocationInfos() {
@@ -181,7 +284,7 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            MainActivity.mapFragment.getMapAsync { tomtomMap ->
+            mapFragment.getMapAsync { tomtomMap ->
                 markMap(tomtomMap)
             }
         }
@@ -221,7 +324,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun removerAllMarkers(){
-        MainActivity.mapFragment.getMapAsync { tomtomMap ->
+        mapFragment.getMapAsync { tomtomMap ->
             markerTags.forEach {tag ->
                 tomtomMap.removeMarkers(tag)
                 //tomtomMap.removeMapClickListener()
@@ -260,7 +363,7 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         removerAllMarkers()
-        _binding = null
         androidLocationProvider = null
+        _binding = null
     }
 }
