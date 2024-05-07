@@ -148,7 +148,8 @@ class BathroomViewModel : ViewModel() {
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
             MainActivity.swipeLoading.postValue(true) // Our Loaders
-            val results = bgRealm.where(bathroom::class.java)?.findAll()
+            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 4.0) // Done to shorten
+                ?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             val reviewMap = mutableMapOf<String, List<String>>()
 
