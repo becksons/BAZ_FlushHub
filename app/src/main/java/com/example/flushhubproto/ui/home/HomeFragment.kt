@@ -1,9 +1,7 @@
 package com.example.flushhubproto.ui.home
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +10,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,22 +20,11 @@ import com.example.flushhubproto.MainActivity
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.tomtom.quantity.Distance
-import com.tomtom.sdk.location.GeoLocation
 import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
-import com.tomtom.sdk.location.OnLocationUpdateListener
-import com.tomtom.sdk.location.android.AndroidLocationProvider
-import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
-import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
-import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
-import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.marker.MarkerOptions
-import com.tomtom.sdk.map.display.ui.MapFragment
-import java.io.File
-import kotlin.time.Duration.Companion.milliseconds
 
 interface RouteActionListener {
     fun onRouteClosed()
@@ -144,7 +129,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-
         setupRecyclerView(binding)
         observeLocationInfos()
         return binding.root
@@ -218,12 +202,10 @@ class HomeFragment : Fragment() {
                 bathroomViewModel.updateSelectedLocation(detailText)
             }
 
-
             Log.d("MarkerClick", "Marker at $address was clicked.")
 
             //show a UI if click
-            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
-
+            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
         }
     }
 
@@ -239,8 +221,6 @@ class HomeFragment : Fragment() {
                 .setDuration(500)
                 .setListener(null)
         }
-
-
 
         binding.detailsTextView.text = null
         binding.detailsTextView.text = address

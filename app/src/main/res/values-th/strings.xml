@@ -80,4 +80,5 @@
     <string name="query_progress_1">ค้นหาห้องน้ำที่ดีที่สุด</string>
     <string name="query_progress_2">กดคาวคิดเห็นที่ไม่ดี</string>
     <string name="query_progress_3">วิเคราะห์ห้องน้ำตามความต้องการ</string>
+    <string name="permission_denied">ใช่ BU กลางเป็นจุดเริ่มแทน</string>
 </resources>

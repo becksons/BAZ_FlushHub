@@ -171,7 +171,10 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                 } else {
-                    //TODO: error handle for permission denied
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
+                    currentLongitude = 42.3505
+                    currentLatitude = -71.1054
+                    isRealmInit.postValue(2)
                 }
             }
         }

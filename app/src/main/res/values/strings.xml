@@ -94,4 +94,5 @@
     <string name="boggle" translatable="false">Boggle!</string>
     <string name="word">WORD</string>
     <string name="browse_the_news">BROWSE THE NEWS</string>
+    <string name="permission_denied">Using BU Central\'s Location as Starting Point</string>
 </resources>
