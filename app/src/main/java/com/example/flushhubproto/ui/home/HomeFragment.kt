@@ -119,6 +119,7 @@ class HomeFragment : Fragment() {
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
             val processedAddresses = mutableSetOf<String>()
 
+            //Converting the bathrooms data from DB to makers for the map
             dataList?.forEach { data ->
                 val parts = data.first.Coordinates.split(',')
                 val longitude: Double = parts[0].toDouble()
@@ -149,6 +150,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    //Converting meters to miles
     private fun metersToMiles(meters: Double): String {
         val conversionFactor = 0.000621371
         return String.format("%.1f", meters * conversionFactor)
@@ -178,29 +180,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
-        val customArrowImage = ImageFactory.fromResource(R.drawable.nav_arrow)
-        val file = File("/Users/becksonstein/AndroidStudioProjects/FlushHubProto/app/src/main/assets/custom_nav_arrow.svg")
-
-        val locationMarkerOptions = LocationMarkerOptions(
-            type = LocationMarkerOptions.Type.Chevron
-//            customModel = android.net.Uri.fromFile(file)
-        )
-
-        tomtomMap.enableLocationMarker(locationMarkerOptions)
-    }
-
-    //Move the map to the current user location
-    private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
-        val cameraOptions = CameraOptions(
-            position = GeoPoint(lat, long),
-            zoom = 17.0,
-            tilt = 0.0,
-            rotation = 0.0
-        )
-
-        tomtomMap.moveCamera(cameraOptions)
-    }
 
     //This function passes lat and long to Google maps and launch it to route the user
     fun openMap(context: Context, lat: Double, long: Double, label: String = "Restroom") {
@@ -269,12 +248,11 @@ class HomeFragment : Fragment() {
             context?.let{ctx->
                 openMap(ctx, lat, lon, address)
             }
-
         }
+
         bathroomViewModel.updateSelectedLocation(address)
     }
     private fun hideGoToRouteLayout() {
-
         binding.goToRouteLayout.visibility = GONE
     }
 
@@ -282,6 +260,5 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         androidLocationProvider = null
-
     }
 }

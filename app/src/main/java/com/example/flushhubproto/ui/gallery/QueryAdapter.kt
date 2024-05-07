@@ -77,7 +77,7 @@ class QueryAdapter(private var locationList: List<Marker>) : RecyclerView.Adapte
             val time = locationInfo?.get(2)
             Log.d("Query recycler view: address: ", address.toString())
 
-
+            //setting up the display for distance of the bathroom in the recycler view
             addressTextView.text = address
             if (distance?.toDouble()== -1.0) {
                 distanceTextView.text = "N/A"

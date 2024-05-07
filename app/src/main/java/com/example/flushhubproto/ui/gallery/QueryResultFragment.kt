@@ -79,9 +79,6 @@ class QueryResultFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        bathroomViewModel.filterCriteria.observe(viewLifecycleOwner) { criteria ->
-//            filterMap(criteria)
-//        }
 
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
@@ -131,17 +128,6 @@ class QueryResultFragment: Fragment() {
             }
         }
     }
-
-
-
-
-    //    private fun observeLocationInfos() {
-//        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
-//            if (bathrooms != null) {
-//                adapter.updateData(bathrooms)
-//            }
-//        }
-//    }
 
     //filters to get only the bathrooms with specifications user want
     private fun filterMap(area: String = "all", rating: Double = 0.0){
@@ -248,6 +234,8 @@ class QueryResultFragment: Fragment() {
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
         }
     }
+
+    //Converting meters to miles
     private fun metersToMiles(meters: Double): String {
         val conversionFactor = 0.000621371
         return String.format("%.1f", meters * conversionFactor)
@@ -327,7 +315,6 @@ class QueryResultFragment: Fragment() {
 
         val locationMarkerOptions = LocationMarkerOptions(
             type = LocationMarkerOptions.Type.Chevron
-//            customModel = android.net.Uri.fromFile(file)
         )
 
         tomtomMap.enableLocationMarker(locationMarkerOptions)
