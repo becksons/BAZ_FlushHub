@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fh_tool_bar">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/reviews"
+            android:fontFamily="@font/ruda_bold"
+            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center">
+
+        </TextView>
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_gravity="center"
+            >
+
+        </View>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/individual_review_recycler_list"
+            android:layout_width="350dp"
+            android:layout_height="632dp"
+            android:background="@color/white"
+            android:elevation="10dp"
+            android:layout_gravity="center">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

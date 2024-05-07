@@ -40,6 +40,9 @@ class BathroomViewModel : ViewModel() {
     private val _queriedBathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
     val queriedBathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get()  = _queriedBathrooms
 
+    private val _reviewList = MutableLiveData<Map<String, List<String>>>()
+    val reviewList: LiveData<Map<String, List<String>>> = _reviewList
+
     init {
         initializeMongoDBRealm()
     }
@@ -57,6 +60,7 @@ class BathroomViewModel : ViewModel() {
             }
         }
     }
+
 
     private fun setupRealm() {
         val user = app.currentUser() ?: throw IllegalStateException("MongoDB User Not Logged In!")
@@ -141,7 +145,15 @@ class BathroomViewModel : ViewModel() {
             MainActivity.swipeLoading.postValue(true) // Our Loaders
             val results = bgRealm.where(bathroom::class.java)?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
-            if (bathrooms != null) { // Do a null check, if null we don't proceed
+            val reviewMap = mutableMapOf<String, List<String>>()
+
+
+            if (bathrooms != null) {
+                bathrooms.forEach { bathroom ->
+                    val reviews = bathroom.Reviews.split("=").filterNot { it.isBlank() }
+                    reviewMap[bathroom._id.toString()] = reviews
+                    Log.d("Review list view model init", "Map: ${reviewMap.entries.toString()}")
+                }
                 _bathrooms.postValue(bathrooms.map { test -> // Critical Thread processes! Crashes may happen here if resources are not correctly allocated
                     // Defaults
                     var distance = -1.0
@@ -175,6 +187,12 @@ class BathroomViewModel : ViewModel() {
 
                     Triple(test, distance, time)
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
+            }
+            _reviewList.postValue(reviewMap)  // Post the mapped reviews
+
+            // Logging the review map
+            reviewMap.forEach { (key, value) ->
+                Log.d("FlUSHHUB_Reviews", "Bathroom Index: $key, Reviews: ${value.joinToString(separator = ", ")}")
             }
             if (MainActivity.isInitLoading.value == true) {
                 MainActivity.isInitLoading.postValue(false) // Finish Loading for Initial Loading
@@ -260,6 +278,9 @@ class BathroomViewModel : ViewModel() {
         realm?.close()
         realm = null
         super.onCleared()
+    }
+    fun getReviewsForBathroom(bathroomId: String): List<String> {
+        return _reviewList.value?.get(bathroomId) ?: emptyList()
     }
     fun updateQueriedBathrooms(results: List<Triple<bathroom, Double, Double>>) {
         _queriedBathrooms.postValue(results)

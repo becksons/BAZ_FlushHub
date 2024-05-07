@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="individual_review_text" type="id" />
+    <item name="individual_review_num_stars" type="id" />
+    <item name="individual_review_rating_bar" type="id" />
+</resources>
