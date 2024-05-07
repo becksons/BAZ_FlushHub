@@ -176,7 +176,7 @@ class BathroomViewModel : ViewModel() {
                         time = calculations[1].toDouble()
                     }
 
-                    //Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}")
+                    //Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}") // For Debug
 
                     Triple(test, distance, time)
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
