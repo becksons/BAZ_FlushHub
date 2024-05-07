@@ -15,17 +15,35 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent">
 
-
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/query_map_container"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="420dp"
-            android:background="@android:color/transparent"
+            android:layout_height="match_parent">
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context="com.example.flushhubproto.ui.home.HomeFragment" />
+            <Button
+                android:id="@+id/query_res_back_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/ruda_regular"
+                android:text="@string/back">
+
+            </Button>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/query_map_container"
+                android:layout_width="match_parent"
+                android:layout_height="440dp"
+                android:background="@android:color/transparent"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:context="com.example.flushhubproto.ui.home.HomeFragment" />
+
+
+
 
         <LinearLayout
             android:id="@+id/go_to_route_layout"
@@ -110,11 +128,7 @@
 
         </LinearLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id = "@+id/query_recycler_list_swipe_refresh"
-            android:layout_width="match_parent"
-            android:translationY="420dp"
-            android:layout_height="match_parent">
+
             <include
                 android:id="@+id/query_res_recycler_view"
                 layout="@layout/query_res_recycler_list"
@@ -124,7 +138,8 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
