@@ -32,7 +32,7 @@ class ReviewAdapter(
             binding.restroomListRankNum.text = "Bathroom ID: ${entry.key}"
             binding.showBathroomReviewsListButton.setOnClickListener {
 
-                MainActivity.reviewButtonClicked.postValue(true)
+                //MainActivity.reviewButtonClicked.postValue(true)
             }
         }
     }

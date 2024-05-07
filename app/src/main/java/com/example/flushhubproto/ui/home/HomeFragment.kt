@@ -124,7 +124,7 @@ class HomeFragment : Fragment() {
         .replace(R.id.map_container, mapFragment)
         .commit()
 
-        requestPermissionsIfNecessary()
+        checkGPS()
         addMarkers()
         setupRecyclerView(binding)
         observeLocationInfos()
@@ -152,7 +152,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun requestPermissionsIfNecessary() {
+    private fun checkGPS() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             initializeMapWithoutLocation()
         } else {
