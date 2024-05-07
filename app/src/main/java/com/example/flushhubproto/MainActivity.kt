@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
@@ -59,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         var swipeLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
         var isRealmInit = MutableLiveData(false)
+        var queryEmpty = true
+        var loadStart = true
         private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
         val mapFragment = MapFragment.newInstance(mapOptions)
         var currentLongitude: Double = 0.0
@@ -68,7 +69,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
 
-    private var loadStart = true
     private var isDrawerOpen = false
     private var submitButton:Button? = null
     private var nameEditText :EditText? = null
@@ -284,9 +284,9 @@ class MainActivity : AppCompatActivity() {
         val btnNavFind: Button = findViewById(R.id.btn_nav_find)
         val btnNavRate: Button = findViewById(R.id.btn_nav_rate)
         val btnNavEntertainment: Button = findViewById(R.id.btn_nav_entertainment)
-        val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.home_icon)
-        drawable?.setBounds(0, 0, (drawable.intrinsicWidth * 0.5).toInt(), (drawable.intrinsicHeight * 0.5).toInt())
-        btnNavHome.setCompoundDrawables(drawable, null, null, null)
+//        val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.home_icon)
+//        drawable?.setBounds(0, 0, (drawable.intrinsicWidth * 0.5).toInt(), (drawable.intrinsicHeight * 0.5).toInt())
+//        btnNavHome.setCompoundDrawables(drawable, null, null, null)
 
         btnMenuClose.setOnClickListener {
             closeTopDrawer()
@@ -461,9 +461,15 @@ class MainActivity : AppCompatActivity() {
                 binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
                 binding.appBarMain.menuText.visibility = VISIBLE
-
-                navController.navigate(R.id.queryResultFragment)
                 binding.root.isClickable = true
+
+                if (!queryEmpty) {
+                    navController.navigate(R.id.queryResultFragment)
+                    queryEmpty = true
+                } else {
+                    Toast.makeText(this, getString(R.string.query_not_found), Toast.LENGTH_SHORT).show()
+                    navController.navigate(R.id.nav_home)
+                }
             }
        }
     }
