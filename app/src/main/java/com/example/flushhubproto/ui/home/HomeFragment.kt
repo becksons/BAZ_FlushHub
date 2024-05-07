@@ -102,6 +102,8 @@ class HomeFragment : Fragment() {
         .replace(R.id.map_container, MainActivity.mapFragment)
         .commit()
 
+        Log.d("FLUSHHUB", "Current Latitude: ${MainActivity.currentLatitude}, Current Longitude: ${MainActivity.currentLongitude}")
+
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
             val processedAddresses = mutableSetOf<String>()
 
