@@ -160,8 +160,8 @@ class BathroomViewModel : ViewModel() {
                     var defaultLong = -71.10539833333333
 
                     if (MainActivity.currentLongitude != 0.0 && MainActivity.currentLatitude != 0.0) {
-                        defaultLat = MainActivity.currentLatitude!!
-                        defaultLong = MainActivity.currentLongitude!!
+                        defaultLat = MainActivity.currentLatitude
+                        defaultLong = MainActivity.currentLongitude
                     }
 
                     val calculations = calcRange(

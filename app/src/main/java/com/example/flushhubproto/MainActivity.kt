@@ -145,6 +145,33 @@ class MainActivity : AppCompatActivity() {
     private fun requestPermissionsIfNecessary() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+        } else {
+            Log.d("INIT", "User Already Gave Existing Permssions!")
+            initializeMapWithLocation()
+            val lm = getSystemService(LOCATION_SERVICE) as LocationManager
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d("INIT", "Permissions Checked. Allowed. Fetching Current Location...")
+                lm.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    Long.MAX_VALUE,
+                    Float.MAX_VALUE,
+                    locationListener
+                )
+            } else {
+                Log.d("INIT", "Permissions Checked. User Denied. Fetching Default Location...")
+                Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
+                currentLatitude = 42.3505
+                currentLongitude = -71.1054
+                isRealmInit.postValue(true)
+
+            }
         }
     }
 
@@ -188,6 +215,13 @@ class MainActivity : AppCompatActivity() {
         currentLatitude = location.latitude
         currentLongitude = location.longitude
         Log.d("INIT", "Fetched Current Location. Posting Value!")
+        if (currentLatitude == 0.0 || currentLongitude == 0.0)
+        {
+            Log.d("INIT", "Location Listener Failed to get proper location! Setting Defaults...")
+            currentLatitude = 42.3505
+            currentLongitude = -71.1054
+        }
+
         isRealmInit.postValue(true)
     }
 
