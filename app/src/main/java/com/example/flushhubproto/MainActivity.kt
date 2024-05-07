@@ -4,10 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
@@ -44,7 +44,9 @@ import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
+import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
+import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import io.realm.Realm
 import kotlin.time.Duration.Companion.milliseconds
@@ -56,21 +58,21 @@ class MainActivity : AppCompatActivity() {
         var swipeLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
         var isRealmInit = MutableLiveData(false)
-        private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
-        val mapFragment = MapFragment.newInstance(mapOptions)
-        var currentLongitude: Double? = 0.0
-        var currentLatitude: Double? = 0.0
+        var queryEmpty = true
+        var loadStart = true
+        var currentLongitude: Double = 0.0
+        var currentLatitude: Double = 0.0
     }
+
+    private var androidLocationProvider: LocationProvider? = null
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
 
-    private var loadStart = true
     private var isDrawerOpen = false
     private var submitButton:Button? = null
     private var nameEditText :EditText? = null
     private var landingPage :LinearLayout? = null
-    private var androidLocationProvider: LocationProvider? = null
     private lateinit var navController: NavController
     private lateinit var greetingTextView: TextView
     private lateinit var distanceTextView: TextView
@@ -79,12 +81,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Map Init Routine
         requestPermissionsIfNecessary()
-        androidLocationProvider = AndroidLocationProvider(
-            context = this,
-            config = androidLocationProviderConfig
-        )
         Realm.init(this) // DB initialization
         bathroomViewModel = ViewModelProvider(this)[BathroomViewModel::class.java]
 
@@ -143,7 +140,31 @@ class MainActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
         } else {
-            initializeMapWithLocation()
+            Log.d("INIT", "User Already Gave Existing Permissions!")
+            val lm = getSystemService(LOCATION_SERVICE) as LocationManager
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d("INIT", "Permissions Checked. Allowed. Fetching Current Location...")
+                lm.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    Long.MAX_VALUE,
+                    Float.MAX_VALUE,
+                    locationListener
+                )
+            } else {
+                Log.d("INIT", "Permissions Checked. User Denied. Fetching Default Location...")
+                Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
+                currentLatitude = 42.3505
+                currentLongitude = -71.1054
+                isRealmInit.postValue(true)
+
+            }
         }
     }
 
@@ -153,7 +174,6 @@ class MainActivity : AppCompatActivity() {
             REQUEST_LOCATION_PERMISSION -> {
                 Log.d("INIT", "Getting Request Code...")
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initializeMapWithLocation()
                     val lm = getSystemService(LOCATION_SERVICE) as LocationManager
                     if (ActivityCompat.checkSelfPermission(
                             this,
@@ -163,7 +183,7 @@ class MainActivity : AppCompatActivity() {
                             Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        Log.d("INIT", "Permissions Checked. Fetching Current Location...")
+                        Log.d("INIT", "Permissions Checked. Allowed. Fetching Current Location...")
                         lm.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             Long.MAX_VALUE,
@@ -171,10 +191,9 @@ class MainActivity : AppCompatActivity() {
                             locationListener
                         )
                     }
-                } else {
-                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
-                    currentLongitude = 42.3505
-                    currentLatitude = -71.1054
+                } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    currentLatitude = 42.3505
+                    currentLongitude = -71.1054
                     isRealmInit.postValue(true)
                 }
             }
@@ -183,54 +202,17 @@ class MainActivity : AppCompatActivity() {
 
     // One time location listener
     private val locationListener: LocationListener = LocationListener { location ->
-        currentLongitude = location.longitude
         currentLatitude = location.latitude
+        currentLongitude = location.longitude
         Log.d("INIT", "Fetched Current Location. Posting Value!")
-        isRealmInit.postValue(true)
-    }
-
-
-    private val androidLocationProviderConfig = AndroidLocationProviderConfig(
-        minTimeInterval = 1000.milliseconds,
-        minDistance = Distance.meters(10.0)
-    )
-
-    private fun initializeMapWithLocation() {
-        mapFragment.getMapAsync { tomtomMap ->
-            tomtomMap.setLocationProvider(androidLocationProvider)
-            androidLocationProvider?.enable()
-
-            val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
-                Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
-
-                HomeFragment.currentLatitude = location.position.latitude
-                HomeFragment.currentLongitude = location.position.longitude
-
-                moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
-            }
-
-            androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
+        if (currentLatitude == 0.0 || currentLongitude == 0.0)
+        {
+            Log.d("INIT", "Location Listener Failed to get proper location! Setting Defaults...")
+            currentLatitude = 42.3505
+            currentLongitude = -71.1054
         }
-    }
 
-    private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
-        val cameraOptions = CameraOptions(
-            position = GeoPoint(lat, long),
-            zoom = 17.0,
-            tilt = 0.0,
-            rotation = 0.0
-        )
-
-        tomtomMap.moveCamera(cameraOptions)
-    }
-
-    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
-        val locationMarkerOptions = LocationMarkerOptions(
-            type = LocationMarkerOptions.Type.Chevron
-        )
-
-        tomtomMap.enableLocationMarker(locationMarkerOptions)
+        isRealmInit.postValue(true)
     }
 
     private fun setupDrawer() {
@@ -267,9 +249,6 @@ class MainActivity : AppCompatActivity() {
         val btnNavFind: Button = findViewById(R.id.btn_nav_find)
         val btnNavRate: Button = findViewById(R.id.btn_nav_rate)
         val btnNavEntertainment: Button = findViewById(R.id.btn_nav_entertainment)
-        val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.home_icon)
-        drawable?.setBounds(0, 0, (drawable.intrinsicWidth * 0.5).toInt(), (drawable.intrinsicHeight * 0.5).toInt())
-        btnNavHome.setCompoundDrawables(drawable, null, null, null)
 
         btnMenuClose.setOnClickListener {
             closeTopDrawer()
@@ -444,9 +423,15 @@ class MainActivity : AppCompatActivity() {
                 binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
                 binding.appBarMain.menuText.visibility = VISIBLE
-
-                navController.navigate(R.id.queryResultFragment)
                 binding.root.isClickable = true
+
+                if (!queryEmpty) {
+                    navController.navigate(R.id.queryResultFragment)
+                    queryEmpty = true
+                } else {
+                    Toast.makeText(this, getString(R.string.query_not_found), Toast.LENGTH_SHORT).show()
+                    navController.navigate(R.id.nav_home)
+                }
             }
        }
     }

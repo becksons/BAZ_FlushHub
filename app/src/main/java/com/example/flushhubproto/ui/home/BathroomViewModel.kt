@@ -107,18 +107,23 @@ class BathroomViewModel : ViewModel() {
 
         val task: Callable<List<Int>> = Callable<List<Int>> {
             client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                //if (!response.isSuccessful) throw IOException("Unexpected code $response") // For Debug
 
                 val responseData = response.body?.string()
                 if (responseData != null) {
-                    val routeResponse = parseRouteData(responseData)
-                    routeResponse.routes.forEach { route ->
-                        routeLength = route.summary.lengthInMeters
-                        routeTime = (route.summary.travelTimeInSeconds/60.0).roundToInt()
+                    if (responseData != "<h1>Developer Over Qps</h1>") { // We hit Tom Tom's QPs limit if false
+                        val routeResponse = parseRouteData(responseData)
+                        routeResponse.routes.forEach { route ->
+                            routeLength = route.summary.lengthInMeters
+                            routeTime = (route.summary.travelTimeInSeconds/60.0).roundToInt()
+                        }
+                        return@Callable listOf(routeLength, routeTime)
                     }
-                    return@Callable listOf(routeLength, routeTime)
                 }
-                throw IllegalStateException("Response Data is Null!")
+                Log.d("FLUSHHUB", "HIT OVER QPS. DATA IS UNAVALIABLE!")
+                routeLength = -1 // We return default for the N/A
+                routeTime = -1 // We return default for the N/A
+                return@Callable listOf(routeLength, routeTime)
             }
         }
 
@@ -167,8 +172,8 @@ class BathroomViewModel : ViewModel() {
                     var defaultLong = -71.10539833333333
 
                     if (MainActivity.currentLongitude != 0.0 && MainActivity.currentLatitude != 0.0) {
-                        defaultLat = MainActivity.currentLatitude!!
-                        defaultLong = MainActivity.currentLongitude!!
+                        defaultLat = MainActivity.currentLatitude
+                        defaultLong = MainActivity.currentLongitude
                     }
 
                     val calculations = calcRange(
@@ -183,7 +188,7 @@ class BathroomViewModel : ViewModel() {
                         time = calculations[1].toDouble()
                     }
 
-                    Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}")
+                    //Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}") // For Debug
 
                     Triple(test, distance, time)
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
@@ -263,6 +268,7 @@ class BathroomViewModel : ViewModel() {
                     }
 
                     if (distance != -1.0 && time != -1.0) {
+                        MainActivity.queryEmpty = false // We don't have an empty query!
                         Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
                         Triple(queryRes, distance, time)
                     } else {

@@ -30,6 +30,8 @@ class InitLoadingFragment: Fragment() {
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 bathroomViewModel.loadAllBathrooms()
+            } else if (MainActivity.currentLatitude == 42.3505 && MainActivity.currentLongitude == -71.1054){
+                bathroomViewModel.loadAllBathrooms()
             }
         }
 

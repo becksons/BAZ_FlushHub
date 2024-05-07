@@ -65,7 +65,7 @@
     <string name="at_floor_list">at Floor</string>
     <string name="building_list">Building</string>
     <string name="gender_list">Gender</string>
-    <string name="miles">mil</string>
+    <string name="miles">mi</string>
     <string name="minutes">min</string>
     <string name="top_restroom">BU\'S TOP RESTROOMS</string>
     <string name="entertainment_banner">FLUSH HUB FUN</string>
@@ -95,4 +95,5 @@
     <string name="word">WORD</string>
     <string name="browse_the_news">BROWSE THE NEWS</string>
     <string name="permission_denied">Using BU Central\'s Location as Starting Point</string>
+    <string name="query_not_found">No Bathrooms Found!</string>
 </resources>

@@ -212,8 +212,8 @@ class QueryResultFragment: Fragment() {
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
 
-                HomeFragment.currentLatitude = location.position.latitude
-                HomeFragment.currentLongitude = location.position.longitude
+                MainActivity.currentLatitude = location.position.latitude
+                MainActivity.currentLongitude = location.position.longitude
 
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
