@@ -96,43 +96,14 @@ class HomeFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        super.onCreate(savedInstanceState)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         childFragmentManager.beginTransaction()
         .replace(R.id.map_container, MainActivity.mapFragment)
         .commit()
 
-        Log.d("FLUSHHUB", "Current Latitude: ${MainActivity.currentLatitude}, Current Longitude: ${MainActivity.currentLongitude}")
-
-        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
-            val processedAddresses = mutableSetOf<String>()
-
-            //Converting the bathrooms data from DB to makers for the map
-            dataList?.forEach { data ->
-                val parts = data.first.Coordinates.split(',')
-                val longitude: Double = parts[0].toDouble()
-                val latitude: Double = parts[1].toDouble()
-                val address: String = data.first.Location
-                var distance = "N/A"
-                var time = "N/A"
-                var stars = "N/A"
-
-                if (data.second != -1.0){
-                    distance = metersToMiles(data.second)
-                    time = data.third.toString()
-                    stars = data.first.Rating.toString()
-                }
-
-                if (address !in processedAddresses) {
-                    processedAddresses.add(address)
-                    makeMarker(latitude, longitude, address, distance, time, stars)
-                }
-            }
-
-            MainActivity.mapFragment.getMapAsync { tomtomMap ->
-                markMap(tomtomMap)
-            }
-        }
+        addMarkers()
 
         setupRecyclerView(binding)
         observeLocationInfos()
@@ -184,6 +155,38 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun addMarkers(){
+        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { dataList ->
+            val processedAddresses = mutableSetOf<String>()
+
+            //Converting the bathrooms data from DB to makers for the map
+            dataList?.forEach { data ->
+                val parts = data.first.Coordinates.split(',')
+                val longitude: Double = parts[0].toDouble()
+                val latitude: Double = parts[1].toDouble()
+                val address: String = data.first.Location
+                var distance = "N/A"
+                var time = "N/A"
+                var stars = "N/A"
+
+                if (data.second != -1.0){
+                    distance = metersToMiles(data.second)
+                    time = data.third.toString()
+                    stars = data.first.Rating.toString()
+                }
+
+                if (address !in processedAddresses) {
+                    processedAddresses.add(address)
+                    makeMarker(latitude, longitude, address, distance, time, stars)
+                }
+            }
+
+            MainActivity.mapFragment.getMapAsync { tomtomMap ->
+                markMap(tomtomMap)
+            }
+        }
+    }
+
     //This function adds markers to the TomTomMap API fragment
     private fun makeMarker(lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
         val loc = GeoPoint(lat, long) //converting lat and long to GeoPoint type
@@ -210,11 +213,22 @@ class HomeFragment : Fragment() {
                 bathroomViewModel.updateSelectedLocation(detailText)
             }
 
-
             Log.d("MarkerClick", clickedMarker.id.toString())
+
             //show a UI if click
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
         }
+    }
+
+    private fun removerAllMarkers(){
+        MainActivity.mapFragment.getMapAsync { tomtomMap ->
+            markerTags.forEach {tag ->
+                tomtomMap.removeMarkers(tag)
+                //tomtomMap.removeMapClickListener()
+            }
+        }
+
+        markerTags.clear()
     }
 
     //This function reveals a layout for the user to launch Google Maps to route them
@@ -245,6 +259,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        removerAllMarkers()
         _binding = null
         androidLocationProvider = null
     }

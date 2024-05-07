@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
