@@ -44,7 +44,9 @@ import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
+import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
+import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import io.realm.Realm
 import kotlin.time.Duration.Companion.milliseconds
@@ -58,8 +60,8 @@ class MainActivity : AppCompatActivity() {
         var isRealmInit = MutableLiveData(false)
         private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
         val mapFragment = MapFragment.newInstance(mapOptions)
-        var currentLongitude: Double? = 0.0
-        var currentLatitude: Double? = 0.0
+        var currentLongitude: Double = 0.0
+        var currentLatitude: Double = 0.0
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -142,8 +144,6 @@ class MainActivity : AppCompatActivity() {
     private fun requestPermissionsIfNecessary() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
-        } else {
-            initializeMapWithLocation()
         }
     }
 
@@ -171,10 +171,11 @@ class MainActivity : AppCompatActivity() {
                             locationListener
                         )
                     }
-                } else {
+                } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
-                    currentLongitude = 42.3505
-                    currentLatitude = -71.1054
+                    initializeMapWithoutLocation()
+                    currentLatitude = 42.3505
+                    currentLongitude = -71.1054
                     isRealmInit.postValue(true)
                 }
             }
@@ -183,8 +184,8 @@ class MainActivity : AppCompatActivity() {
 
     // One time location listener
     private val locationListener: LocationListener = LocationListener { location ->
-        currentLongitude = location.longitude
         currentLatitude = location.latitude
+        currentLongitude = location.longitude
         Log.d("INIT", "Fetched Current Location. Posting Value!")
         isRealmInit.postValue(true)
     }
@@ -195,6 +196,21 @@ class MainActivity : AppCompatActivity() {
         minDistance = Distance.meters(10.0)
     )
 
+
+    private fun initializeMapWithoutLocation() {
+        mapFragment.getMapAsync { tomtomMap ->
+            moveMap(tomtomMap, currentLatitude, currentLongitude)
+            val loc = GeoPoint(currentLatitude, currentLongitude) //converting lat and long to GeoPoint type
+            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move
+                coordinate = loc,
+                pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
+            )
+
+            tomtomMap.addMarker(markerOptions)
+        }
+    }
+
+    //for if we do have gps permission
     private fun initializeMapWithLocation() {
         mapFragment.getMapAsync { tomtomMap ->
             tomtomMap.setLocationProvider(androidLocationProvider)
@@ -203,8 +219,8 @@ class MainActivity : AppCompatActivity() {
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
 
-                HomeFragment.currentLatitude = location.position.latitude
-                HomeFragment.currentLongitude = location.position.longitude
+                currentLatitude = location.position.latitude
+                currentLongitude = location.position.longitude
 
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
                 updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)

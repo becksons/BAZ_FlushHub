@@ -90,8 +90,8 @@ class FindRestroomFragment : Fragment() {
                 currentQuery[0],
                 currentQuery[1],
                 currentQuery[2].toDouble(),
-                HomeFragment.currentLatitude,
-                HomeFragment.currentLongitude
+                MainActivity.currentLatitude,
+                MainActivity.currentLongitude
             )
             bathroomViewModel.searchQuery.postValue(Triple(currentQuery[0],currentQuery[1],currentQuery[2]))
         }

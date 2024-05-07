@@ -24,6 +24,7 @@ import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.image.ImageFactory
+import com.tomtom.sdk.map.display.marker.Marker
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 
 interface RouteActionListener {
@@ -65,9 +66,6 @@ class HomeFragment : Fragment() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) { /* Handle state change */ }
                 override fun onSlide(bottomSheet: View, slideOffset: Float) { /* Handle sliding */ }
         }
-
-        var currentLongitude: Double = 0.0
-        var currentLatitude: Double = 0.0
     }
 
 
@@ -82,6 +80,9 @@ class HomeFragment : Fragment() {
     private lateinit var bathroomViewModel: BathroomViewModel
     private var isBarVisible: Boolean = false
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    private val markerOptionsList: MutableList<MarkerOptions> = mutableListOf()
+    private var markerTags: MutableList<String> = mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -122,10 +123,12 @@ class HomeFragment : Fragment() {
 
                 if (address !in processedAddresses) {
                     processedAddresses.add(address)
-                    MainActivity.mapFragment.getMapAsync { tomtomMap ->
-                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars)
-                    }
+                    makeMarker(latitude, longitude, address, distance, time, stars)
                 }
+            }
+
+            MainActivity.mapFragment.getMapAsync { tomtomMap ->
+                markMap(tomtomMap)
             }
         }
 
@@ -180,7 +183,7 @@ class HomeFragment : Fragment() {
     }
 
     //This function adds markers to the TomTomMap API fragment
-    private fun markMap(tomtomMap: TomTomMap, lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
+    private fun makeMarker(lat: Double, long: Double, address: String = "Bathroom", distance: String = "0", eta: String = "0", rating: String = "0.0") {
         val loc = GeoPoint(lat, long) //converting lat and long to GeoPoint type
         val markerOptions = MarkerOptions( //assigning informations of this marker
             coordinate = loc,
@@ -191,8 +194,12 @@ class HomeFragment : Fragment() {
                     "\nRating: $rating" + requireContext().getString(R.string.stars)
         )
 
-        //adding marker to the map
-        tomtomMap.addMarker(markerOptions)
+        markerTags.add(markerOptions.tag.toString())
+        markerOptionsList.add(markerOptions)
+    }
+
+    private fun markMap(tomtomMap: TomTomMap){
+        tomtomMap.addMarkers(markerOptionsList)
 
         //making the marker clickable
         tomtomMap.addMarkerClickListener { clickedMarker ->
@@ -202,7 +209,7 @@ class HomeFragment : Fragment() {
                 bathroomViewModel.updateSelectedLocation(detailText)
             }
 
-            Log.d("MarkerClick", "Marker at $address was clicked.")
+            Log.d("MarkerClick", clickedMarker.id.toString())
 
             //show a UI if click
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
