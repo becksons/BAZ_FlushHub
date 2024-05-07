@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
                     currentLongitude = 42.3505
                     currentLatitude = -71.1054
-                    isRealmInit.postValue(2)
+                    isRealmInit.postValue(true)
                 }
             }
         }
