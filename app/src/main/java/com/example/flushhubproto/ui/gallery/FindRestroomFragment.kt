@@ -20,10 +20,7 @@ class FindRestroomFragment : Fragment() {
     private var _binding: FragmentFindBinding? = null
     private lateinit var bathroomViewModel: BathroomViewModel
     private val binding get() = _binding!!
-    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "all", "0.0") //default values
-    companion object{
-        var isQueryLoading = MutableLiveData(false)
-    }
+    private var currentQuery: MutableList<String> = mutableListOf("All Gender", "all", "3.0") //default values
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

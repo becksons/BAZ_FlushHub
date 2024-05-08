@@ -121,7 +121,7 @@ class QueryResultFragment: Fragment() {
         }
     }
     //filters to get only the bathrooms with specifications user want
-    private fun filterMap(area: String = "all", rating: Double = 0.0){
+    private fun filterMap(area: String = "all", rating: Double = 3.0){
         Log.d("Find Button call from query res frag","filter map called...")
 
         bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { dataList ->
