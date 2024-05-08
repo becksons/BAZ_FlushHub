@@ -79,6 +79,9 @@ class QueryResultFragment: Fragment() {
 
     private lateinit var adapter: LocationInfoAdapter
 
+    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
+    private val mapFragment = MapFragment.newInstance(mapOptions)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -96,14 +99,15 @@ class QueryResultFragment: Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = QueryResFragmentBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
-        requestPermissionsIfNecessary()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.query_map_container, mapFragment)
+            .commit()
 
+        checkGPS()
         val queryRes = bathroomViewModel.searchQuery.value?.second
         filterMap(queryRes.toString())
-
         setupRecyclerView(binding)
         observeQueriedBathrooms()
-        //setupRecyclerView()
         return binding.root
     }
     private fun setupRecyclerView(binding: QueryResFragmentBinding) {
@@ -185,7 +189,7 @@ class QueryResultFragment: Fragment() {
         }
     }
 
-    private fun requestPermissionsIfNecessary() {
+    private fun checkGPS() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             initializeMapWithoutLocation()
         } else {
@@ -193,9 +197,6 @@ class QueryResultFragment: Fragment() {
         }
     }
 
-
-    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
-    private val mapFragment = MapFragment.newInstance(mapOptions)
     private fun initializeMapWithoutLocation() {
         mapFragment.getMapAsync { tomtomMap ->
             moveMap(tomtomMap, MainActivity.currentLatitude, MainActivity.currentLongitude)
