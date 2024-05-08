@@ -15,7 +15,6 @@ import io.realm.mongodb.sync.Subscription
 import io.realm.mongodb.sync.SyncConfiguration
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.io.IOException
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import kotlin.math.roundToInt
@@ -148,7 +147,7 @@ class BathroomViewModel : ViewModel() {
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
             MainActivity.swipeLoading.postValue(true) // Our Loaders
-            val results = bgRealm.where(bathroom::class.java)?.findAll()
+            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 4.0)?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             val reviewMap = mutableMapOf<String, List<String>>()
 

@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
+
     tools:context="com.example.flushhubproto.MainActivity">
 
     <include layout="@layout/content_main" android:id="@+id/content_main" />
-    <include layout="@layout/nav_header_main" android:id="@+id/nav_header_main" />
+
     <TextView
         android:id="@+id/menu_text"
         android:layout_width="60dp"
@@ -18,7 +19,7 @@
         android:elevation="25dp"
         android:fontFamily="@font/ruda_black"
         android:textColor="@color/black"
-        android:translationY="150dp"
+        android:translationY="50dp"
         android:translationX="20dp">
 
     </TextView>
@@ -38,7 +39,7 @@
         android:text="@string/menu"
         android:textSize="20sp"
         android:translationX="-275dp"
-        android:translationY="110dp">
+        android:translationY="10dp">
     </ImageButton>
 
 
@@ -49,7 +50,7 @@
         android:background="@color/purple_500"
         android:elevation="10dp"
         android:id = "@+id/app_bar_banner"
-        android:translationY="100dp"
+
         app:layout_constraintTop_toBottomOf="@+id/navHeader"
 
         >
@@ -97,10 +98,10 @@
                 <TextView
                     android:id = "@+id/fragment_banner"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:fontFamily="@font/ruda_black"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="30dp"
 
                     android:textColor="@color/black"
                     android:textAlignment="center"

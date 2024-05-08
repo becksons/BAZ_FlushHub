@@ -18,7 +18,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map_container"
             android:layout_width="match_parent"
-            android:layout_height="547dp"
+            android:layout_height="480dp"
             android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,16 +27,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
             tools:context="com.example.flushhubproto.ui.home.HomeFragment" />
+        <include layout="@layout/show_route_layout"  android:visibility="gone" android:layout_width="match_parent" android:layout_height="130dp" android:id="@id/go_to_route_layout" android:elevation = "8dp"/>
 
         <LinearLayout
-            android:id="@+id/go_to_route_layout"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/fh_tool_bar"
+            android:visibility="gone"
 
             android:elevation="10dp"
             android:orientation="vertical"
-            android:visibility="gone"
+
 
 
             >

@@ -12,10 +12,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +35,6 @@ import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
 import com.tomtom.sdk.map.display.image.ImageFactory
 import com.tomtom.sdk.map.display.location.LocationMarkerOptions
-import com.tomtom.sdk.map.display.marker.Marker
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import kotlin.time.Duration.Companion.milliseconds
@@ -293,10 +289,10 @@ class HomeFragment : Fragment() {
         val markerOptions = MarkerOptions( //assigning informations of this marker
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
-            tag = "Address: ${address}\n" +
-                    "Distance: $distance" + " " +  requireContext().getString(R.string.miles) +
-                    "\nETA: $eta" + " " + requireContext().getString(R.string.minutes) +
-                    "\nRating: $rating" + " " + requireContext().getString(R.string.stars)
+            tag = "${address}\n" +
+                    distance + " " +  requireContext().getString(R.string.miles) +
+                    "\n$eta" + " " + requireContext().getString(R.string.minutes) +
+                    "\n$rating"
         )
 
         markerTags.add(markerOptions.tag.toString())
@@ -332,10 +328,15 @@ class HomeFragment : Fragment() {
     }
 
     //This function reveals a layout for the user to launch Google Maps to route them
-    private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
-        binding.goToRouteLayout.visibility = VISIBLE
-        binding.goToRouteLayout.apply {
-            visibility = View.VISIBLE
+    private fun showGoToRouteLayout(lat:Double, lon: Double, tagData: String = "Bathroom") {
+        val tagDataList = tagData.split("\n")
+        val address  = tagDataList[0]
+        val distance = tagDataList[1]
+        val eta = tagDataList[2]
+        val rating = tagDataList[3]
+
+        binding.goToRouteLayout.root.visibility = VISIBLE
+        binding.goToRouteLayout.root.apply {
             alpha = 0f
             animate()
                 .alpha(1f)
@@ -343,18 +344,26 @@ class HomeFragment : Fragment() {
                 .setListener(null)
         }
 
+
         binding.detailsTextView.text = null
-        binding.detailsTextView.text = address
+        binding.goToRouteLayout.showRouteLayoutAddress.text = address
+        binding.goToRouteLayout.showRouteLayoutDistance.text = distance
+        binding.goToRouteLayout.showRouteLayoutEta.text = eta
+        binding.goToRouteLayout.showRouteLayoutRatingBar.progress = rating.toDouble().toInt()
+        binding.goToRouteLayout.showRouteLayoutRatingBar.isClickable = false
         binding.mapButton.setOnClickListener {
             context?.let{ctx->
                 openMap(ctx, lat, lon, address)
             }
         }
+        binding.goToRouteLayout.collapseButton.setOnClickListener {
+            hideGoToRouteLayout()
+        }
 
         bathroomViewModel.updateSelectedLocation(address)
     }
     private fun hideGoToRouteLayout() {
-        binding.goToRouteLayout.visibility = GONE
+        binding.goToRouteLayout.root.visibility = GONE
     }
 
     override fun onDestroyView() {
