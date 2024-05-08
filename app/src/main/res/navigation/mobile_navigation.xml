@@ -31,6 +31,12 @@
             app:exitAnim="@anim/nav_default_enter_anim"
             app:popEnterAnim="@anim/nav_default_enter_anim"
             app:popExitAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_nav_home_self"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_home_to_bathroomPage2"
+            app:destination="@id/bathroomPage" />
     </fragment>
 
     <fragment
@@ -147,6 +153,14 @@
         <action
             android:id="@+id/action_queryLoadingFragment_to_queryResultFragment"
             app:destination="@id/queryResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bathroomPage"
+        android:name="com.example.flushhubproto.ui.bathroom.BathroomPage"
+        android:label="BathroomPage" >
+        <action
+            android:id="@+id/action_bathroomPage_to_nav_home"
+            app:destination="@id/nav_home" />
     </fragment>
 
 

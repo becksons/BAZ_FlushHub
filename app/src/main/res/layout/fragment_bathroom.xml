@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/bathroomPageLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/Back_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+
+        <TextView
+            android:id="@+id/Bathroom_Name"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:text="Placeholder" />
+
+        <TextView
+            android:id="@+id/Bathroom_Description"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:text="Placeholder" />
+
+        <TextView
+            android:id="@+id/Bathroom_Location"
+            android:layout_width="match_parent"
+            android:layout_height="114dp"
+            android:text="Placeholder" />
+
+        <TextView
+            android:id="@+id/Top_Review"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:text="Top Review" />
+
+        <TextView
+            android:id="@+id/Best_Review"
+            android:layout_width="match_parent"
+            android:layout_height="111dp"
+            android:text="Placeholder" />
+
+        <RatingBar
+            android:id="@+id/ratingBathroomBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <Button
+            android:id="@+id/Route_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Route" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

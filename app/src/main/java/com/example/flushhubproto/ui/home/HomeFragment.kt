@@ -1,6 +1,7 @@
 package com.example.flushhubproto.ui.home
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,6 +16,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -40,11 +44,7 @@ import com.tomtom.sdk.map.display.ui.MapFragment
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-interface RouteActionListener {
-    fun onRouteClosed()
-}
 class HomeFragment : Fragment() {
-
     data class RouteResponse(
         val formatVersion: String,
         val routes: List<Route>
@@ -88,15 +88,13 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: LocationInfoAdapter
 
     private var isExpanded = false
-
-    private lateinit var bathroomViewModel: BathroomViewModel
     private var isBarVisible: Boolean = false
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var bathroomViewModel: BathroomViewModel
 
-    var androidLocationProvider: LocationProvider? = null
-
+    private var androidLocationProvider: LocationProvider? = null
     private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
-    val mapFragment = MapFragment.newInstance(mapOptions)
+    private val mapFragment = MapFragment.newInstance(mapOptions)
 
     private val markerOptionsList: MutableList<MarkerOptions> = mutableListOf()
     private var markerTags: MutableList<String> = mutableListOf()

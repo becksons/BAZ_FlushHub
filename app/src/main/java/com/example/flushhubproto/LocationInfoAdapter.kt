@@ -7,26 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.schema.bathroom
 import com.example.tomtom.R
 
-
-
 class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double, Double>>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
+    private var bathroomList: List<Triple<bathroom, Double, Double>>? = null;
+
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newLocationList: List<Triple<bathroom, Double, Double>>?) {
         if (newLocationList != null) {
             locationList = newLocationList
         }else{
-            Log.d("Location adapter update data", "location list is null")
+            Log.d("HOMEPAGE", "Location list is null!")
         }
-
-        Log.d("update data adapter", "Updating data in adapter...")
+        Log.d("HOMEPAGE", "Updating data in adapter...")
+        bathroomList = newLocationList
         notifyDataSetChanged()
     }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.location_info_item, parent, false)
@@ -40,17 +41,21 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
 
     override fun getItemCount() = locationList.size
 
-
    inner class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val addressTextView: TextView = itemView.findViewById(R.id.address_text_view)
         private val distanceTextView: TextView = itemView.findViewById(R.id.distance_text_view)
         private val timeTextView: TextView = itemView.findViewById(R.id.time_text_view)
         init {
-            itemView.setOnClickListener {
+            itemView.setOnClickListener {v ->
+                val navController: NavController = findNavController(v)
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                   //TODO: Figure out item listener for restroom recycler list
-                    Toast.makeText(itemView.context,"Item clicked at $position",Toast.LENGTH_SHORT).show()
+                    val bathroom: Triple<bathroom, Double, Double>? = bathroomList?.get(position)
+                    if (bathroom != null) {
+                        Toast.makeText(itemView.context,"Bathroom ${bathroom.first.Name} clicked at $position",Toast.LENGTH_SHORT).show()
+                        MainActivity.currentBathroom = bathroom
+                        navController.navigate(R.id.bathroomPage) // We Navigate for More Info
+                    }
                 }
             }
         }
@@ -63,8 +68,7 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
 
         @SuppressLint("SetTextI18n")
         fun bind(location: Triple<bathroom, Double, Double>) {
-
-            addressTextView.text = location.first.Location
+            addressTextView.text = location.first.Name
             if (location.second == -1.0) {
                 distanceTextView.text = "N/A"
             } else {
