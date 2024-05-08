@@ -141,7 +141,10 @@
 
 
             android:layout_marginTop="-25dp"
-            >
+            android:clickable="false"
+            android:focusable="false"
+            android:isIndicator="true"
+             >
 
         </RatingBar>
         <ImageButton

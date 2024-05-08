@@ -265,6 +265,18 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
+                    } else if (area == "all") {
+                        Log.i("FlUSHHUB", "[QUERY] CALCULATING ALL")
+                        val calculations = calcRange(
+                            currLat,
+                            currLong,
+                            latitude,
+                            longitude
+                        )
+                        if (calculations != null) {
+                            distance = calculations[0].toDouble()
+                            time = calculations[1].toDouble()
+                        }
                     }
 
                     if (distance != -1.0 && time != -1.0) {
