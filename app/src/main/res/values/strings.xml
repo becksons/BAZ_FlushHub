@@ -99,4 +99,5 @@
     <string name="reviews">Reviews:</string>
     <string name="review">Review:</string>
     <string name="review_rating">Rating:</string>
+    <string name="x_stars" translatable="false">X Stars</string>
 </resources>

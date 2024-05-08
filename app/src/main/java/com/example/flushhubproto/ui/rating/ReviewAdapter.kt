@@ -2,11 +2,11 @@ package com.example.flushhubproto.ui.rating
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flushhubproto.MainActivity
+import com.example.tomtom.R
 import com.example.tomtom.databinding.ReviewListItemBinding
-class ReviewAdapter(
-    private var data: List<Map.Entry<String, List<String>>>
 
+class ReviewAdapter(
+    private var data: List<BathroomReviewData>
 ) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
@@ -15,25 +15,32 @@ class ReviewAdapter(
     }
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
-        holder.bind(data[position])
+        // Position + 1 since positions start at 0 but ranks start at 1
+        holder.bind(data[position], position + 1)
     }
 
     override fun getItemCount(): Int = data.size
-
-    fun updateData(newData: Map<String, List<String>>) {
-        this.data = newData.entries.toList()
+    fun updateData(newData: List<BathroomReviewData>) {
+        this.data = newData
         notifyDataSetChanged()
+
     }
 
-    class ReviewViewHolder(
-        private var binding: ReviewListItemBinding,
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(entry: Map.Entry<String, List<String>>) {
-            binding.restroomListRankNum.text = "Bathroom ID: ${entry.key}"
-            binding.showBathroomReviewsListButton.setOnClickListener {
 
-                //MainActivity.reviewButtonClicked.postValue(true)
+    class ReviewViewHolder(
+        private var binding: ReviewListItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(bathroomData: BathroomReviewData, rank: Int) {
+            binding.reviewListItemBuilding.text = bathroomData.buildingName
+            if(bathroomData.gender=="All Gender"){
+                binding.restroomListItemGender.setImageResource(R.drawable.gender_nuetral_icon)
             }
+            binding.restroomListRankNum.text = "#$rank"
+
+            binding.reviewListRateBar.rating = bathroomData.averageRating
+
         }
     }
 }
+
+
