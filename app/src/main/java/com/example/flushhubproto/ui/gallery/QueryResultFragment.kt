@@ -138,13 +138,12 @@ class QueryResultFragment: Fragment() {
                 val address: String = data.first.Location
                 var distance = "N/A" //default value
                 var time = "N/A" //default value
-                var stars = 0.0 //default value
+                val stars = data.first.Rating
 
                 //if the distance is gotten, then it implies other fields are also gotten
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
                     time = data.third.toString()
-                    stars = data.first.Rating
                 }
 
                 if (address !in processedAddresses) {
