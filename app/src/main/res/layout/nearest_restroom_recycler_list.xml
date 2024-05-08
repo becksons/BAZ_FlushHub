@@ -24,7 +24,7 @@
                 android:layout_width="400dp"
                 android:layout_height="50dp"
                 android:text = "@string/nearest_restrooms"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="27sp"
                 android:textAlignment="center"
                 android:translationY="-5dp"

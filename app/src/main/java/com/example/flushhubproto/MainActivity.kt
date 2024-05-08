@@ -8,7 +8,6 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
@@ -59,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     private var landingPage :LinearLayout? = null
     private lateinit var navController: NavController
     private lateinit var greetingTextView: TextView
-    private lateinit var distanceTextView: TextView
     private lateinit var bathroomViewModel: BathroomViewModel
 
     @SuppressLint("ClickableViewAccessibility")
@@ -101,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             val name = nameEditText?.text.toString()
             if (name.isNotEmpty()) {
                 saveName(name)
-                greetUser(name,0.01F)
+                greetUser(name)
                 landingPage?.visibility = GONE
             } else {
                 Toast.makeText(this, getString(R.string.ask_name), Toast.LENGTH_SHORT).show()
@@ -209,13 +207,15 @@ class MainActivity : AppCompatActivity() {
                 Log.d("INIT", "Initializing...")
                 navController.navigate(R.id.initLoadingFragment)
                 binding.root.isClickable = false
-                binding.appBarMain.appBarBanner.visibility = GONE
+                binding.appBarMain.appBanner.root.visibility = GONE
+
                 binding.appBarMain.openDrawerButton.visibility = GONE
                 binding.appBarMain.menuText.visibility = GONE
             } else if (loadStart) {
-                binding.appBarMain.appBarBanner.visibility =  VISIBLE
+
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
                 binding.appBarMain.menuText.visibility = VISIBLE
+                binding.appBarMain.appBanner.root.visibility = VISIBLE
 
                 navController.navigate(R.id.nav_home)
                 binding.root.isClickable = true
@@ -226,7 +226,6 @@ class MainActivity : AppCompatActivity() {
 
 
         val btnMenuClose: ImageButton = findViewById(R.id.menu_button_close)
-        val fragmentBannerView:TextView = findViewById(R.id.fragment_banner)
         val btnNavHome: Button = findViewById(R.id.btn_nav_home)
         val btnNavFind: Button = findViewById(R.id.btn_nav_find)
         val btnNavRate: Button = findViewById(R.id.btn_nav_rate)
@@ -277,99 +276,54 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.nav_gallery -> {
-                    fragmentBannerView.visibility = VISIBLE
-                    fragmentBannerView.apply {
-                        text = getString(R.string.find_your_restroom)
-                        textSize = 23.0F
-                        translationX = 2.0F
-                        translationY = 10.0F
-                        gravity = Gravity.CENTER
-                    }
-                    greetingTextView.visibility = GONE
-                    distanceTextView.visibility = GONE
+                    updateBannerText(getString(R.string.find_your_restroom))
+//                    greetingTextView.visibility = View.GONE
                 }
 
                 R.id.nav_slideshow -> {
-                    fragmentBannerView.visibility = VISIBLE
-                    fragmentBannerView.apply {
-                        text =  getString(R.string.find_your_restroom)
-                        textSize = 23.0F
-                        translationX = 2.0F
-                        translationY = 10.0F
-                        gravity = Gravity.CENTER
-                    }
-                    greetingTextView.visibility = GONE
-                    distanceTextView.visibility = GONE
+                    updateBannerText(getString(R.string.menu_rate))
+
                 }
 
                 R.id.nav_home -> {
                     greetUserWithDistance()
-                    greetingTextView.visibility = VISIBLE
-                    distanceTextView.visibility = VISIBLE
-                    fragmentBannerView.visibility = GONE
-                }
-                R.id.randomAnimalFragment -> {
-                    fragmentBannerView.visibility = VISIBLE
-                    fragmentBannerView.apply {
-                        text = getString(R.string.entertainment_banner)
-                        textSize = 24.0F
-                        translationX = 2.0F
-                        translationY = 10.0F
-                        gravity = Gravity.CENTER
-                    }
-                    greetingTextView.visibility = GONE
-                    distanceTextView.visibility = GONE
+
 
                 }
-                R.id.flushHubBoggle ->{
-                    fragmentBannerView.visibility = VISIBLE
-                    fragmentBannerView.apply {
-                        text =getString(R.string.entertainment_banner)
-                        textSize = 24.0F
-                        translationX = 2.0F
-                        translationY = 10.0F
-                        gravity = Gravity.CENTER
 
-                    }
-                    greetingTextView.visibility = GONE
-                    distanceTextView.visibility = GONE
+                R.id.randomAnimalFragment,
+                R.id.flushHubBoggle,
+                R.id.nav_entertainment -> {
+                    updateBannerText(getString(R.string.entertainment_banner))
+//                    greetingTextView.visibility = View.GONE
 
                 }
-                R.id.nav_entertainment ->{
-                    fragmentBannerView.visibility = VISIBLE
-                    fragmentBannerView.apply {
-                        text = getString(R.string.entertainment_banner)
-                        textSize = 24.0F
-                        translationX = 2.0F
-                        translationY = 10.0F
-                        gravity = Gravity.CENTER
 
-                    }
-                    greetingTextView.visibility = GONE
-                    distanceTextView.visibility = GONE
+                R.id.newsListFragment -> {
+                    updateBannerText(getString(R.string.news_banner))
+//                    greetingTextView.visibility = View.GONE
 
                 }
-                R.id.newsListFragment ->{
-                    fragmentBannerView.visibility = VISIBLE
-                    fragmentBannerView.apply {
-                        text = getString(R.string.news_banner)
-                        textSize = 24.0F
-                        translationX = 2.0F
-                        translationY = 10.0F
-                        gravity = Gravity.CENTER
-
-                    }
-                    greetingTextView.visibility = GONE
-                    distanceTextView.visibility = GONE
-                }
-
             }
         }
+
+
+    }
+    private fun updateBannerText(text: String) {
+        binding.appBarMain.appBanner.bannerMainText.textSize = 23.0F
+        greetingTextView.translationY = 20.0F
+        binding.appBarMain.appBanner.bannerMainText.visibility= View.VISIBLE
+        binding.appBarMain.appBanner.bannerMainText.text = text
+
+    }
+
+    private fun hideBannerText() {
+        binding.appBarMain.appBanner.bannerMainText.visibility=  View.GONE
     }
     private fun greetUserWithDistance() {
         val name = getUserName()
-        val milesAway = 0.01f  //TODO: Change to meters
-        greetUser(name, milesAway)
+
+        greetUser(name)
     }
     private fun getUserName(): String {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
@@ -396,12 +350,14 @@ class MainActivity : AppCompatActivity() {
             if (queryLoading) {
                 navController.navigate(R.id.queryLoadingFragment)
                 binding.root.isClickable = false
-                binding.appBarMain.appBarBanner.visibility = GONE
+
+                binding.appBarMain.appBanner.root.visibility = GONE
 
                 binding.appBarMain.openDrawerButton.visibility = GONE
                 binding.appBarMain.menuText.visibility = GONE
             } else if (!loadStart) {
-                binding.appBarMain.appBarBanner.visibility =  VISIBLE
+
+                binding.appBarMain.appBanner.root.visibility = VISIBLE
 
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
                 binding.appBarMain.menuText.visibility = VISIBLE
@@ -431,7 +387,7 @@ class MainActivity : AppCompatActivity() {
         val isFirstLaunch = sharedPreferences.getBoolean("is_first_launch", true)
         val name = sharedPreferences.getString("user_name", null)
         if (!isFirstLaunch && name != null) {
-            greetUser(name,0.01F)
+            greetUser(name)
             landingPage?.visibility = GONE
 
         } else {
@@ -439,16 +395,14 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-    private fun greetUser(name: String, milesAway: Float) {
-        greetingTextView = findViewById(R.id.greeting_text_name)
-        distanceTextView = findViewById(R.id.greeting_miles_away)
-        greetingTextView.text = getString(R.string.dont_worry) + " $name!"
-        distanceTextView.text = "       " + getString(R.string.nearest) + " \n        $milesAway " + getString(R.string.miles_away)
-        distanceTextView.textAlignment = View.TEXT_ALIGNMENT_INHERIT
-
+    private fun greetUser(name: String) {
+        greetingTextView = binding.appBarMain.appBanner.bannerMainText
+        greetingTextView.textSize = 15.0F
+        greetingTextView.text = getString(R.string.dont_worry) + " $name! \n" + getString(R.string.flushhub_got_you)
+        greetingTextView.translationY = 10.0F
         greetingTextView.visibility = VISIBLE
-        distanceTextView.visibility = VISIBLE
     }
+
     private fun openTopDrawer() {
         topDrawer.animate().translationY(0f).setDuration(300).start()
         isDrawerOpen = true

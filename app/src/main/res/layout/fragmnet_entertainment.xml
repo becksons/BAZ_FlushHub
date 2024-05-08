@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:translationY="40dp"
+
     android:background="@color/fh_tool_bar">
 
 
@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:orientation="vertical"
+        android:translationY="-20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:translationY="10dp"
+
                 android:orientation="horizontal">
 
                 <Button
@@ -38,60 +39,62 @@
                     android:fontFamily="@font/ruda_bold"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:text="General"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <Button
                     android:id="@+id/sports"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:fontFamily="@font/ruda_bold"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:text="Sports"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <Button
                     android:id="@+id/entertainment"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:fontFamily="@font/ruda_bold"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Entertainment"
-                    android:textSize="20sp" />
+                    android:layout_height="50dp"
+                    android:textSize="25sp" />
 
                 <Button
                     android:id="@+id/business"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ruda_bold"
                     android:text="Business"
-                    android:textSize="20sp" />
+                    android:layout_height="50dp"
+                    android:textSize="25sp" />
 
                 <Button
                     android:id="@+id/health"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:fontFamily="@font/ruda_bold"
-                    android:layout_height="wrap_content"
+
                     android:layout_weight="1"
                     android:text="Health"
-                    android:textSize="20sp" />
+                    android:layout_height="50dp"
+                    android:textSize="25sp"  />
 
                 <Button
                     android:id="@+id/science"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+
                     android:layout_weight="1"
                     android:fontFamily="@font/ruda_bold"
                     android:text="Science"
-                    android:textSize="20sp" />
+                    android:layout_height="50dp"
+                    android:textSize="25sp"  />
 
             </LinearLayout>
         </HorizontalScrollView>

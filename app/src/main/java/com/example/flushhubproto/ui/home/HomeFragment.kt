@@ -348,7 +348,7 @@ class HomeFragment : Fragment() {
         binding.goToRouteLayout.showRouteLayoutAddress.text = address
         binding.goToRouteLayout.showRouteLayoutDistance.text = distance
         binding.goToRouteLayout.showRouteLayoutEta.text = eta
-        binding.goToRouteLayout.showRouteLayoutRatingBar.progress = rating.toDouble().toInt()
+        binding.goToRouteLayout.showRouteLayoutRatingBar.rating = rating.toFloat()
         binding.goToRouteLayout.showRouteLayoutRatingBar.isClickable = false
         binding.mapButton.setOnClickListener {
             context?.let{ctx->

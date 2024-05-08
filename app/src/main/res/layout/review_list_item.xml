@@ -121,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:translationY="-10dp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:fontFamily="@font/ruda_black"
                 android:text = "REVIEWS"
                 android:textSize="12dp"

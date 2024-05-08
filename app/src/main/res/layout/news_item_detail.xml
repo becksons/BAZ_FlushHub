@@ -23,6 +23,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@android:color/transparent"
+
+            android:scaleType="fitCenter"
+            android:layout_marginTop="-10dp"
+            android:layout_marginEnd="300dp"
+            android:layout_gravity="end"
+            android:textSize="20sp"
+            android:fontFamily="@font/ruda_bold"
+            android:src="@drawable/back_arrow"
+
+            android:text="Return" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -30,7 +45,7 @@
             android:layout_margin="30dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="220dp"
                 android:translationY="30dp"
                 android:orientation="vertical">
 
@@ -42,7 +57,7 @@
                     android:textSize="20sp"
                     android:textColor="@color/black"
 
-                    android:layout_height="wrap_content"
+                    android:layout_height="70dp"
                     android:layout_marginBottom="20dp"
                     android:textStyle="bold"
                     android:layout_gravity="center"
@@ -54,9 +69,9 @@
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:fontFamily="@font/ruda_black"
-                    android:layout_width="100dp"
+                    android:layout_width="180dp"
 
-                    android:layout_height="30dp"
+                    android:layout_height="60dp"
 
 
                     android:textSize="15sp"
@@ -65,6 +80,7 @@
                     android:text="Author" />
                 <View
                     android:layout_width="650dp"
+                    android:layout_marginTop="15dp"
 
                     android:layout_height="1dp"
                     android:layout_gravity="center"
@@ -90,21 +106,11 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:fontFamily="@font/ruda_regular"
-            android:layout_gravity="center"
+
             android:textAlignment="center"
             android:text="@string/details" />
         </ScrollView>
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="-20dp"
-            android:layout_gravity="end"
-            android:textSize="20sp"
-            android:fontFamily="@font/ruda_bold"
-            android:translationY="-100dp"
-            android:text="Return" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
