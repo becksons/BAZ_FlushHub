@@ -151,9 +151,9 @@ class HomeFragment : Fragment() {
 
     private fun checkGPS() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            initializeMapWithoutLocation()
+            initializeMapWithoutLocation() //for if no gps permission
         } else {
-            initializeMapWithLocation()
+            initializeMapWithLocation() //for if we do have gps permission
         }
     }
 
@@ -161,13 +161,14 @@ class HomeFragment : Fragment() {
         mapFragment.getMapAsync { tomtomMap ->
             moveMap(tomtomMap, MainActivity.currentLatitude, MainActivity.currentLongitude)
             val loc = GeoPoint(MainActivity.currentLatitude, MainActivity.currentLongitude) //converting lat and long to GeoPoint type
-            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move
+            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move (just a pin of the default coords)
                 coordinate = loc,
                 pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
             )
 
             tomtomMap.addMarker(markerOptions)
 
+            //to close route layout when user clicks away from the pin
             tomtomMap.addMapClickListener {
                 hideGoToRouteLayout()
                 return@addMapClickListener true
@@ -176,6 +177,8 @@ class HomeFragment : Fragment() {
     }
     private fun initializeMapWithLocation() {
         mapFragment.getMapAsync { tomtomMap ->
+
+            //setting up location provider (gps)
             androidLocationProvider = AndroidLocationProvider(
                 context = requireContext(),
                 config = androidLocationProviderConfig
@@ -185,16 +188,19 @@ class HomeFragment : Fragment() {
 
             Log.d("INIT", "Setting TOM TOM Map...")
 
+            //keep checking for user location change
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
 
+                //update coords to current user location
                 MainActivity.currentLatitude = location.position.latitude
                 MainActivity.currentLongitude = location.position.longitude
 
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+                updateUserLocationOnMap(tomtomMap)
             }
 
+            //to close route layout when user clicks away from the pin
             tomtomMap.addMapClickListener {
                 hideGoToRouteLayout()
                 return@addMapClickListener true
@@ -210,6 +216,7 @@ class HomeFragment : Fragment() {
     )
 
     private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
+        //settings for camera
         val cameraOptions = CameraOptions(
             position = GeoPoint(lat, long),
             zoom = 17.0,
@@ -217,10 +224,10 @@ class HomeFragment : Fragment() {
             rotation = 0.0
         )
 
-        tomtomMap.animateCamera(cameraOptions, 0.7.seconds)
+        tomtomMap.animateCamera(cameraOptions, 0.7.seconds) //add a bit of animation when moving the camera
     }
 
-    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+    private fun updateUserLocationOnMap(tomtomMap: TomTomMap) {
         val locationMarkerOptions = LocationMarkerOptions(
             type = LocationMarkerOptions.Type.Chevron
         )
