@@ -6,27 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentRatingsBinding
 
 class RatingsFragment : Fragment() {
-
-    private var _binding: FragmentRatingsBinding? = null
     private lateinit var adapter: ReviewAdapter
+    private var _binding: FragmentRatingsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: BathroomViewModel by viewModels()
-
-
+    private lateinit var bathroomViewModel: BathroomViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRatingsBinding.inflate(inflater, container, false)
-
-
+        bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
         setupRecyclerView()
-        viewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
+
+        bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
             Log.d("Ratings Fragment", "Getting review data...")
             if (bathrooms != null) {
                 val reviewMap = bathrooms.associate {
@@ -38,20 +36,11 @@ class RatingsFragment : Fragment() {
             }
         }
 
-//        viewModel.reviewList.observe(viewLifecycleOwner) { reviewMap ->
-//            if (reviewMap != null) {
-//                adapter.updateData(reviewMap)
-//            }
-//        }
-
-
         return binding.root
     }
 
     private fun setupRecyclerView() {
         adapter = ReviewAdapter(emptyList())
-
-
         binding.ratingsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.ratingsRecyclerView.adapter = adapter
     }

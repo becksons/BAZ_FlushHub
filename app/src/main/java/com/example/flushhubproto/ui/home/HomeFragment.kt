@@ -104,17 +104,6 @@ class HomeFragment : Fragment() {
     private val markerOptionsList: MutableList<MarkerOptions> = mutableListOf()
     private var markerTags: MutableList<String> = mutableListOf()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        fun toggleBar() {
-            isBarVisible = !isBarVisible
-        }
-        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
-            binding.detailsTextView.text = details
-        }
-    }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
         Log.d("DEBUG", "CURRENT LONGITUDE: ${MainActivity.currentLongitude}, CURRENT LATITUDE: ${MainActivity.currentLatitude}")
@@ -129,6 +118,13 @@ class HomeFragment : Fragment() {
         setupRecyclerView(binding)
         observeLocationInfos()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
+            binding.detailsTextView.text = details
+        }
     }
 
     //Converting meters to miles
@@ -146,7 +142,7 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         //Nearest location review swipe refresh
         swipeRefreshLayout.setOnRefreshListener {
-            bathroomViewModel.loadAllBathrooms()
+//            bathroomViewModel.loadAllBathrooms()
             Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
             swipeRefreshLayout.isRefreshing = (MainActivity.swipeLoading.value == true)
         }
