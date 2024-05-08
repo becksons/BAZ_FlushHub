@@ -3,4 +3,5 @@
     <item name="individual_review_text" type="id" />
     <item name="individual_review_num_stars" type="id" />
     <item name="individual_review_rating_bar" type="id" />
+    <item name="bathroom_details_back_button" type="id" />
 </resources>

@@ -1,18 +1,17 @@
 package com.example.flushhubproto.ui.bathroom
 
-import android.media.Rating
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.flushhubproto.MainActivity
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentBathroomBinding
-import org.w3c.dom.Text
 
 class BathroomPage: Fragment() {
     private val binding get() = _binding!!
@@ -28,7 +27,7 @@ class BathroomPage: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val backButton: Button = view.findViewById(R.id.Back_Button)
+        val backButton: ImageButton = view.findViewById(R.id.bathroom_details_back_button)
         val bathroomName: TextView = view.findViewById(R.id.Bathroom_Name)
         val bathroomDescription: TextView = view.findViewById(R.id.Bathroom_Location)
         val bestReview: TextView = view.findViewById(R.id.Best_Review)

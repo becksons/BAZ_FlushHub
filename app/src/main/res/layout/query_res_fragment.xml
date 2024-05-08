@@ -33,8 +33,10 @@
                 android:text="@string/back">
 
             </Button>
-
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/query_map_container"
                     android:layout_width="match_parent"
@@ -53,6 +55,11 @@
                     android:layout_height="300dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+
+
+            </LinearLayout>
+
 
 
 
