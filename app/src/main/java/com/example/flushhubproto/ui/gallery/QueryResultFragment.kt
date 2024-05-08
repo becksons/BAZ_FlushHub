@@ -187,46 +187,62 @@ class QueryResultFragment: Fragment() {
 
     private fun requestPermissionsIfNecessary() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                HomeFragment.REQUEST_LOCATION_PERMISSION
-            )
+            initializeMapWithoutLocation()
         } else {
             initializeMapWithLocation()
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            HomeFragment.REQUEST_LOCATION_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initializeMapWithLocation()
-                }
-            }
-        }
-    }
 
     private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
     private val mapFragment = MapFragment.newInstance(mapOptions)
-    private val queryList = mutableListOf<Marker>()
-    private fun initializeMapWithLocation() {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.query_map_container, mapFragment)
-            .commit()
-
+    private fun initializeMapWithoutLocation() {
         mapFragment.getMapAsync { tomtomMap ->
+            moveMap(tomtomMap, MainActivity.currentLatitude, MainActivity.currentLongitude)
+            val loc = GeoPoint(MainActivity.currentLatitude, MainActivity.currentLongitude) //converting lat and long to GeoPoint type
+            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move (just a pin of the default coords)
+                coordinate = loc,
+                pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
+            )
+
+            tomtomMap.addMarker(markerOptions)
+
+            //to close route layout when user clicks away from the pin
+            tomtomMap.addMapClickListener {
+                hideGoToRouteLayout()
+                return@addMapClickListener true
+            }
+        }
+    }
+    private fun initializeMapWithLocation() {
+        mapFragment.getMapAsync { tomtomMap ->
+
+            //setting up location provider (gps)
+            androidLocationProvider = AndroidLocationProvider(
+                context = requireContext(),
+                config = androidLocationProviderConfig
+            )
             tomtomMap.setLocationProvider(androidLocationProvider)
             androidLocationProvider?.enable()
 
+            Log.d("INIT", "Setting TOM TOM Map...")
+
+            //keep checking for user location change
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
 
+                //update coords to current user location
                 MainActivity.currentLatitude = location.position.latitude
                 MainActivity.currentLongitude = location.position.longitude
 
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+                updateUserLocationOnMap(tomtomMap)
+            }
+
+            //to close route layout when user clicks away from the pin
+            tomtomMap.addMapClickListener {
+                hideGoToRouteLayout()
+                return@addMapClickListener true
             }
 
             androidLocationProvider?.addOnLocationUpdateListener(onLocationUpdateListener)
@@ -304,7 +320,7 @@ class QueryResultFragment: Fragment() {
     }
 
 
-    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+    private fun updateUserLocationOnMap(tomtomMap: TomTomMap) {
         val customArrowImage = ImageFactory.fromResource(R.drawable.nav_arrow)
         val file = File("/Users/becksonstein/AndroidStudioProjects/FlushHubProto/app/src/main/assets/custom_nav_arrow.svg")
 
