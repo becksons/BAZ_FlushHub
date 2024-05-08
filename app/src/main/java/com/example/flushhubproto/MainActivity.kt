@@ -28,6 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.example.flushhubproto.schema.bathroom
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
 import com.example.tomtom.R
@@ -46,8 +47,8 @@ class MainActivity : AppCompatActivity() {
         var loadStart = true
         var currentLongitude: Double = 0.0
         var currentLatitude: Double = 0.0
+        var currentBathroom: Triple<bathroom, Double, Double>? = null
 
-        var reviewButtonClicked = MutableLiveData<Boolean>(false)
     }
 
     private var androidLocationProvider: LocationProvider? = null
