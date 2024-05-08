@@ -171,7 +171,17 @@ class QueryResultFragment: Fragment() {
                     }
                 }
             }
+        }
+        mapFragment.getMapAsync{tomtomMap ->
+            tomtomMap.addMarkerClickListener { clickedMarker ->
+                val detailText = clickedMarker.tag
 
+                if (detailText != null) {
+                    bathroomViewModel.updateSelectedLocation(detailText)
+                }
+
+                showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
+            }
         }
     }
 
