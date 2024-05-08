@@ -81,4 +81,8 @@
     <string name="query_progress_2">กดคาวคิดเห็นที่ไม่ดี</string>
     <string name="query_progress_3">วิเคราะห์ห้องน้ำตามความต้องการ</string>
     <string name="permission_denied">ใช่ BU กลางเป็นจุดเริ่มแทน</string>
+    <string name="query_not_found">หาห้องน้ำไม่เจอ</string>
+    <string name="reviews">ความคิดเห็น:</string>
+    <string name="review">ความคิดเห็น:</string>
+    <string name="review_rating">คะแนน:</string>
 </resources>

@@ -38,6 +38,7 @@ import com.tomtom.sdk.map.display.location.LocationMarkerOptions
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 interface RouteActionListener {
     fun onRouteClosed()
@@ -100,17 +101,6 @@ class HomeFragment : Fragment() {
     private val markerOptionsList: MutableList<MarkerOptions> = mutableListOf()
     private var markerTags: MutableList<String> = mutableListOf()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        fun toggleBar() {
-            isBarVisible = !isBarVisible
-        }
-        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
-            binding.detailsTextView.text = details
-        }
-    }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
         Log.d("DEBUG", "CURRENT LONGITUDE: ${MainActivity.currentLongitude}, CURRENT LATITUDE: ${MainActivity.currentLatitude}")
@@ -120,11 +110,18 @@ class HomeFragment : Fragment() {
         .replace(R.id.map_container, mapFragment)
         .commit()
 
-        requestPermissionsIfNecessary()
+        checkGPS()
         addMarkers()
         setupRecyclerView(binding)
         observeLocationInfos()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
+            binding.detailsTextView.text = details
+        }
     }
 
     //Converting meters to miles
@@ -142,17 +139,17 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         //Nearest location review swipe refresh
         swipeRefreshLayout.setOnRefreshListener {
-            bathroomViewModel.loadAllBathrooms()
+//            bathroomViewModel.loadAllBathrooms()
             Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
             swipeRefreshLayout.isRefreshing = (MainActivity.swipeLoading.value == true)
         }
     }
 
-    private fun requestPermissionsIfNecessary() {
+    private fun checkGPS() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            initializeMapWithoutLocation()
+            initializeMapWithoutLocation() //for if no gps permission
         } else {
-            initializeMapWithLocation()
+            initializeMapWithLocation() //for if we do have gps permission
         }
     }
 
@@ -160,13 +157,14 @@ class HomeFragment : Fragment() {
         mapFragment.getMapAsync { tomtomMap ->
             moveMap(tomtomMap, MainActivity.currentLatitude, MainActivity.currentLongitude)
             val loc = GeoPoint(MainActivity.currentLatitude, MainActivity.currentLongitude) //converting lat and long to GeoPoint type
-            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move
+            val markerOptions = MarkerOptions( //assigning informations of user marker which will not move (just a pin of the default coords)
                 coordinate = loc,
                 pinImage = ImageFactory.fromResource(R.drawable.map_default_pin)
             )
 
             tomtomMap.addMarker(markerOptions)
 
+            //to close route layout when user clicks away from the pin
             tomtomMap.addMapClickListener {
                 hideGoToRouteLayout()
                 return@addMapClickListener true
@@ -175,6 +173,8 @@ class HomeFragment : Fragment() {
     }
     private fun initializeMapWithLocation() {
         mapFragment.getMapAsync { tomtomMap ->
+
+            //setting up location provider (gps)
             androidLocationProvider = AndroidLocationProvider(
                 context = requireContext(),
                 config = androidLocationProviderConfig
@@ -184,16 +184,19 @@ class HomeFragment : Fragment() {
 
             Log.d("INIT", "Setting TOM TOM Map...")
 
+            //keep checking for user location change
             val onLocationUpdateListener = OnLocationUpdateListener { location: GeoLocation ->
                 Log.d("Location Update", "Latitude: ${location.position.latitude}, Longitude: ${location.position.longitude}")
 
+                //update coords to current user location
                 MainActivity.currentLatitude = location.position.latitude
                 MainActivity.currentLongitude = location.position.longitude
 
                 moveMap(tomtomMap, location.position.latitude, location.position.longitude)
-                updateUserLocationOnMap(tomtomMap,location.position.latitude,location.position.longitude)
+                updateUserLocationOnMap(tomtomMap)
             }
 
+            //to close route layout when user clicks away from the pin
             tomtomMap.addMapClickListener {
                 hideGoToRouteLayout()
                 return@addMapClickListener true
@@ -209,6 +212,7 @@ class HomeFragment : Fragment() {
     )
 
     private fun moveMap(tomtomMap: TomTomMap, lat: Double, long: Double){
+        //settings for camera
         val cameraOptions = CameraOptions(
             position = GeoPoint(lat, long),
             zoom = 17.0,
@@ -216,10 +220,10 @@ class HomeFragment : Fragment() {
             rotation = 0.0
         )
 
-        tomtomMap.moveCamera(cameraOptions)
+        tomtomMap.animateCamera(cameraOptions, 0.7.seconds) //add a bit of animation when moving the camera
     }
 
-    private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
+    private fun updateUserLocationOnMap(tomtomMap: TomTomMap) {
         val locationMarkerOptions = LocationMarkerOptions(
             type = LocationMarkerOptions.Type.Chevron
         )
@@ -311,6 +315,7 @@ class HomeFragment : Fragment() {
 
             Log.d("MarkerClick", clickedMarker.id.toString())
 
+            moveMap(tomtomMap, clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude)
             //show a UI if click
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
         }

@@ -95,8 +95,9 @@
     <string name="word">WORD</string>
     <string name="browse_the_news">BROWSE THE NEWS</string>
     <string name="permission_denied">Using BU Central\'s Location as Starting Point</string>
-    <string name="query_not_found" translatable="false">No Bathrooms Found!</string>
-    <string name="reviews" translatable="false">Reviews:</string>
-    <string name="review" translatable="false">Review:</string>
-    <string name="review_rating" translatable="false">Rating:</string>
+    <string name="query_not_found">No Bathrooms Found!</string>
+    <string name="reviews">Reviews:</string>
+    <string name="review">Review:</string>
+    <string name="review_rating">Rating:</string>
+    <string name="x_stars" translatable="false">X Stars</string>
 </resources>
