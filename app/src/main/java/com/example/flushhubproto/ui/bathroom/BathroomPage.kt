@@ -29,7 +29,7 @@ class BathroomPage: Fragment() {
 
         val backButton: ImageButton = view.findViewById(R.id.bathroom_details_back_button)
         val bathroomName: TextView = view.findViewById(R.id.Bathroom_Name)
-        val bathroomDescription: TextView = view.findViewById(R.id.Bathroom_Location)
+        val bathroomDescription: TextView = view.findViewById(R.id.Bathroom_Description)
         val bestReview: TextView = view.findViewById(R.id.Best_Review)
         val ratings: RatingBar = view.findViewById(R.id.ratingBathroomBar)
         val routeButton: Button = view.findViewById(R.id.Route_Button)
