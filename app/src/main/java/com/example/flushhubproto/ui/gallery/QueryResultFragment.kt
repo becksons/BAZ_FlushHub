@@ -13,9 +13,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavHostController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flushhubproto.LocationInfoAdapter
@@ -85,6 +82,9 @@ class QueryResultFragment: Fragment() {
 //        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
 //            binding.detailsTextView.text = details
 //        }
+        binding.queryResBackButton.setOnClickListener {
+            findNavController().navigate(R.id.nav_home)
+        }
 
         //setting up new instances of the same stuffs we did in HomeFragment/MainActivity
         androidLocationProvider = AndroidLocationProvider(
@@ -274,13 +274,15 @@ class QueryResultFragment: Fragment() {
                 .setDuration(500)
                 .setListener(null)
         }
+        binding.goToRouteLayout.showRouteLayoutRatingBar.isClickable = false
+        binding.goToRouteLayout.showRouteLayoutRatingBar.progress= rating.toFloat().toInt()
 
 
         binding.goToRouteLayout.showRouteLayoutAddress.text = address
         binding.goToRouteLayout.showRouteLayoutDistance.text = distance
         binding.goToRouteLayout.showRouteLayoutEta.text = eta
-        binding.goToRouteLayout.showRouteLayoutRatingBar.progress = rating.toDouble().toInt()
-        binding.goToRouteLayout.showRouteLayoutRatingBar.isClickable = false
+
+
 
         binding.goToRouteLayout.collapseButton.setOnClickListener {
             hideGoToRouteLayout()

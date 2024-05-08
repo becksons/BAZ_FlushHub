@@ -21,18 +21,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <ImageButton
                 android:id="@+id/query_res_back_button"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:translationY="40dp"
+
+                android:scaleType="fitCenter"
                 android:layout_marginTop="16dp"
+                android:scaleX="1.2"
+
+                android:elevation="10dp"
+                android:scaleY="1.2"
+                android:src="@drawable/back_arrow"
+                android:background="@android:color/transparent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:fontFamily="@font/ruda_regular"
                 android:text="@string/back">
 
-            </Button>
+            </ImageButton>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

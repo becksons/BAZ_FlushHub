@@ -17,12 +17,14 @@
         android:text = "@string/menu"
         android:textSize="20dp"
         android:elevation="25dp"
-        android:fontFamily="@font/ruda_black"
+        android:fontFamily="@font/ruda_bold"
         android:textColor="@color/black"
         android:translationY="50dp"
         android:translationX="20dp">
 
     </TextView>
+
+    <include layout="@layout/app_banner" android:id="@+id/app_banner" />
     <ImageButton
         android:id="@+id/open_drawer_button"
         android:layout_width="130dp"
@@ -45,93 +47,17 @@
 
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id ="@+id/app_bar_red"
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:background="@color/purple_500"
         android:elevation="10dp"
-        android:id = "@+id/app_bar_banner"
-
-        app:layout_constraintTop_toBottomOf="@+id/navHeader"
 
         >
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-
-            >
-
-            <LinearLayout
-                android:layout_width="250dp"
-                android:layout_height="80dp"
-                android:orientation="vertical"
-                android:layout_margin="20dp"
-                android:translationX="120dp"
-                android:translationY="-5dp"
-
-
-                >
-
-                <TextView
-                    android:id = "@+id/greeting_text_name"
-                    android:layout_width="300dp"
-                    android:layout_gravity="start"
-
-                    android:layout_height="30dp"
-
-
-
-                    android:textSize="25sp"
-                    android:text = "@string/greet_user_default"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:visibility="gone"
-                    android:fontFamily="@font/ruda_black"
-
-                    >
-
-
-
-                </TextView>
-                <TextView
-                    android:id = "@+id/fragment_banner"
-                    android:layout_width="300dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/ruda_black"
-                    android:layout_marginTop="30dp"
-
-                    android:textColor="@color/black"
-                    android:textAlignment="center"
-                    android:text="@string/find_your_restroom"
-
-
-
-                    android:translationX="5dp"
-                    android:translationY="-10dp"
-                    >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/greeting_miles_away"
-                    android:layout_width="360dp"
-                    android:layout_height="50dp"
-                    android:visibility="gone"
-                    android:textSize="13sp"
-                    android:textAlignment="textStart"
-                    android:text="@string/nearest_restroom_is_x_miles_away"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/ruda_bold"
-                    android:translationY="4dp"
-                    android:translationX="-20dp"
-
-                    />
-            </LinearLayout>
-        </LinearLayout>
-
     </com.google.android.material.appbar.AppBarLayout>
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

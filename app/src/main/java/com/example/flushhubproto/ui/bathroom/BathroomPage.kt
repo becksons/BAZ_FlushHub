@@ -29,14 +29,17 @@ class BathroomPage: Fragment() {
 
         val backButton: ImageButton = view.findViewById(R.id.bathroom_details_back_button)
         val bathroomName: TextView = view.findViewById(R.id.Bathroom_Name)
-        val bathroomDescription: TextView = view.findViewById(R.id.Bathroom_Location)
+        val bathroomDescription: TextView = view.findViewById(R.id.Bathroom_Description)
         val bestReview: TextView = view.findViewById(R.id.Best_Review)
         val ratings: RatingBar = view.findViewById(R.id.ratingBathroomBar)
-        val routeButton: Button = view.findViewById(R.id.Route_Button)
+        val routeButton: Button = view.findViewById(R.id.detail_map_button)
+
+
 
 
         bathroomName.text = MainActivity.currentBathroom?.first?.Name
         bathroomDescription.text = MainActivity.currentBathroom?.first?.Description
+        ratings.rating = MainActivity.currentBathroom?.first?.Rating?.toFloat()!!
 
         if (MainActivity.currentBathroom != null) {
             ratings.rating = MainActivity.currentBathroom!!.first.Rating.toFloat()
@@ -44,15 +47,19 @@ class BathroomPage: Fragment() {
             ratings.rating = 0.0F
         }
 
-        val rawReviewList = MainActivity.currentBathroom?.first?.Reviews?.split("=")
-        if (rawReviewList != null) {
-            val ratingReviewMasterList: MutableList<List<String>> = mutableListOf()
+//        val rawReviewList = MainActivity.currentBathroom?.first?.Reviews?.split("=")
+//        if (rawReviewList != null) {
+//            val ratingReviewMasterList: MutableList<List<String>> = mutableListOf()
 //            rawReviewList.forEach {rev ->
-//                val ratingAndReview = rev.split("$")
-//                ratingReviewMasterList.add(listOf(ratingAndReview[0], ratingAndReview[1])) // Rating | Review
+//                if(!rev.contains("=")){
+//                    val ratingAndReview = rev.split("$")
+//                    ratingReviewMasterList.add(listOf(ratingAndReview[0], ratingAndReview[1])) // Rating | Review
+//
+//                }
+//
 //            }
-            bestReview.text = "AKSJDHAS"
-        }
+//
+//        }
     }
 
 }

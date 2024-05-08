@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">FlushHubProto</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
@@ -10,7 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_find">Find Your Restroom</string>
     <string name="menu_rate">Review Restrooms</string>
-    <string name="menu">MENU</string>
+    <string name="menu">Menu</string>
     <string name="the_flushhub" translatable="false">The FlushHub</string>
     <string name="greet_user_default">Don\'t worry, user!</string>
     <string name="nearest_restroom_is_x_miles_away">The nearest restroom is .01 miles away </string>
@@ -27,10 +27,10 @@
     <string name="what_is_your_name">What is your name?</string>
     <string name="submit">Enter</string>
     <string name="landing_app_description">Boston University\'s #1 restroom finder tool!</string>
-    <string name="find_your_restroom">FIND YOUR RESTROOM</string>
-    <string name="gender">GENDER:</string>
-    <string name="campus">CAMPUS AREA:</string>
-    <string name="rating">RESTROOM RATING:</string>
+    <string name="find_your_restroom">Find Your Restroom</string>
+    <string name="gender">Gender:</string>
+    <string name="campus">Campus Area:</string>
+    <string name="rating">Restroom Rating:</string>
     <string name="find">FIND</string>
     <string name="central">Central</string>
     <string name="west">West</string>
@@ -39,11 +39,11 @@
     <string name="restroom_nickname_hint">Restroom Nickname\n</string>
     <string name="type_your_review_here"> Type your review here</string>
     <string name="submit_review">Submit Review</string>
-    <string name="leave_a_review">LEAVE A REVIEW: </string>
+    <string name="leave_a_review">Leave a review: </string>
     <string name="building">Building:</string>
     <string name="floor">at Floor:</string>
     <string name="leave_a_n_restroom_review">Leave a \n Restroom Review!</string>
-    <string name="rate_this_restroom">RATE THIS RESTROOM:</string>
+    <string name="rate_this_restroom">Rate this restroom:</string>
     <string name="restroom_nickname">RESTROOM NICKNAME</string>
     <string name="give_this_restroom_a_nickname">Give this restroom a nickname</string>
     <string name="location">LOCATION:</string>
@@ -67,9 +67,9 @@
     <string name="gender_list">Gender</string>
     <string name="miles">mi</string>
     <string name="minutes">min</string>
-    <string name="top_restroom">BU\'S TOP RESTROOMS</string>
-    <string name="entertainment_banner">FLUSH HUB FUN</string>
-    <string name="news_banner" translatable="false">FLUSH HUB NEWS</string>
+    <string name="top_restroom">BU\'S Top Restrooms</string>
+    <string name="entertainment_banner">FlushHub Fun!</string>
+    <string name="news_banner" translatable="false">Flush Hub News</string>
     <string name="ask_name">Please enter your name</string>
     <string name="dont_worry">Don\'t worry,</string>
     <string name="nearest">The nearest restroom is</string>
@@ -93,11 +93,12 @@
     <string name="new_game">New Game</string>
     <string name="boggle" translatable="false">Boggle!</string>
     <string name="word">WORD</string>
-    <string name="browse_the_news">BROWSE THE NEWS</string>
+    <string name="browse_the_news" tools:ignore="ExtraTranslation">BROWSE THE NEWS</string>
     <string name="permission_denied">Using BU Central\'s Location as Starting Point</string>
     <string name="query_not_found">No Bathrooms Found!</string>
     <string name="reviews">Reviews:</string>
     <string name="review">Review:</string>
     <string name="review_rating">Rating:</string>
     <string name="x_stars" translatable="false">X Stars</string>
+    <string name="flushhub_got_you">FlushHub\'s got you.</string>
 </resources>
