@@ -240,7 +240,7 @@ class HomeFragment : Fragment() {
 
 
     //This function passes lat and long to Google maps and launch it to route the user
-    fun openMap(context: Context, lat: Double, long: Double, label: String = "Restroom") {
+    private fun openMap(context: Context, lat: Double, long: Double, label: String = "Restroom") {
         val geoUri = android.net.Uri.parse("geo:0,0?q=$lat,$long($label)") //lat, long, and what you want to call the location
         val intent = Intent(Intent.ACTION_VIEW, geoUri) //using intent
         intent.setPackage("com.google.android.apps.maps")

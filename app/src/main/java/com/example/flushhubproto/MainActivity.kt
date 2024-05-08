@@ -33,7 +33,6 @@ import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
 import com.example.tomtom.R
 import com.example.tomtom.databinding.ActivityMainBinding
-import com.tomtom.sdk.location.LocationProvider
 import io.realm.Realm
 
 
@@ -50,8 +49,6 @@ class MainActivity : AppCompatActivity() {
         var currentBathroom: Triple<bathroom, Double, Double>? = null
 
     }
-
-    private var androidLocationProvider: LocationProvider? = null
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var topDrawer: FrameLayout
@@ -442,8 +439,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
-
     private fun greetUser(name: String, milesAway: Float) {
         greetingTextView = findViewById(R.id.greeting_text_name)
         distanceTextView = findViewById(R.id.greeting_miles_away)

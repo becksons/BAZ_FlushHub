@@ -52,7 +52,6 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
                 if (position != RecyclerView.NO_POSITION) {
                     val bathroom: Triple<bathroom, Double, Double>? = bathroomList?.get(position)
                     if (bathroom != null) {
-                        Toast.makeText(itemView.context,"Bathroom ${bathroom.first.Name} clicked at $position",Toast.LENGTH_SHORT).show()
                         MainActivity.currentBathroom = bathroom
                         navController.navigate(R.id.bathroomPage) // We Navigate for More Info
                     }
