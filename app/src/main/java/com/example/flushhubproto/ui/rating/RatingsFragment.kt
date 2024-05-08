@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
@@ -85,6 +86,13 @@ class RatingsFragment : Fragment() {
             .replace(R.id.nav_host_fragment_content_main, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.leaveReview.setOnClickListener {
+            findNavController().navigate(R.id.submitReviewFragment)
+        }
     }
 
     companion object {

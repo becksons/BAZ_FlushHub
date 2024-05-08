@@ -2,22 +2,42 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fh_tool_bar"
     android:fillViewport="true">
 
 <GridLayout
     android:layout_width="match_parent"
-    android:background="@color/fh_tool_bar"
+    android:background="@android:color/transparent"
+
     android:layout_height="wrap_content"
     android:paddingBottom="160dp"
 
-    android:paddingTop="160dp"
+    android:paddingTop="100dp"
 
 
 
     android:columnCount="1"
-    android:rowCount="6">
+    android:rowCount="8">
+    <TextView
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/ruda_black"
+        android:textColor="@color/purple_500"
+        android:textSize="35dp"
+        android:textAlignment="center"
+
+        android:text="CUTE ANIMALS!">
+
+    </TextView>
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_row="1"
+        android:layout_height="320dp"
+        android:background="@drawable/banner_style"
+        >
 
     </androidx.cardview.widget.CardView>
 
@@ -29,21 +49,33 @@
         android:scaleType="centerCrop"
         android:fitsSystemWindows="true"
         android:layout_gravity="center"
+        android:elevation="20dp"
         android:cropToPadding="true"
         android:layout_margin="20dp"
-        android:layout_row="0"
+        android:layout_row="2"
         android:layout_column="0"/>
 
     <Button
         android:id="@+id/catButton"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="250dp"
+        android:layout_height="65dp"
         android:layout_gravity="center"
         android:fontFamily="@font/ruda_regular"
+        android:layout_margin="20dp"
+        android:drawableLeft="@drawable/cat_icon"
         android:text="@string/click_for_a_random_cat"
 
-        android:layout_row="1"
+        android:layout_row="3"
         android:layout_column="0"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="320dp"
+        android:background="@drawable/banner_style"
+        >
+
+    </androidx.cardview.widget.CardView>
+
 
 
     <ImageView
@@ -54,21 +86,33 @@
         android:fitsSystemWindows="true"
         android:layout_gravity="center"
         android:scaleType="fitEnd"
-        android:layout_row="2"
+        android:elevation="20dp"
+        android:layout_row="4"
         android:layout_column="0"/>
 
 
 
     <Button
         android:id="@+id/dogButton"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:layout_row="3"
+        android:layout_width="250dp"
+        android:layout_height="65dp"
+        android:layout_row="5"
         android:layout_column="0"
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:fontFamily="@font/ruda_regular"
+        android:drawableLeft="@drawable/dog_icon"
         android:text="@string/click_for_a_random_dog" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="320dp"
+        android:background="@drawable/banner_style"
+        android:layout_row="5"
+        >
+
+    </androidx.cardview.widget.CardView>
+
 
     <ImageView
         android:id="@+id/foxImageView"
@@ -78,18 +122,20 @@
         android:layout_gravity="center"
         android:fitsSystemWindows="true"
         android:scaleType="fitEnd"
-        android:layout_row="4"
+        android:elevation="20dp"
+        android:layout_row="6"
         android:layout_column="0"/>
 
     <Button
         android:id="@+id/foxButton"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="250dp"
+        android:layout_height="65dp"
         android:layout_gravity="center"
         android:fontFamily="@font/ruda_regular"
         android:text="@string/click_for_a_random_fox"
         android:layout_margin="20dp"
-        android:layout_row="5"
+        android:drawableLeft="@drawable/fox_icon"
+        android:layout_row="7"
         android:layout_column="0"/>
 
 </GridLayout>

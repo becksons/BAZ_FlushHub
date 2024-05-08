@@ -76,14 +76,16 @@
         </View>
         <Button
             android:id="@+id/nav_entertainment_animals"
-            android:layout_width="300dp"
+            android:layout_width="340dp"
             android:layout_height="70dp"
-            android:layout_gravity="center"
+            android:layout_marginStart="52dp"
+            android:textAlignment="textStart"
             android:background="@drawable/find_button"
+            android:drawableLeft="@drawable/cute_animal_icon"
 
             android:fontFamily="@font/ruda_black"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:layout_marginTop="30dp"
 
             android:text = "@string/cute_animals"
@@ -98,13 +100,15 @@
         </View>
         <Button
             android:id="@+id/nav_entertainment_boggle"
-            android:layout_width="300dp"
+            android:layout_width="340dp"
             android:layout_height="70dp"
             android:background="@drawable/find_button"
             android:fontFamily="@font/ruda_black"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:layout_gravity="center"
+            android:textSize="23sp"
+            android:textAlignment="textStart"
+            android:drawableLeft="@drawable/game_icon"
+            android:layout_marginStart="52dp"
             android:text = "@string/play_boggle"
             >
 
@@ -117,13 +121,15 @@
         </View>
         <Button
             android:id="@+id/nav_entertainment_hangman"
-            android:layout_width="300dp"
+            android:layout_width="340dp"
             android:layout_height="70dp"
             android:background="@drawable/find_button"
             android:fontFamily="@font/ruda_black"
-            android:layout_gravity="center"
+            android:layout_marginStart="52dp"
             android:textColor="@color/white"
-            android:textSize="23sp"
+            android:textSize="22sp"
+            android:textAlignment="textStart"
+            android:drawableLeft="@drawable/news_icon"
 
             android:text = "@string/browse_the_news"
             >

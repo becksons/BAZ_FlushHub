@@ -218,7 +218,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:background="@drawable/find_button"
-            android:drawableLeft="@drawable/search"
+            android:drawableLeft="@drawable/search_icon"
             android:elevation="5dp"
             android:fontFamily="@font/ruda_black"
             android:text="@string/find"

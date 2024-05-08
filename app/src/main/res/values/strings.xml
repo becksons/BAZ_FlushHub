@@ -44,7 +44,7 @@
     <string name="floor">at Floor:</string>
     <string name="leave_a_n_restroom_review">Leave a \n Restroom Review!</string>
     <string name="rate_this_restroom">Rate this restroom:</string>
-    <string name="restroom_nickname">RESTROOM NICKNAME</string>
+    <string name="restroom_nickname">Restroom</string>
     <string name="give_this_restroom_a_nickname">Give this restroom a nickname</string>
     <string name="location">LOCATION:</string>
     <string name="select_building">Select building</string>
@@ -101,4 +101,5 @@
     <string name="review_rating">Rating:</string>
     <string name="x_stars" translatable="false">X Stars</string>
     <string name="flushhub_got_you">FlushHub\'s got you.</string>
+    <string name="select_a_building">select a building</string>
 </resources>
