@@ -42,6 +42,7 @@ import com.tomtom.sdk.map.display.marker.Marker
 import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 interface RouteActionListener {
     fun onRouteClosed()
@@ -216,7 +217,7 @@ class HomeFragment : Fragment() {
             rotation = 0.0
         )
 
-        tomtomMap.moveCamera(cameraOptions)
+        tomtomMap.animateCamera(cameraOptions, 0.7.seconds)
     }
 
     private fun updateUserLocationOnMap(tomtomMap: TomTomMap, lat: Double, long: Double) {
@@ -311,6 +312,7 @@ class HomeFragment : Fragment() {
 
             Log.d("MarkerClick", clickedMarker.id.toString())
 
+            moveMap(tomtomMap, clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude)
             //show a UI if click
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
         }
