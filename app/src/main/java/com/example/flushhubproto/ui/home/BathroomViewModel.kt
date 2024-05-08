@@ -15,7 +15,6 @@ import io.realm.mongodb.sync.Subscription
 import io.realm.mongodb.sync.SyncConfiguration
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.io.IOException
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import kotlin.math.roundToInt

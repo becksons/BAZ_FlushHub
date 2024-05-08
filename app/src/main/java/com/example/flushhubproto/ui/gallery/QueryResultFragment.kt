@@ -4,20 +4,16 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.flushhubproto.LocationInfoAdapter
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
@@ -82,9 +78,9 @@ class QueryResultFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
-            binding.detailsTextView.text = details
-        }
+//        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
+//            binding.detailsTextView.text = details
+//        }
 
         //setting up new instances of the same stuffs we did in HomeFragment/MainActivity
         androidLocationProvider = AndroidLocationProvider(
@@ -259,11 +255,15 @@ class QueryResultFragment: Fragment() {
     }
 
     //This function reveals a layout for the user to launch Google Maps to route them
-    private fun showGoToRouteLayout(lat:Double, lon: Double, address: String = "Bathroom") {
-        val layout = binding.goToRouteLayout
-        binding.goToRouteLayout.visibility = View.VISIBLE
-        binding.goToRouteLayout.apply {
-            visibility = View.VISIBLE
+    private fun showGoToRouteLayout(lat:Double, lon: Double, tagData: String = "Bathroom") {
+        val tagDataList = tagData.split("\n")
+        val address  = tagDataList[0]
+        val distance = tagDataList[1]
+        val eta = tagDataList[2]
+        val rating = tagDataList[3]
+
+        binding.goToRouteLayout.root.visibility = View.VISIBLE
+        binding.goToRouteLayout.root.apply {
             alpha = 0f
             animate()
                 .alpha(1f)
@@ -271,15 +271,21 @@ class QueryResultFragment: Fragment() {
                 .setListener(null)
         }
 
-        binding.detailsTextView.text = null
-        binding.detailsTextView.text = address
-        binding.mapButton.setOnClickListener {
-            context?.let{ctx->
-                openMap(ctx, lat, lon, address)
-            }
 
+        binding.goToRouteLayout.showRouteLayoutAddress.text = address
+        binding.goToRouteLayout.showRouteLayoutDistance.text = distance
+        binding.goToRouteLayout.showRouteLayoutEta.text = eta
+        binding.goToRouteLayout.showRouteLayoutRatingBar.progress = rating.toDouble().toInt()
+        binding.goToRouteLayout.showRouteLayoutRatingBar.isClickable = false
+
+        binding.goToRouteLayout.collapseButton.setOnClickListener {
+            hideGoToRouteLayout()
         }
+
         bathroomViewModel.updateSelectedLocation(address)
+    }
+    private fun hideGoToRouteLayout() {
+        binding.goToRouteLayout.root.visibility = View.GONE
     }
 
     //This function passes lat and long to Google maps and launch it to route the user

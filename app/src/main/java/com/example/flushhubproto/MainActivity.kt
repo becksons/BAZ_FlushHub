@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
@@ -30,26 +29,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.flushhubproto.ui.home.BathroomViewModel
-import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.flushhubproto.ui.home.HomeFragment.Companion.REQUEST_LOCATION_PERMISSION
 import com.example.tomtom.R
 import com.example.tomtom.databinding.ActivityMainBinding
-import com.tomtom.quantity.Distance
-import com.tomtom.sdk.location.GeoLocation
-import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
-import com.tomtom.sdk.location.OnLocationUpdateListener
-import com.tomtom.sdk.location.android.AndroidLocationProvider
-import com.tomtom.sdk.location.android.AndroidLocationProviderConfig
-import com.tomtom.sdk.map.display.MapOptions
-import com.tomtom.sdk.map.display.TomTomMap
-import com.tomtom.sdk.map.display.camera.CameraOptions
-import com.tomtom.sdk.map.display.image.ImageFactory
-import com.tomtom.sdk.map.display.location.LocationMarkerOptions
-import com.tomtom.sdk.map.display.marker.MarkerOptions
-import com.tomtom.sdk.map.display.ui.MapFragment
 import io.realm.Realm
-import kotlin.time.Duration.Companion.milliseconds
 
 
 class MainActivity : AppCompatActivity() {
@@ -62,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         var loadStart = true
         var currentLongitude: Double = 0.0
         var currentLatitude: Double = 0.0
+
+        var reviewButtonClicked = MutableLiveData<Boolean>(false)
     }
 
     private var androidLocationProvider: LocationProvider? = null
@@ -226,12 +212,10 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.initLoadingFragment)
                 binding.root.isClickable = false
                 binding.appBarMain.appBarBanner.visibility = GONE
-                binding.appBarMain.navHeaderMain.root.visibility = GONE
                 binding.appBarMain.openDrawerButton.visibility = GONE
                 binding.appBarMain.menuText.visibility = GONE
             } else if (loadStart) {
                 binding.appBarMain.appBarBanner.visibility =  VISIBLE
-                binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
                 binding.appBarMain.menuText.visibility = VISIBLE
 
@@ -415,12 +399,12 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.queryLoadingFragment)
                 binding.root.isClickable = false
                 binding.appBarMain.appBarBanner.visibility = GONE
-                binding.appBarMain.navHeaderMain.root.visibility = GONE
+
                 binding.appBarMain.openDrawerButton.visibility = GONE
                 binding.appBarMain.menuText.visibility = GONE
             } else if (!loadStart) {
                 binding.appBarMain.appBarBanner.visibility =  VISIBLE
-                binding.appBarMain.navHeaderMain.root.visibility = VISIBLE
+
                 binding.appBarMain.openDrawerButton.visibility = VISIBLE
                 binding.appBarMain.menuText.visibility = VISIBLE
                 binding.root.isClickable = true

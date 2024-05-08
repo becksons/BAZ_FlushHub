@@ -9,7 +9,7 @@
         android:id="@+id/boggleLayout"
         android:elevation="8dp"
 
-        android:translationY="30dp"
+
         android:background="@color/fh_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

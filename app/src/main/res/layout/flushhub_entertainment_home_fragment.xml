@@ -15,7 +15,7 @@
         android:elevation="10dp"
         android:background="@color/fh_tool_bar"
         android:orientation="vertical"
-        android:translationY="100dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
