@@ -245,27 +245,14 @@ class QueryResultFragment: Fragment() {
         val markerOptions = MarkerOptions(
             coordinate = loc,
             pinImage = ImageFactory.fromResource(R.drawable.bathroom_location_icon),
-            tag = "Address: ${address}\n" +
-                    "Distance: $distance" + requireContext().getString(R.string.miles) +
-                    "\nETA: $eta" + requireContext().getString(R.string.minutes) +
-                    "\nRating: $rating" + requireContext().getString(R.string.stars)
+            tag = "${address}\n" +
+                    distance + " " +  requireContext().getString(R.string.miles) +
+                    "\n$eta" + " " + requireContext().getString(R.string.minutes) +
+                    "\n$rating"
         )
 
-        val marker = tomtomMap.addMarker(markerOptions)
-        queryList.add(marker)
-        //-----------------------------
-
-        tomtomMap.addMarkerClickListener { clickedMarker ->
-            val detailText = clickedMarker.tag
-
-            if (detailText != null) {
-                bathroomViewModel.updateSelectedLocation(detailText)
-            }
-
-
-            Log.d(" Query MarkerClick", "Marker at $address was clicked.")
-            showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!, )
-        }
+        tomtomMap.addMarker(markerOptions)
+        //---------------------------
     }
 
     //This function reveals a layout for the user to launch Google Maps to route them
