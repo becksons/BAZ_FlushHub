@@ -92,7 +92,7 @@ class HomeFragment : Fragment() {
     private var clickedAdd : String? = null
 
     private var androidLocationProvider: LocationProvider? = null
-    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
+    private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
     private val markerOptionsList: MutableList<MarkerOptions> = mutableListOf()
