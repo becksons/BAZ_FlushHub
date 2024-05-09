@@ -98,7 +98,7 @@
             android:layout_row="0"
 
             android:layout_column="1"
-            android:translationX = "5dp"
+            android:translationX = "20dp"
             android:isIndicator="true"
             android:translationY="-3dp"
             android:layout_gravity="center_horizontal"

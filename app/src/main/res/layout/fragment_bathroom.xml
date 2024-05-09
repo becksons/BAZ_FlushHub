@@ -8,8 +8,7 @@
     android:elevation="15dp"
 >
 
-
-    <GridLayout
+ <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"

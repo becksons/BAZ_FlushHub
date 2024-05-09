@@ -28,7 +28,7 @@
         android:textSize="35dp"
         android:textAlignment="center"
 
-        android:text="CUTE ANIMALS!">
+        android:text="@string/cute_animals">
 
     </TextView>
     <androidx.cardview.widget.CardView

@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flushhubproto.schema.bathroom
 import com.example.tomtom.R
 
-class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double, Double>>) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
+class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double, Double>>,
+                          private val onItemClick: (Triple<bathroom, Double, Double>) -> Unit
+) : RecyclerView.Adapter<LocationInfoAdapter.LocationViewHolder>() {
     private var bathroomList: List<Triple<bathroom, Double, Double>>? = null;
 
     @SuppressLint("NotifyDataSetChanged")
@@ -37,6 +37,9 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
     override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
         val location = locationList[position]
         holder.bind(location)
+        holder.itemView.setOnClickListener {
+            onItemClick(location)
+        }
     }
 
     override fun getItemCount() = locationList.size

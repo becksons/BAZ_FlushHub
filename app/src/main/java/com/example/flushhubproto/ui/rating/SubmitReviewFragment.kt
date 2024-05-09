@@ -51,7 +51,7 @@ class SubmitReviewFragment: Fragment() {
             }
         }
 
-        binding.buildingSpinner.adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, buildingData)
+        binding.buildingSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, buildingData.toList())
         binding.submitButton.setOnClickListener {
             findNavController().navigate(R.id.nav_slideshow)
         }

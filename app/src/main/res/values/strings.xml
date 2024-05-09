@@ -103,4 +103,22 @@
     <string name="flushhub_got_you">FlushHub\'s got you.</string>
     <string name="select_a_building">select a building</string>
     <string name="rating_label">Rating:</string>
+    <string name="bathroom_details">Bathroom Details:</string>
+    <string name="description">Description:</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="top_review">Top Review:</string>
+    <string name="go_capitalized">GO</string>
+    <string name="flushhub">FlushHub</string>
+    <string name="address_">Address:</string>
+    <string name="address">Address</string>
+    <string name="distance">Distance:</string>
+    <string name="distance_">Distance</string>
+    <string name="eta">ETA:</string>
+    <string name="eta_">ETA</string>
+    <string name="rating_">Rating:</string>
+    <string name="_reviews">Reviews:</string>
+    <string name="return_">Return</string>
+    <string name="title_">Title</string>
+    <string name="author_">Author</string>
+    <string name="details_will_appear_here">Details will appear here</string>
 </resources>

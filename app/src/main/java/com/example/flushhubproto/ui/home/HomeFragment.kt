@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.flushhubproto.LocationInfoAdapter
 import com.example.flushhubproto.MainActivity
+import com.example.flushhubproto.schema.bathroom
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentHomeBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -88,6 +89,10 @@ class HomeFragment : Fragment() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var bathroomViewModel: BathroomViewModel
 
+    private var clickedLat: Double? = null
+    private var clickedLon: Double? = null
+    private var clickedAdd : String? = null
+
     private var androidLocationProvider: LocationProvider? = null
     private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
     private val mapFragment = MapFragment.newInstance(mapOptions)
@@ -116,6 +121,7 @@ class HomeFragment : Fragment() {
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
         }
+
     }
 
     //Converting meters to miles
@@ -129,7 +135,11 @@ class HomeFragment : Fragment() {
         swipeRefreshLayout = binding.nearestRestroomSwipeRefreshLayout
         recyclerView = binding.nearestLocationRecycler.nearestLocationRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = LocationInfoAdapter(emptyList())
+
+        adapter = LocationInfoAdapter(emptyList()) { bathroom ->
+            showExpandedRouteLayout(bathroom)
+        }
+        binding.nearestLocationRecycler.nearestLocationRecyclerView.adapter = adapter
         recyclerView.adapter = adapter
         //Nearest location review swipe refresh
         swipeRefreshLayout.setOnRefreshListener {
@@ -138,6 +148,39 @@ class HomeFragment : Fragment() {
             swipeRefreshLayout.isRefreshing = (MainActivity.swipeLoading.value == true)
         }
     }
+
+    private fun showExpandedRouteLayout(
+        bathroom: Triple<bathroom, Double, Double>
+
+    ) {
+        binding.expandedRouteDetail.root.visibility = VISIBLE
+        binding.expandedRouteDetail.BathroomName.text= bathroom.first.Name
+        binding.expandedRouteDetail.BathroomDescription.text = bathroom.first.Description
+        binding.expandedRouteDetail.ratingBathroomBar.rating = bathroom.first.Rating.toFloat()
+        binding.expandedRouteDetail.root.apply {
+            alpha = 0f
+            animate()
+                .alpha(1f)
+                .setDuration(500)
+                .setListener(null)
+        }
+        binding.expandedRouteDetail.bathroomDetailsBackButton.setOnClickListener {
+            binding.expandedRouteDetail.root.visibility = GONE
+            binding.expandedRouteDetail.root.apply {
+                alpha = 0f
+                animate()
+                    .alpha(1f)
+                    .setDuration(500)
+                    .setListener(null)
+            }
+        }
+        binding.expandedRouteDetail.detailMapButton.setOnClickListener {
+
+            //....
+        }
+
+    }
+
 
     private fun checkGPS() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -305,6 +348,9 @@ class HomeFragment : Fragment() {
             if (detailText != null) {
                 bathroomViewModel.updateSelectedLocation(detailText)
             }
+            clickedLat = clickedMarker.coordinate.latitude
+            clickedLon = clickedMarker.coordinate.longitude
+            clickedAdd = clickedMarker.tag
 
             Log.d("MarkerClick", clickedMarker.id.toString())
 

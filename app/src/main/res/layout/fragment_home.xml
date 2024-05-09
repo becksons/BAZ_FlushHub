@@ -67,7 +67,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/ruda_regular"
 
-                    android:text="Details will appear here"
+                    android:text="@string/details_will_appear_here"
                     android:textColor="#000000"
                     android:layout_margin="10dp"
                     android:textSize="12sp"
@@ -86,7 +86,7 @@
                     android:elevation="8dp"
                     android:fontFamily="@font/ruda_black"
 
-                    android:text="GO"
+                    android:text="@string/go_capitalized"
                     android:textColor="@color/black"
                     android:translationX="-40dp"
 
@@ -105,6 +105,11 @@
 
 
 
+
+
     </LinearLayout>
+     <include layout="@layout/expanded_route_layout" android:id="@+id/expanded_route_detail"  android:visibility="gone"  />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

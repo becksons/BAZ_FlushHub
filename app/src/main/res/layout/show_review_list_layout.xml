@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     android:fontFamily="@font/ruda_black"
-                    android:text="Reviews:"
+                    android:text="@string/_reviews"
                     android:textAlignment="center"
                     android:textColor="@color/purple_500"
 

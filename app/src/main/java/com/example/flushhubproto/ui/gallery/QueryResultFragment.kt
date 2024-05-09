@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flushhubproto.LocationInfoAdapter
 import com.example.flushhubproto.MainActivity
+import com.example.flushhubproto.schema.bathroom
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
 import com.example.tomtom.databinding.QueryResFragmentBinding
@@ -110,10 +111,53 @@ class QueryResultFragment: Fragment() {
         return binding.root
     }
     private fun setupRecyclerView(binding: QueryResFragmentBinding) {
-        adapter = LocationInfoAdapter(emptyList())
+        adapter = LocationInfoAdapter(emptyList()) { bathroom ->
+            showExpandedRouteLayout(bathroom)
+        }
         binding.queryResRecyclerView.queryResRecyclerList.layoutManager = LinearLayoutManager(context)
         binding.queryResRecyclerView.queryResRecyclerList.adapter = adapter
     }
+
+    private fun showExpandedRouteLayout(
+        bathroom: Triple<bathroom, Double, Double>
+
+    ) {
+        binding.expandedRouteDetail.root.visibility = View.VISIBLE
+        binding.expandedRouteDetail.BathroomName.text= bathroom.first.Name
+        binding.expandedRouteDetail.BathroomDescription.text = bathroom.first.Description
+        binding.expandedRouteDetail.ratingBathroomBar.rating = bathroom.first.Rating.toFloat()
+        binding.expandedRouteDetail.root.apply {
+            alpha = 0f
+            animate()
+                .alpha(1f)
+                .setDuration(500)
+                .setListener(null)
+        }
+        binding.expandedRouteDetail.bathroomDetailsBackButton.setOnClickListener {
+            binding.expandedRouteDetail.root.visibility = View.GONE
+            binding.expandedRouteDetail.root.apply {
+                alpha = 0f
+                animate()
+                    .alpha(1f)
+                    .setDuration(500)
+                    .setListener(null)
+            }
+        }
+        binding.expandedRouteDetail.detailMapButton.setOnClickListener {
+
+            //....
+        }
+
+    }
+
+
+    private fun hideExpandedRouteLayout() {
+
+//        binding.expandedRouteDetail.root.startAnimation(slideDown)
+        binding.expandedRouteDetail.root.animate().translationY(300F).setDuration(300).start()
+    }
+
+
     private fun observeQueriedBathrooms() {
         bathroomViewModel.queriedBathrooms.observe(viewLifecycleOwner) { bathrooms ->
             // Update adapter data

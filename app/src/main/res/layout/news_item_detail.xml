@@ -37,7 +37,7 @@
             android:fontFamily="@font/ruda_bold"
             android:src="@drawable/back_arrow"
 
-            android:text="Return" />
+            android:text="@string/return_" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -62,7 +62,7 @@
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:textAlignment="center"
-                    android:text="Title" />
+                    android:text="@string/title_" />
 
                 <TextView
                     android:id="@+id/articleAuthor"
@@ -77,7 +77,7 @@
                     android:textSize="15sp"
                     android:layout_gravity="center"
                     android:textAlignment="center"
-                    android:text="Author" />
+                    android:text="@string/author_" />
                 <View
                     android:layout_width="650dp"
                     android:layout_marginTop="15dp"
