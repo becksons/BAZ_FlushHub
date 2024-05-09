@@ -5,19 +5,33 @@
     android:background="@color/fh_tool_bar"
     android:fillViewport="true">
 
+
 <GridLayout
     android:layout_width="match_parent"
     android:background="@android:color/transparent"
 
     android:layout_height="wrap_content"
-    android:paddingBottom="160dp"
 
-    android:paddingTop="100dp"
+
+
 
 
 
     android:columnCount="1"
-    android:rowCount="8">
+    android:rowCount="9">
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="60dp"
+        android:layout_margin="25dp"
+        android:background="@android:color/transparent"
+        android:elevation="15dp"
+        android:layout_gravity="center"
+        android:translationY="20dp"
+
+        android:src="@drawable/cute_animal_icon"
+        >
+
+    </ImageView>
     <TextView
         android:layout_row="0"
         android:layout_column="0"
@@ -25,7 +39,10 @@
         android:layout_width="match_parent"
         android:fontFamily="@font/ruda_black"
         android:textColor="@color/purple_500"
-        android:textSize="35dp"
+        android:textSize="35sp"
+         android:translationX="30dp"
+        android:layout_margin="10dp"
+
         android:textAlignment="center"
 
         android:text="@string/cute_animals">
@@ -44,7 +61,7 @@
 
     <ImageView
         android:id="@+id/catImageView"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
         android:fitsSystemWindows="true"
@@ -80,12 +97,12 @@
 
     <ImageView
         android:id="@+id/dogImageView"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_margin="20dp"
         android:fitsSystemWindows="true"
         android:layout_gravity="center"
-        android:scaleType="fitEnd"
+        android:scaleType="centerCrop"
         android:elevation="20dp"
         android:layout_row="4"
         android:layout_column="0"/>
@@ -116,12 +133,12 @@
 
     <ImageView
         android:id="@+id/foxImageView"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_margin="20dp"
         android:layout_gravity="center"
         android:fitsSystemWindows="true"
-        android:scaleType="fitEnd"
+        android:scaleType="centerCrop"
         android:elevation="20dp"
         android:layout_row="6"
         android:layout_column="0"/>
@@ -137,6 +154,22 @@
         android:drawableLeft="@drawable/fox_icon"
         android:layout_row="7"
         android:layout_column="0"/>
+    <ImageButton
+        android:id="@+id/animalBackButton"
+        android:layout_height="70dp"
+        android:layout_width="70dp"
+        android:layout_column="0"
+        android:layout_margin="10dp"
+        android:layout_row="8"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:scaleType="centerCrop"
+        android:src="@drawable/back_arrow"
+        android:translationY="-19dp"
+        >
+
+    </ImageButton>
+
 
 </GridLayout>
 </ScrollView>

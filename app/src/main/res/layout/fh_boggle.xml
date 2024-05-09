@@ -30,7 +30,7 @@
 
             android:layout_marginBottom="30dp"
 
-            android:background="@color/fh_background"
+            android:background="#A1A0A0"
             android:elevation="10dp"
 
 
@@ -147,7 +147,8 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:fontFamily="@font/ruda_bold"
-            android:paddingBottom="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/black"
             android:text="@string/enter_a_word_then_hit_submit"
             android:textAlignment="center"
 

@@ -39,25 +39,3 @@ class BathroomPage: Fragment() {
         bathroomName.text = MainActivity.currentBathroom?.first?.Name
         bathroomDescription.text = MainActivity.currentBathroom?.first?.Description
         ratings.rating = MainActivity.currentBathroom?.first?.Rating?.toFloat()!!
-
-        if (MainActivity.currentBathroom != null) {
-            ratings.rating = MainActivity.currentBathroom!!.first.Rating.toFloat()
-        } else {
-            ratings.rating = 0.0F
-        }
-
-        val topRatingAndReview: MutableList<String> = mutableListOf("0.0", "")
-        MainActivity.currentBathroom?.first?.Reviews?.split("=")?.forEach { rev ->
-            if (rev != "") {
-                val ratingAndReview = rev.split("$")
-                val candidateRating: Double = ratingAndReview[0].toDouble()
-                if (candidateRating > topRatingAndReview[0].toDouble()) {
-                    topRatingAndReview[0] = candidateRating.toString()
-                    topRatingAndReview[1] = ratingAndReview[1]
-                }
-            }
-        }
-        bestReview.text =  "Rating: " + topRatingAndReview[0] + "\n" + topRatingAndReview[1] // Need to translate this
-    }
-
-}

@@ -96,14 +96,7 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/restroom_list_item_gender"
-                    android:layout_width="40dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="end"
-                    android:elevation="40dp"
-                    android:src="@drawable/gender_nuetral_icon"
-                    android:translationX="0dp" />
+
 
                 <View
                     android:layout_width="30dp"

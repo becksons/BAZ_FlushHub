@@ -78,14 +78,15 @@
     <string name="stars">stars</string>
     <string name="back" translatable="false">Back</string>
     <string name="generate_meme" translatable="false">Click for a random meme</string>
-    <string name="cute_animals">CUTE ANIMALS</string>
+    <string name="cute_animals">CUTE ANIMALS!</string>
+    <string name="cute_animals_menu">CUTE ANIMALS</string>
     <string name="play_boggle">PLAY BOGGLE</string>
     <string name="play_hangman">PLAY HANGMAN</string>
     <string name="elevate_your_restroom_experience_with">Elevate your restroom experience</string>
     <string name="click_for_a_random_cat">Click for a random cat!</string>
     <string name="click_for_a_random_dog">Click for a random dog!</string>
     <string name="click_for_a_random_fox">Click for a random fox!</string>
-    <string name="enter_a_word_then_hit_submit">Tap the letters together to form a word, \n then press enter</string>
+    <string name="enter_a_word_then_hit_submit">Tap adjacent letters together to form a word, \n then press enter</string>
     <string name="clear">Clear</string>
     <string name="score">Score:</string>
     <string name="default_score" translatable="false">0</string>
@@ -121,4 +122,10 @@
     <string name="title_">Title</string>
     <string name="author_">Author</string>
     <string name="details_will_appear_here">Details will appear here</string>
+    <string name="_0_0_stars">0.0 stars</string>
+    <string name="stars_review_list">stars</string>
+    <string name="_0_0">0.0</string>
+    <string name="_1">#1</string>
+    <string name="reviews_for">Reviews for</string>
+
 </resources>

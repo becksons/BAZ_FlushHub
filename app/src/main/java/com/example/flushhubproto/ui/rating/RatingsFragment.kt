@@ -16,6 +16,7 @@ import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentRatingsBinding
 import kotlin.math.roundToInt
 
+
 data class BathroomReviewData(
     val bathroomId: String,
     val buildingName: String,
@@ -39,6 +40,8 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
         swipeRefreshLayout = binding.ratingsSwipeRefresh
         setupRecyclerView()
 
+
+        //Getting bathroom data and creating instances of BathroomReviewData
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
             Log.d("Ratings Fragment", "Getting review data...")
             if (bathrooms != null) {
@@ -64,7 +67,9 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
                     binding.topBuilding.text = it.buildingName
                     binding.topRatingBar.rating= it.averageRating
                     binding.topRatingBar.isClickable = false
-                    binding.topRatingNum.text = roundToNearestHalf(it.averageRating).toString() + " stars"
+
+                    val topRatingNumString = roundToNearestHalf(it.averageRating).toString()
+                    binding.topRatingNum.text = topRatingNumString
                 }
             } else {
                 Log.d("Ratings Fragment", "Review data null")
@@ -75,10 +80,16 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
     private fun roundToNearestHalf(num: Float): Double {
         return (num * 2).roundToInt() / 2.0
     }
-    override fun onShowReviewsRequested(reviews: List<String>) {
-        val reviewsAdapter = IndividualReviewsListAdapter(requireContext(), reviews)
+
+    //The review list layout is visible when a user clicks on a reviews button in a recycler view item
+    override fun onShowReviewsRequested(reviews: BathroomReviewData) {
+
+        val reviewsAdapter = IndividualReviewsListAdapter(requireContext(), reviews.reviews)
         binding.showIndividualReviewList.individualReviewListView.adapter = reviewsAdapter
         binding.showIndividualReviewList.root.visibility = View.VISIBLE
+        binding.showIndividualReviewList.reviewListBuildingName.text = reviews.buildingName
+        val avgRankString = reviews.averageRating.toString()
+        binding.showIndividualReviewList.reviewListBuildingAvgRank.text = avgRankString
     }
 
     private fun setupRecyclerView() {
@@ -87,13 +98,6 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
         binding.ratingsRecyclerView.adapter = adapter
     }
 
-    private fun navigateToReviewDetails(bathroomId: String) {
-        val fragment = ReviewDetailsFragment.newInstance(bathroomId)
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_content_main, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -117,7 +121,4 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
         }
     }
 
-    companion object {
-        fun newInstance() = RatingsFragment()
-    }
 }

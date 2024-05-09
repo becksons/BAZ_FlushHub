@@ -35,7 +35,7 @@
 
         <TextView
             android:id="@+id/individual_review_text"
-            android:layout_width="200dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_row="1"
             android:layout_column="1"
@@ -82,7 +82,7 @@
             android:textColor="@color/black"
             android:textSize="13sp"
             android:layout_margin="10dp"
-            android:translationX="-5dp"
+            android:translationX="95dp"
             android:fontFamily="@font/ruda_regular"
             android:text="3.5 stars"
             android:layout_column="1"
@@ -98,7 +98,7 @@
             android:layout_row="0"
 
             android:layout_column="1"
-            android:translationX = "20dp"
+            android:translationX = "-85dp"
             android:isIndicator="true"
             android:translationY="-3dp"
             android:layout_gravity="center_horizontal"
