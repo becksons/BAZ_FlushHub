@@ -62,8 +62,8 @@ class ArticleHolder(
         binding.root.setOnClickListener {
 
             title = article.title
-            author = article.author ?: "Author"
-            content = article.content ?: "Content"
+            author = article.author ?: R.string.author_.toString()
+            content = article.content ?: R.string.content.toString()
 
             newsNavigation()
         }

@@ -121,11 +121,23 @@
     <string name="return_">Return</string>
     <string name="title_">Title</string>
     <string name="author_">Author</string>
+    <string name="content">content</string>
     <string name="details_will_appear_here">Details will appear here</string>
     <string name="_0_0_stars">0.0 stars</string>
     <string name="stars_review_list">stars</string>
     <string name="_0_0" translatable="false">0.0</string>
     <string name="_1" translatable="false">#1</string>
     <string name="reviews_for">Reviews for</string>
+    <string name="general">General</string>
+    <string name="sport">Sport</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="business">Business</string>
+    <string name="health">Health</string>
+    <string name="science">Science</string>
+    <string name="reviews_">REVIEW</string>
+    <string name="rank">Ranking:</string>
+    <string name="floor_number">Floor Number:</string>
+    <string name="restroom_building">Restroom Building:</string>
+    <string name="submit_your_review">SUBMIT YOUR REVIEW!:</string>
 
 </resources>

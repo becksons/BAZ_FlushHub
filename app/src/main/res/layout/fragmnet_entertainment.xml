@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:text="General"
+                    android:text="@string/general"
                     android:textSize="25sp" />
 
                 <Button
@@ -51,7 +51,7 @@
                     android:fontFamily="@font/ruda_bold"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:text="Sports"
+                    android:text="@string/sport"
                     android:textSize="25sp" />
 
                 <Button
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:fontFamily="@font/ruda_bold"
                     android:layout_weight="1"
-                    android:text="Entertainment"
+                    android:text="@string/entertainment"
                     android:layout_height="50dp"
                     android:textSize="25sp" />
 
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ruda_bold"
-                    android:text="Business"
+                    android:text="@string/business"
                     android:layout_height="50dp"
                     android:textSize="25sp" />
 
@@ -81,7 +81,7 @@
                     android:fontFamily="@font/ruda_bold"
 
                     android:layout_weight="1"
-                    android:text="Health"
+                    android:text="@string/health"
                     android:layout_height="50dp"
                     android:textSize="25sp"  />
 
@@ -92,7 +92,7 @@
 
                     android:layout_weight="1"
                     android:fontFamily="@font/ruda_bold"
-                    android:text="Science"
+                    android:text="@string/science"
                     android:layout_height="50dp"
                     android:textSize="25sp"  />
 
@@ -115,19 +115,19 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_marginStart="100dp"
-                android:fontFamily="@font/ruda_black"
                 android:id="@+id/articleTitle"
-                android:translationY="-50dp"
-                android:layout_width="60dp"
-                android:textSize="25sp"
-
+                android:layout_width="84dp"
                 android:layout_height="50dp"
                 android:layout_margin="70dp"
-                android:textStyle="bold"
+                android:layout_marginStart="100dp"
+                android:fontFamily="@font/ruda_black"
 
+                android:text="@string/title"
                 android:textAlignment="center"
-                android:text="Title" />
+                android:textSize="25sp"
+
+                android:textStyle="bold"
+                android:translationY="-50dp" />
 
             <TextView
                 android:id="@+id/articleAuthor"
@@ -141,7 +141,7 @@
                 android:textSize="25sp"
 
                 android:textAlignment="center"
-                android:text="Author" />
+                android:text="@string/author" />
 
 
 

@@ -85,7 +85,7 @@
                             android:layout_height="match_parent"
 
                             android:fontFamily="@font/ruda_bold"
-                            android:text="building"
+                            android:text="@string/building"
 
                             android:textColor="#000"
 
@@ -129,7 +129,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:fontFamily="@font/ruda_black"
-                        android:text="REVIEWS"
+                        android:text="@string/reviews"
                         android:textColor="@color/white"
                         android:textSize="12dp"
                         android:translationY="-10dp">

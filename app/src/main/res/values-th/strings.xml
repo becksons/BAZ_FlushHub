@@ -90,7 +90,7 @@
     <string name="select_a_building">เลือกอาคาร</string>
     <string name="rating_label">คะแนน</string>
     <string name="bathroom_details">ข้อมูลห้องน้ำ</string>
-    <string name="description">ขอมูล</string>
+    <string name="description">ข้อมูล</string>
     <string name="placeholder">ตัวอักษรชั่วคราว</string>
     <string name="top_review">ความคิดเห็นที่ดีที่สุด</string>
     <string name="go_capitalized">ไป</string>
@@ -108,5 +108,17 @@
     <string name="details_will_appear_here">ข้อมูลจะปรากฏที่นี่</string>
     <string name="_0_0_stars">0.0 ดาว</string>
     <string name="stars_review_list">ดาว</string>
-    <string name="reviews_for">ความคิกเห็นเกี่ยวกับ</string>
+    <string name="reviews_for">ความคิกเห็น</string>
+    <string name="content">เนื้อหา</string>
+    <string name="general">ทั่วไป</string>
+    <string name="sport">กีฬา</string>
+    <string name="entertainment">บันเทิ่ง</string>
+    <string name="business">ธุรกิจ</string>
+    <string name="health">สุขภาพ</string>
+    <string name="science">วิทยาศาสตร์</string>
+    <string name="reviews_">ความคิดเห็น</string>
+    <string name="rank">อันดับ:</string>
+    <string name="floor_number">ชั้น:</string>
+    <string name="restroom_building">อาคารห้องน้ำ:</string>
+    <string name="submit_your_review">ลงความคิดเห็นของคุณ!:</string>
 </resources>

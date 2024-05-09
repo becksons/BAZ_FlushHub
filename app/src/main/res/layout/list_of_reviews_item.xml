@@ -23,7 +23,7 @@
             android:layout_margin="20dp"
             android:translationY="-30dp"
             android:fontFamily="@font/ruda_bold"
-            android:text="Review:"
+            android:text="@string/reviews"
 
             android:layout_column="0"
             android:translationX="32dp"
