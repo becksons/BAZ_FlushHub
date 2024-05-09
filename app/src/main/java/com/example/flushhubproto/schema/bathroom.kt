@@ -3,7 +3,6 @@ package com.example.flushhubproto.schema
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.bson.types.ObjectId
-
 open class bathroom (
     @PrimaryKey
     var _id: ObjectId = ObjectId(),

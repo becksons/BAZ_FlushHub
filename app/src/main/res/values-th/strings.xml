@@ -85,4 +85,24 @@
     <string name="reviews">ความคิดเห็น:</string>
     <string name="review">ความคิดเห็น:</string>
     <string name="review_rating">คะแนน:</string>
+    <string name="flushhub_got_you">Flushhubs ช่วยคุณได้</string>
+    <string name="select_a_building">เลือกอาคาร</string>
+    <string name="rating_label">คะแนน</string>
+    <string name="bathroom_details">ข้อมูลห้องน้ำ</string>
+    <string name="description">ขอมูล</string>
+    <string name="placeholder">ตัวอักษรชั่วคราว</string>
+    <string name="top_review">ความคิดเห็นที่ดีที่สุด</string>
+    <string name="go_capitalized">ไป</string>
+    <string name="address_">ที่อยู่:</string>
+    <string name="address">ที่อยู่</string>
+    <string name="distance">ระยะทาง:</string>
+    <string name="distance_">ระยะทาง</string>
+    <string name="eta">เวลาเดินทาง:</string>
+    <string name="eta_">เวลาเดินทาง</string>
+    <string name="rating_">คะแนน</string>
+    <string name="_reviews">ความคิดเห็น</string>
+    <string name="return_">กลับ</string>
+    <string name="title_">หัวข้อ</string>
+    <string name="author_">ผู้เขียน</string>
+    <string name="details_will_appear_here">ข้อมูลจะปรากฏที่นี่</string>
 </resources>
