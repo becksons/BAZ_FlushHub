@@ -93,7 +93,7 @@ class BathroomViewModel : ViewModel() {
 
     // Calculates Distance and Travel time based on given Coordinates
     private fun calcRange(startLat: Double, startLong: Double, desLat: Double, desLong: Double): List<Int>? {
-        val apiKey = "YbAIKDlzANgswfBTirAdDONIKfLN9n6J"
+        val apiKey = "AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z"
         val url = "https://api.tomtom.com/routing/1/calculateRoute/$startLat,$startLong:$desLat,$desLong/json?key=$apiKey&travelMode=pedestrian"
         val client = OkHttpClient()
         val request = Request.Builder()
@@ -110,7 +110,7 @@ class BathroomViewModel : ViewModel() {
 
                 val responseData = response.body?.string()
                 if (responseData != null) {
-                    if (responseData != "<h1>Developer Over Qps</h1>") { // We hit Tom Tom's QPs limit if false
+                    if (responseData != "<h1>Developer Over Qps</h1>" && responseData != "<h1>Call blocked. You went over the allowed limit.</h1>") { // We hit Tom Tom's QPs limit if false
                         val routeResponse = parseRouteData(responseData)
                         routeResponse.routes.forEach { route ->
                             routeLength = route.summary.lengthInMeters
@@ -119,7 +119,7 @@ class BathroomViewModel : ViewModel() {
                         return@Callable listOf(routeLength, routeTime)
                     }
                 }
-                Log.d("FLUSHHUB", "HIT OVER QPS. DATA IS UNAVALIABLE!")
+//                Log.d("FLUSHHUB", "HIT OVER QPS. DATA IS UNAVALIABLE!") // For Debug
                 routeLength = -1 // We return default for the N/A
                 routeTime = -1 // We return default for the N/A
                 return@Callable listOf(routeLength, routeTime)
@@ -146,17 +146,16 @@ class BathroomViewModel : ViewModel() {
 
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
-            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 1.5) // Done to shorten
+            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 0.0) // Done to shorten
                 ?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             val reviewMap = mutableMapOf<String, List<String>>()
 
-
             if (bathrooms != null) {
+                var calculatedAmount = 0
                 bathrooms.forEach { bathroom ->
                     val reviews = bathroom.Reviews.split("=").filterNot { it.isBlank() }
                     reviewMap[bathroom._id.toString()] = reviews
-                    Log.d("Review list view model init", "Map: ${reviewMap.entries.toString()}")
                 }
                 _bathrooms.postValue(bathrooms.map { test -> // Critical Thread processes! Crashes may happen here if resources are not correctly allocated
                     // Defaults
@@ -185,24 +184,22 @@ class BathroomViewModel : ViewModel() {
                     if (calculations != null) {
                         distance = calculations[0].toDouble()
                         time = calculations[1].toDouble()
+                        if (distance != -1.0 && time != -1.0) {
+                            calculatedAmount += 1
+                        }
                     }
-
-                    //Log.i("FlUSHHUB", "Triple Created: ${Triple(test, distance, time)}") // For Debug
-
                     Triple(test, distance, time)
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
+                Log.d("LOADING ALL BATHROOMS", "Calculated $calculatedAmount / 316 Bathrooms.")
             }
             _reviewList.postValue(reviewMap)  // Post the mapped reviews
 
-            // Logging the review map
-            reviewMap.forEach { (key, value) ->
-                Log.d("FlUSHHUB_Reviews", "Bathroom Index: $key, Reviews: ${value.joinToString(separator = ", ")}")
-            }
             if (MainActivity.isInitLoading.value == true) {
                 MainActivity.isInitLoading.postValue(false) // Finish Loading for Initial Loading
             } else if (MainActivity.swipeReviewLoading.value == true) {
                 MainActivity.swipeReviewLoading.postValue(false) // Finished Review Swipe Loading
-                Log.d("REVIEW", "FETCHED THE DATA!")
+            } else if (MainActivity.swipeBathroomLoading.value == true) {
+                MainActivity.swipeBathroomLoading.postValue(false) // Finished Bathroom (Home) Swipe Loading
             }
         }
     }

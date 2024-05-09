@@ -81,20 +81,18 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var refreshBool = false
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: LocationInfoAdapter
-
-    private var isExpanded = false
-    private var isBarVisible: Boolean = false
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var bathroomViewModel: BathroomViewModel
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private var clickedLat: Double? = null
     private var clickedLon: Double? = null
     private var clickedAdd : String? = null
 
     private var androidLocationProvider: LocationProvider? = null
-    private val mapOptions = MapOptions(mapKey ="YbAIKDlzANgswfBTirAdDONIKfLN9n6J")
+    private val mapOptions = MapOptions(mapKey ="AOYMhs1HWBhlfnU4mIaiSULFfvNGTw4Z")
     private val mapFragment = MapFragment.newInstance(mapOptions)
 
     private val markerOptionsList: MutableList<MarkerOptions> = mutableListOf()
@@ -111,7 +109,7 @@ class HomeFragment : Fragment() {
 
         checkGPS()
         addMarkers()
-        setupRecyclerView(binding)
+        setupRecyclerView()
         observeLocationInfos()
         return binding.root
     }
@@ -121,7 +119,18 @@ class HomeFragment : Fragment() {
         bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
             binding.detailsTextView.text = details
         }
-
+        swipeRefreshLayout.setOnRefreshListener {
+            MainActivity.swipeBathroomLoading.postValue(true)
+            refreshBool = true
+            bathroomViewModel.loadAllBathrooms() // sets this to false after computation
+            MainActivity.swipeBathroomLoading.observe(viewLifecycleOwner) {
+                Log.d("REVIEW", "Triggered HOME!")
+                swipeRefreshLayout.isRefreshing = it // Checks if its true or false
+                if (!it && refreshBool) {
+                    refreshBool = false
+                }
+            }
+        }
     }
 
     //Converting meters to miles
@@ -131,7 +140,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun setupRecyclerView(binding: FragmentHomeBinding) {
+    private fun setupRecyclerView() {
         swipeRefreshLayout = binding.nearestRestroomSwipeRefreshLayout
         recyclerView = binding.nearestLocationRecycler.nearestLocationRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -141,15 +150,10 @@ class HomeFragment : Fragment() {
         }
         binding.nearestLocationRecycler.nearestLocationRecyclerView.adapter = adapter
         recyclerView.adapter = adapter
-        swipeRefreshLayout.setOnRefreshListener {
-            Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
-            swipeRefreshLayout.isRefreshing = true
-        }
     }
 
     private fun showExpandedRouteLayout(
         bathroom: Triple<bathroom, Double, Double>
-
     ) {
         binding.expandedRouteDetail.root.visibility = VISIBLE
         binding.expandedRouteDetail.BathroomName.text= bathroom.first.Name
@@ -162,6 +166,21 @@ class HomeFragment : Fragment() {
                 .setDuration(500)
                 .setListener(null)
         }
+
+        // We obtain the top reviews
+        val reviewList = bathroom.first.Reviews.split("=")
+        val bestReview = mutableListOf<String>("0", "N/A")
+        reviewList.forEach { rev->
+            if (rev != "") {
+                val candidateReview = rev.split("$")
+                if (candidateReview[0].toDouble() > bestReview[0].toDouble()) {
+                    bestReview[0] = candidateReview[0]
+                    bestReview[1] = candidateReview[1]
+                }
+            }
+        }
+        binding.expandedRouteDetail.BestReview.text = "Rating: " + bestReview[0] + "\n" + bestReview[1]
+
         binding.expandedRouteDetail.bathroomDetailsBackButton.setOnClickListener {
             binding.expandedRouteDetail.root.visibility = GONE
             binding.expandedRouteDetail.root.apply {
@@ -173,8 +192,10 @@ class HomeFragment : Fragment() {
             }
         }
         binding.expandedRouteDetail.detailMapButton.setOnClickListener {
-
-            //....
+            val parts = bathroom.first.Coordinates.split(',')
+            val longitude: Double = parts[0].toDouble()
+            val latitude: Double = parts[1].toDouble()
+            openMap(requireContext(), latitude, longitude)
         }
 
     }
@@ -351,7 +372,6 @@ class HomeFragment : Fragment() {
             clickedAdd = clickedMarker.tag
 
             Log.d("MarkerClick", clickedMarker.id.toString())
-
             moveMap(tomtomMap, clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude)
             //show a UI if click
             showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
