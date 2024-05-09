@@ -26,7 +26,6 @@ class BathroomPage: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val backButton: ImageButton = view.findViewById(R.id.bathroom_details_back_button)
         val bathroomName: TextView = view.findViewById(R.id.Bathroom_Name)
         val bathroomDescription: TextView = view.findViewById(R.id.Bathroom_Description)

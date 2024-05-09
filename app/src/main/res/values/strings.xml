@@ -108,7 +108,7 @@
     <string name="placeholder">Placeholder</string>
     <string name="top_review">Top Review:</string>
     <string name="go_capitalized">GO</string>
-    <string name="flushhub">FlushHub</string>
+    <string name="flushhub" translatable="false">FlushHub</string>
     <string name="address_">Address:</string>
     <string name="address">Address</string>
     <string name="distance">Distance:</string>
