@@ -100,7 +100,7 @@
     android:id="@+id/nearest_restroom_swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/nearest_restroom_recycler_list" android:id="@+id/nearest_location_recycler_view" />
+    <include layout="@layout/nearest_restroom_recycler_list" android:id="@+id/nearest_location_recycler" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

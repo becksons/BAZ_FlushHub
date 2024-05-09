@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView(binding: FragmentHomeBinding) {
         swipeRefreshLayout = binding.nearestRestroomSwipeRefreshLayout
-        recyclerView = binding.nearestLocationRecyclerView.nearestLocationRecyclerView
+        recyclerView = binding.nearestLocationRecycler.nearestLocationRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = LocationInfoAdapter(emptyList())
         recyclerView.adapter = adapter
@@ -371,4 +371,5 @@ class HomeFragment : Fragment() {
         androidLocationProvider = null
         _binding = null
     }
+
 }

@@ -102,4 +102,5 @@
     <string name="x_stars" translatable="false">X Stars</string>
     <string name="flushhub_got_you">FlushHub\'s got you.</string>
     <string name="select_a_building">select a building</string>
+    <string name="rating_label">Rating:</string>
 </resources>

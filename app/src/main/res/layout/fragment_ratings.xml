@@ -14,6 +14,7 @@
 
         android:orientation="vertical">
 
+
         <TextView
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
@@ -245,6 +246,8 @@
             android:text="@string/leave_a_review">
 
         </Button>
-
     </LinearLayout>
+    <include layout="@layout/show_review_list_layout" android:id="@+id/show_individual_review_list" android:visibility="gone" android:elevation="100dp"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,7 @@ data class BathroomReviewData(
     val averageRating: Float
 )
 
-class RatingsFragment : Fragment() {
+class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
     private lateinit var adapter: ReviewAdapter
     private var _binding: FragmentRatingsBinding? = null
     private val binding get() = _binding!!
@@ -73,9 +73,20 @@ class RatingsFragment : Fragment() {
     fun roundToNearestHalf(num: Float): Double {
         return (num * 2).roundToInt() / 2.0
     }
+    override fun onShowReviewsRequested(reviews: List<String>) {
+
+
+        val reviewsAdapter = IndividualReviewsListAdapter(requireContext(), reviews)
+        binding.showIndividualReviewList.individualReviewListView.adapter = reviewsAdapter
+        binding.showIndividualReviewList.root.visibility = View.VISIBLE
+
+
+
+
+    }
 
     private fun setupRecyclerView() {
-        adapter = ReviewAdapter(emptyList())
+        adapter = ReviewAdapter(emptyList(),this)
         binding.ratingsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.ratingsRecyclerView.adapter = adapter
     }
@@ -93,6 +104,11 @@ class RatingsFragment : Fragment() {
         binding.leaveReview.setOnClickListener {
             findNavController().navigate(R.id.submitReviewFragment)
         }
+        binding.showIndividualReviewList.reviewListBackButton.setOnClickListener {
+            binding.showIndividualReviewList.root.visibility = View.GONE
+
+        }
+
     }
 
     companion object {

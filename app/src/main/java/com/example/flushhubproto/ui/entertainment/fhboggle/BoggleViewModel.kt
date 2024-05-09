@@ -10,7 +10,6 @@ class BoggleViewModel : ViewModel() {
     var resetGameEvent = MutableLiveData<Boolean>()
 
     fun updateScore(newScore: Int) {
-
         score.postValue(max(0, (score.value ?: 0)+ newScore))
     }
 

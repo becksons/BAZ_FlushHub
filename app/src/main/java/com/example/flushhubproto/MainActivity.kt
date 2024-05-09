@@ -412,14 +412,36 @@ class MainActivity : AppCompatActivity() {
         topDrawer.animate().translationY(-topDrawer.height.toFloat()).setDuration(300).start()
         isDrawerOpen = false
     }
-    @Deprecated("Deprecated in Java")
+    @Deprecated("Deprecated in Java")//Handling android back button logic
     override fun onBackPressed() {
-        if (isDrawerOpen) {
-            closeTopDrawer()
-        } else {
-            super.onBackPressed()
+        super.onBackPressed()
+        val currentFragment = navController.currentDestination?.id
+
+        when (currentFragment) {
+            R.id.initLoadingFragment ->{
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.nav_home)
+            }
+            R.id.queryLoadingFragment ->{
+
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.nav_home)
+            }
+            R.id.nav_home->{
+            }
+            R.id.queryResultFragment->{
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.nav_home)
+            }
+            else -> {
+                findNavController(R.id.nav_host_fragment_content_main).popBackStack()
+            }
         }
+        if(topDrawer.visibility == VISIBLE){
+            closeTopDrawer()
+        }
+
     }
+
+
+
 
 
 

@@ -14,7 +14,8 @@ import com.example.tomtom.R
 import com.tomtom.sdk.map.display.marker.Marker
 
 
-class QueryAdapter(private var locationList: List<Marker>) : RecyclerView.Adapter<QueryAdapter.QueryViewHolder>() {
+class
+QueryAdapter(private var locationList: List<Marker>) : RecyclerView.Adapter<QueryAdapter.QueryViewHolder>() {
     private lateinit var bathroomViewModel: BathroomViewModel
 
 
