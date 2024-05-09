@@ -146,7 +146,7 @@ class BathroomViewModel : ViewModel() {
 
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
-            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 0.0) // Done to shorten
+            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 4.0) // Done to shorten
                 ?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             val reviewMap = mutableMapOf<String, List<String>>()
@@ -237,10 +237,9 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
-
+                        MainActivity.queryEmpty = false // We don't have an empty query!
                         Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
                         Triple(queryRes, distance, time)
-
                     } else if(area == "central" && longitude >= -71.110940 && longitude <= -71.100546){
                         Log.i("FlUSHHUB", "[QUERY] CALCULATING CENTRAL")
                         val calculations = calcRange(
@@ -254,10 +253,9 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
-
+                        MainActivity.queryEmpty = false // We don't have an empty query!
                         Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
                         Triple(queryRes, distance, time)
-
                     } else if(area == "east" && longitude > -71.100546){
                         Log.i("FlUSHHUB", "[QUERY] CALCULATING EAST")
                         val calculations = calcRange(
@@ -271,10 +269,9 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
-
+                        MainActivity.queryEmpty = false // We don't have an empty query!
                         Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
                         Triple(queryRes, distance, time)
-
                     } else if (area == "all") {
                         Log.i("FlUSHHUB", "[QUERY] CALCULATING ALL")
                         val calculations = calcRange(
@@ -287,21 +284,17 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
-
+                        MainActivity.queryEmpty = false // We don't have an empty query!
                         Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
                         Triple(queryRes, distance, time)
-
                     } else {
                         null
                     }
 
-                }.sortedBy { it.second })
-
-                if (!_queriedBathrooms.value.isNullOrEmpty()){
-                    MainActivity.queryEmpty = false // We don't have an empty query!
-                } else{
-                    MainActivity.queryEmpty = true // We do have an empty query
-                }
+                }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
+            } else {
+                Log.d("QUERY", "Query Bathrooms Returned Empty!")
+                MainActivity.queryEmpty = true // We do have an empty query
             }
             MainActivity.isQueryLoading.postValue(false)// Finish Loading after gathering Query
         }
@@ -345,11 +338,6 @@ class BathroomViewModel : ViewModel() {
             }
         }
 
-    }
-
-    fun test() {
-        MainActivity.swipeReviewLoading.postValue(false)
-        Log.d("REVIEW", "FETCHED THE DATA!")
     }
     // ===================================================================
     override fun onCleared() {

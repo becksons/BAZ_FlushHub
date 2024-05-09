@@ -81,10 +81,6 @@ class QueryResultFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-//        bathroomViewModel.selectedLocation.observe(viewLifecycleOwner) { details ->
-//            binding.detailsTextView.text = details
-//        }
         binding.queryResBackButton.setOnClickListener {
             findNavController().navigate(R.id.nav_home)
         }
@@ -143,9 +139,26 @@ class QueryResultFragment: Fragment() {
                     .setListener(null)
             }
         }
-        binding.expandedRouteDetail.detailMapButton.setOnClickListener {
 
-            //....
+        // We obtain the top reviews
+        val reviewList = bathroom.first.Reviews.split("=")
+        val bestReview = mutableListOf<String>("0", "N/A")
+        reviewList.forEach { rev->
+            if (rev != "") {
+                val candidateReview = rev.split("$")
+                if (candidateReview[0].toDouble() > bestReview[0].toDouble()) {
+                    bestReview[0] = candidateReview[0]
+                    bestReview[1] = candidateReview[1]
+                }
+            }
+        }
+        binding.expandedRouteDetail.BestReview.text = "Rating: " + bestReview[0] + "\n" + bestReview[1]
+
+        binding.expandedRouteDetail.detailMapButton.setOnClickListener {
+            val parts = bathroom.first.Coordinates.split(',')
+            val longitude: Double = parts[0].toDouble()
+            val latitude: Double = parts[1].toDouble()
+            openMap(requireContext(), latitude, longitude)
         }
 
     }
@@ -311,9 +324,7 @@ class QueryResultFragment: Fragment() {
                 .setListener(null)
         }
         binding.goToRouteLayout.showRouteLayoutRatingBar.isClickable = false
-        binding.goToRouteLayout.showRouteLayoutRatingBar.progress= rating.toFloat().toInt()
-
-
+        binding.goToRouteLayout.showRouteLayoutRatingBar.rating= rating.toFloat()
         binding.goToRouteLayout.showRouteLayoutAddress.text = address
         binding.goToRouteLayout.showRouteLayoutDistance.text = distance
         binding.goToRouteLayout.showRouteLayoutEta.text = eta
