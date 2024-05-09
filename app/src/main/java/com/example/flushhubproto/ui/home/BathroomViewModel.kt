@@ -239,6 +239,10 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
+
+                        Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
+                        Triple(queryRes, distance, time)
+
                     } else if(area == "central" && longitude >= -71.110940 && longitude <= -71.100546){
                         Log.i("FlUSHHUB", "[QUERY] CALCULATING CENTRAL")
                         val calculations = calcRange(
@@ -252,6 +256,10 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
+
+                        Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
+                        Triple(queryRes, distance, time)
+
                     } else if(area == "east" && longitude > -71.100546){
                         Log.i("FlUSHHUB", "[QUERY] CALCULATING EAST")
                         val calculations = calcRange(
@@ -265,6 +273,10 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
+
+                        Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
+                        Triple(queryRes, distance, time)
+
                     } else if (area == "all") {
                         Log.i("FlUSHHUB", "[QUERY] CALCULATING ALL")
                         val calculations = calcRange(
@@ -277,16 +289,20 @@ class BathroomViewModel : ViewModel() {
                             distance = calculations[0].toDouble()
                             time = calculations[1].toDouble()
                         }
-                    }
 
-                    if (distance != -1.0 && time != -1.0) {
-                        MainActivity.queryEmpty = false // We don't have an empty query!
                         Log.i("FlUSHHUB", "[QUERY] Triple Created: ${Triple(queryRes, distance, time)}")
                         Triple(queryRes, distance, time)
+
                     } else {
                         null
                     }
+
                 }.sortedBy { it.second })
+                if (!_queriedBathrooms.value.isNullOrEmpty()){
+                    MainActivity.queryEmpty = false // We don't have an empty query!
+                } else{
+                    MainActivity.queryEmpty = true // We do have an empty query
+                }
             }
             MainActivity.isQueryLoading.postValue(false)// Finish Loading after gathering Query
         }

@@ -10,11 +10,9 @@
 
 
     <GridLayout
-
         android:id="@+id/gridLayout"
         android:layout_width="0dp"
-        android:layout_height="400dp"
-
+        android:layout_height="match_parent"
         android:background="@color/fh_tool_bar"
         android:columnCount="5"
         android:rowCount="5"
@@ -29,11 +27,8 @@
             android:layout_row="0"
             android:layout_column="0"
             android:background="@android:color/transparent"
-
-
             android:scaleType="fitCenter"
             android:src="@drawable/back_arrow">
-
         </ImageButton>
 
         <TextView
@@ -125,22 +120,25 @@
             android:textColor="@color/black"
             android:textSize="18dp"
             android:translationX="10dp"
-
             android:translationY="-80dp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="350dp"
-            android:layout_height="80dp"
-
+            android:layout_height="wrap_content"
             android:layout_row="4"
             android:layout_column="1"
-            android:layout_margin="10dp"
+            android:layout_gravity="center"
             android:background="@color/fh_tool_bar"
             android:elevation="20dp"
-            android:translationX="-130dp"
-
-
-            android:translationY="-120dp">
+            android:translationX="-150dp"
+            android:translationY="-220dp">
+            <TextView
+                android:id="@+id/Best_Review"
+                android:elevation="22dp"
+                android:layout_width="150dp"
+                android:layout_height="111dp"
+                android:layout_margin="10dp"
+                android:text="Placeholder" />
 
         </androidx.cardview.widget.CardView>
 
@@ -149,7 +147,6 @@
             android:layout_width="120dp"
             android:layout_height="30dp"
             android:layout_row="3"
-
             android:layout_column="1"
             android:layout_margin="10dp"
             android:fontFamily="@font/ruda_black"
@@ -158,13 +155,6 @@
             android:textSize="20sp"
             android:translationX="-120dp"
             android:translationY="-30dp" />
-
-        <TextView
-            android:id="@+id/Best_Review"
-            android:layout_width="150dp"
-            android:layout_height="111dp"
-            android:layout_margin="10dp"
-            android:text="Placeholder" />
 
         <RatingBar
             android:id="@+id/ratingBathroomBar"
@@ -186,21 +176,15 @@
             android:layout_row="4"
             android:layout_column="0"
             android:layout_gravity="center"
-
             android:background="@drawable/find_button"
             android:drawableLeft="@drawable/walk_icon"
             android:elevation="15dp"
-
             android:fontFamily="@font/ruda_black"
             android:text="GO"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:translationX="250dp"
-            android:translationY="-40dp"
-
-
+            android:translationY="180dp"
             />
-
-
     </GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

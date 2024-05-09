@@ -35,6 +35,7 @@ import com.tomtom.sdk.map.display.marker.MarkerOptions
 import com.tomtom.sdk.map.display.ui.MapFragment
 import java.io.File
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class QueryResultFragment: Fragment() {
     data class RouteResponse(
@@ -136,40 +137,18 @@ class QueryResultFragment: Fragment() {
                 val address: String = data.first.Location
                 var distance = "N/A" //default value
                 var time = "N/A" //default value
-                var stars = 0.0 //default value
+                val stars = data.first.Rating
 
                 //if the distance is gotten, then it implies other fields are also gotten
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
                     time = data.third.toString()
-                    stars = data.first.Rating
                 }
 
                 if (address !in processedAddresses) {
                     processedAddresses.add(address)
                     mapFragment.getMapAsync{tomtomMap ->
-                        if(area == "west"){
-                            //-71.110940 is the line we drew to mark the start of west campus
-                            if(longitude < -71.110940 && stars >= rating){
-                                Log.d("remove", longitude.toString())
-                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
-                            }
-                        }else if(area == "central"){
-                            Log.d("remove", "central")
-                            //central campus in between the two lines
-                            if(longitude >= -71.110940 && longitude <= -71.100546 && stars >= rating){
-                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
-                            }
-                        }else if(area == "east"){
-                            Log.d("remove", "east")
-                            //-71.100546 is the line we drew to mark the start of east campus
-                            if(longitude > -71.100546 && stars >= rating){
-                                markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
-                            }
-                        }else{
-                            Log.d("remove", "all")
-                            markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
-                        }
+                        markMap(tomtomMap, latitude, longitude, address, distance, time, stars.toString())
                     }
                 }
             }
@@ -182,6 +161,7 @@ class QueryResultFragment: Fragment() {
                     bathroomViewModel.updateSelectedLocation(detailText)
                 }
 
+                moveMap(tomtomMap, clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude)
                 showGoToRouteLayout(clickedMarker.coordinate.latitude, clickedMarker.coordinate.longitude, clickedMarker.tag!!)
             }
         }
@@ -341,7 +321,7 @@ class QueryResultFragment: Fragment() {
             rotation = 0.0
         )
 
-        tomtomMap.moveCamera(cameraOptions)
+        tomtomMap.animateCamera(cameraOptions, 0.7.seconds)
     }
 
     private val androidLocationProviderConfig = AndroidLocationProviderConfig(

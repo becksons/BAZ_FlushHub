@@ -363,6 +363,7 @@ class MainActivity : AppCompatActivity() {
                 binding.appBarMain.menuText.visibility = VISIBLE
                 binding.root.isClickable = true
 
+                Log.d("queryEmpty", queryEmpty.toString())
                 if (!queryEmpty) {
                     navController.navigate(R.id.queryResultFragment)
                     queryEmpty = true

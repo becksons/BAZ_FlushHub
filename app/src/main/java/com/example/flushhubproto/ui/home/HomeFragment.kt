@@ -261,12 +261,11 @@ class HomeFragment : Fragment() {
                 val address: String = data.first.Location
                 var distance = "N/A"
                 var time = "N/A"
-                var stars = "N/A"
+                val stars = data.first.Rating.toString()
 
                 if (data.second != -1.0){
                     distance = metersToMiles(data.second)
                     time = data.third.toString()
-                    stars = data.first.Rating.toString()
                 }
 
                 if (address !in processedAddresses) {
