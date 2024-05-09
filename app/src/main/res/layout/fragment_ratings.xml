@@ -10,10 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-
         android:orientation="vertical">
-
 
         <TextView
             android:id="@+id/empty_view"
@@ -229,14 +226,23 @@
 
         </View>
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/ratingsSwipeRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ratingsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:scrollbars="vertical"
+                android:layout_margin="10dp"
+                >
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ratingsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:scrollbars="vertical"
-            android:layout_margin="10dp"
-              />
+
+
+
 
         <Button
             android:id="@+id/leaveReview"

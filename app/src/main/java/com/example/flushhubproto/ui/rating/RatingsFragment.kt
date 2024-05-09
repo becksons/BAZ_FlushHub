@@ -4,10 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentRatingsBinding
@@ -22,7 +25,9 @@ data class BathroomReviewData(
 )
 
 class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var adapter: ReviewAdapter
+    private var refreshBool = false
     private var _binding: FragmentRatingsBinding? = null
     private val binding get() = _binding!!
     private lateinit var bathroomViewModel: BathroomViewModel
@@ -31,8 +36,8 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRatingsBinding.inflate(inflater, container, false)
         bathroomViewModel = ViewModelProvider(requireActivity())[BathroomViewModel::class.java]
+        swipeRefreshLayout = binding.ratingsSwipeRefresh
         setupRecyclerView()
-
 
         bathroomViewModel.bathrooms.observe(viewLifecycleOwner) { bathrooms ->
             Log.d("Ratings Fragment", "Getting review data...")
@@ -55,35 +60,25 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
 
                 adapter.updateData(reviewDataList)
 
-
                 reviewDataList.firstOrNull()?.let {
                     binding.topBuilding.text = it.buildingName
                     binding.topRatingBar.rating= it.averageRating
                     binding.topRatingBar.isClickable = false
                     binding.topRatingNum.text = roundToNearestHalf(it.averageRating).toString() + " stars"
-
                 }
             } else {
                 Log.d("Ratings Fragment", "Review data null")
             }
         }
-
-
         return binding.root
     }
-    fun roundToNearestHalf(num: Float): Double {
+    private fun roundToNearestHalf(num: Float): Double {
         return (num * 2).roundToInt() / 2.0
     }
     override fun onShowReviewsRequested(reviews: List<String>) {
-
-
         val reviewsAdapter = IndividualReviewsListAdapter(requireContext(), reviews)
         binding.showIndividualReviewList.individualReviewListView.adapter = reviewsAdapter
         binding.showIndividualReviewList.root.visibility = View.VISIBLE
-
-
-
-
     }
 
     private fun setupRecyclerView() {
@@ -107,9 +102,19 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
         }
         binding.showIndividualReviewList.reviewListBackButton.setOnClickListener {
             binding.showIndividualReviewList.root.visibility = View.GONE
-
         }
-
+        swipeRefreshLayout.setOnRefreshListener {
+            MainActivity.swipeReviewLoading.postValue(true)
+            refreshBool = true
+            bathroomViewModel.loadAllBathrooms() // sets this to false after computation
+            MainActivity.swipeReviewLoading.observe(viewLifecycleOwner) {
+                swipeRefreshLayout.isRefreshing = it // Checks if its true or false
+                if (!it && refreshBool) {
+                    refreshBool = false
+                    Toast.makeText(context, "Reviews Refreshed!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     companion object {

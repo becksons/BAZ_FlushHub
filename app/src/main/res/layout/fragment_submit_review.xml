@@ -113,9 +113,8 @@
         </TextView>
         <Spinner
             android:id="@+id/buildingSpinner"
-            android:layout_width="250dp"
-
-            android:layout_gravity="center"
+            android:layout_width="260dp"
+            android:layout_gravity="center_horizontal"
             android:layout_height="40dp"
             android:fontFamily="@font/ruda_regular"
             android:layout_margin="10dp"
@@ -127,95 +126,31 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:orientation="horizontal">
-
-
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginStart="80dp"
-               android:translationY="10dp"
-
-
+                android:translationY="10dp"
                 android:fontFamily="@font/ruda_bold"
                 android:text="Floor Number: "
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 >
-
             </TextView>
             <Spinner
                 android:id="@+id/floorSpinner"
                 android:layout_width="80dp"
                 android:fontFamily="@font/ruda_regular"
-
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
-
                 android:background="@color/white"
                 android:elevation="8dp"
                 android:layout_margin="25dp"
-
                 android:prompt="@string/select_building"
                 />
-
-
-
         </LinearLayout>
-        <RadioGroup
-            android:id="@+id/gender_radio_group"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-         android:layout_gravity="center"
-
-            android:backgroundTint="@color/purple_500"
-            android:orientation="horizontal"
-
-
-            android:progressTint="@color/purple_500"
-
-
-
-            android:scaleX=".8"
-            android:scaleY=".8"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <RadioButton
-                android:id="@+id/gender_female"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/woman_icon"
-                android:elevation="4dp"
-
-
-                />
-
-            <RadioButton
-                android:id="@+id/gender_neutral"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/gender_nuetral_icon"
-                android:elevation="4dp" />
-
-            <RadioButton
-                android:id="@+id/gender_male"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/man_icon"
-                android:elevation="4dp" />
-
-
-        </RadioGroup>
-
-
-
-
-
 
 
         <View
@@ -281,7 +216,6 @@
             <EditText
                 android:id="@+id/reviewEditText"
                 android:layout_width="0dp"
-
                 android:layout_height="100dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
@@ -292,9 +226,8 @@
                 android:minLines="3"
                 android:translationY="-10dp"
                 android:background="@drawable/boggle_button_style" />
-
-
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -306,10 +239,8 @@
                 android:layout_marginEnd="60dp"
                 android:scaleY="1.5"
                 android:scaleX="1.5"
-
                 android:scaleType="fitCenter"
                 android:layout_height="70dp"
-
                 android:src="@drawable/back_arrow">
 
             </ImageButton>
@@ -321,23 +252,13 @@
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:drawableLeft="@drawable/submit_review_icon"
-
                 android:layout_gravity="center"
                 android:layout_margin="30dp"
                 android:background="@drawable/find_button"
                 android:text="SUBMIT YOUR REVIEW"
                 android:textAlignment="center"
-
-
-
                 />
-
-
-
         </LinearLayout>
-
-
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 

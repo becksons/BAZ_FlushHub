@@ -1,6 +1,7 @@
 package com.example.flushhubproto.ui.home
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -146,7 +147,6 @@ class BathroomViewModel : ViewModel() {
 
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
-            MainActivity.swipeLoading.postValue(true) // Our Loaders
             val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 4.0) // Done to shorten
                 ?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
@@ -201,8 +201,10 @@ class BathroomViewModel : ViewModel() {
             }
             if (MainActivity.isInitLoading.value == true) {
                 MainActivity.isInitLoading.postValue(false) // Finish Loading for Initial Loading
+            } else if (MainActivity.swipeReviewLoading.value == true) {
+                MainActivity.swipeReviewLoading.postValue(false) // Finished Review Swipe Loading
+                Log.d("REVIEW", "FETCHED THE DATA!")
             }
-            MainActivity.swipeLoading.postValue(false) // Finish Loading
         }
     }
 
@@ -298,6 +300,7 @@ class BathroomViewModel : ViewModel() {
                     }
 
                 }.sortedBy { it.second })
+
                 if (!_queriedBathrooms.value.isNullOrEmpty()){
                     MainActivity.queryEmpty = false // We don't have an empty query!
                 } else{
@@ -306,6 +309,51 @@ class BathroomViewModel : ViewModel() {
             }
             MainActivity.isQueryLoading.postValue(false)// Finish Loading after gathering Query
         }
+    }
+
+    private fun roundToNearestHalf(num: Double): Double {
+        return (num * 2).roundToInt() / 2.0
+    }
+
+    fun addReview(ratings: Double, restroomName: String, gender: String, floor: String, review: String) {
+        realm?.executeTransactionAsync { bgRealm->
+            val result = bgRealm.where(bathroom::class.java)
+            .equalTo("Name", restroomName)
+            .equalTo("Type", gender)
+            .findAll()
+
+            val queryResult = result?.let { bgRealm.copyFromRealm(it) }
+            if (!queryResult.isNullOrEmpty()) {
+                queryResult.map { bathroom ->
+                    val previousReviews: String = bathroom.Reviews
+                    val currentRating = if (ratings % 1.0 == 0.0) { ratings.toInt() } else { ratings}
+                    val currentReview = currentRating.toString() + "$" + "Floor:" + floor + " " + review + "="
+                    val previousReviewsList = bathroom.Reviews.split("=")
+                    var n = 1 // 1 counting our current review
+                    var sum: Double = ratings
+
+                    previousReviewsList.forEach {rev ->
+                        if (rev != "") {
+                            val x = rev.split("$")
+                            sum += x[0].toDouble()
+                            n++
+                        }
+                    }
+
+                    // Now we set the review and the new overall rating
+                    result.setDouble("Rating", roundToNearestHalf(sum/n))
+                    result.setString("Reviews", previousReviews + currentReview)
+                }
+            } else {
+                Log.d("REVIEW", "Failed to add review!")
+            }
+        }
+
+    }
+
+    fun test() {
+        MainActivity.swipeReviewLoading.postValue(false)
+        Log.d("REVIEW", "FETCHED THE DATA!")
     }
     // ===================================================================
     override fun onCleared() {
