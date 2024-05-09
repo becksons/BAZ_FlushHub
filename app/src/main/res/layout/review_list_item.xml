@@ -125,6 +125,7 @@
                         android:numStars="5"
                         android:rating="3"
                         android:scaleX=".4"
+                        android:isIndicator="true"
                         android:scaleY=".4"
                         android:translationX="-50dp">
 

@@ -108,6 +108,7 @@
                     android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:elevation="35dp"
+                    android:isIndicator="true"
                     android:numStars="5"
                     android:scaleY=".8"
                     android:scaleX=".8"

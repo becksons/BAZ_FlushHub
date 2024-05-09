@@ -59,6 +59,7 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
                 reviewDataList.firstOrNull()?.let {
                     binding.topBuilding.text = it.buildingName
                     binding.topRatingBar.rating= it.averageRating
+                    binding.topRatingBar.isClickable = false
                     binding.topRatingNum.text = roundToNearestHalf(it.averageRating).toString() + " stars"
 
                 }

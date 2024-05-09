@@ -46,6 +46,8 @@ class ReviewAdapter(
             }
             binding.restroomListRankNum.text = "#$rank"
             binding.reviewListRateBar.rating = bathroomData.averageRating
+            binding.reviewListRateBar.isClickable = false
+
 
             binding.showBathroomReviewsListButton.setOnClickListener {
                 Log.d("Show bathroom review button","Button clicked....")
