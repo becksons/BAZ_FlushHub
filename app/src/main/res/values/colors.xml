@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="fh_tool_bar">#D9D9D9</color>
-
     <color name="fh_background">#828080</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#A71C1C</color>

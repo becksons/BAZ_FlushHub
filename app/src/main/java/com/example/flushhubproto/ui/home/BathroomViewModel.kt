@@ -1,7 +1,6 @@
 package com.example.flushhubproto.ui.home
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -147,7 +146,7 @@ class BathroomViewModel : ViewModel() {
 
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
-            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 4.0) // Done to shorten
+            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 1.5) // Done to shorten
                 ?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             val reviewMap = mutableMapOf<String, List<String>>()

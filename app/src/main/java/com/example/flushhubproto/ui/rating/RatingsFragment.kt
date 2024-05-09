@@ -14,6 +14,7 @@ import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentRatingsBinding
+
 import kotlin.math.roundToInt
 
 
@@ -47,9 +48,18 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
             if (bathrooms != null) {
                 val reviewDataList = bathrooms.map {
                     val reviews = it.first.Reviews.split("=")
+
                     val ratings = reviews.mapNotNull { review ->
-                        review.split("$").firstOrNull()?.toFloatOrNull()
-                    }
+                        Log.d("Rating review list data","Searching for null review: ${review}")
+                        if(review == ""){
+
+                            null
+                        }else{
+                            review.split("$").firstOrNull()?.toFloatOrNull()
+
+                        }
+
+                    }.dropLast(1)
                     val averageRating = if (ratings.isNotEmpty()) ratings.average().toFloat() else 0F
 
                     BathroomReviewData(
@@ -60,6 +70,7 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
                         averageRating = averageRating
                     )
                 }.sortedByDescending { it.averageRating }
+
 
                 adapter.updateData(reviewDataList)
 
