@@ -1,10 +1,10 @@
 package com.example.flushhubproto.ui.rating
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -14,7 +14,6 @@ import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentRatingsBinding
-
 import kotlin.math.roundToInt
 
 
@@ -73,7 +72,7 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
 
 
                 adapter.updateData(reviewDataList)
-
+                //Binding the review data for the top restroom
                 reviewDataList.firstOrNull()?.let {
                     binding.topBuilding.text = it.buildingName
                     binding.topRatingBar.rating= it.averageRating

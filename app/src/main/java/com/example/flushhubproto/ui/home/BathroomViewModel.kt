@@ -25,9 +25,6 @@ class BathroomViewModel : ViewModel() {
     private val _selectedLocation = MutableLiveData<String>()
     val selectedLocation: LiveData<String> = _selectedLocation
 
-    //Search query listener
-    private val _queryReady = MutableLiveData<Boolean>(false)
-    val queryReady :MutableLiveData<Boolean> get() = _queryReady
 
     private val _searchQuery = MutableLiveData<Triple<String,String,String>>()
     val searchQuery: MutableLiveData<Triple<String,String,String>>get() = _searchQuery
@@ -39,8 +36,6 @@ class BathroomViewModel : ViewModel() {
     private val _queriedBathrooms = MutableLiveData<List<Triple<bathroom, Double, Double>>?>()
     val queriedBathrooms: MutableLiveData<List<Triple<bathroom, Double, Double>>?> get()  = _queriedBathrooms
 
-    private val _reviewList = MutableLiveData<Map<String, List<String>>>()
-    val reviewList: LiveData<Map<String, List<String>>> = _reviewList
 
     init {
         initializeMongoDBRealm()
@@ -146,7 +141,7 @@ class BathroomViewModel : ViewModel() {
 
     fun loadAllBathrooms() {
         realm?.executeTransactionAsync { bgRealm ->
-            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 0.0) // Done to shorten
+            val results = bgRealm.where(bathroom::class.java)?.greaterThanOrEqualTo("Rating", 3.5) // Done to shorten
                 ?.findAll()
             val bathrooms = results?.let { bgRealm.copyFromRealm(it) }
             val reviewMap = mutableMapOf<String, List<String>>()
@@ -192,7 +187,7 @@ class BathroomViewModel : ViewModel() {
                 }.sortedBy { if (it.second == -1.0) Double.MAX_VALUE else it.second })
                 Log.d("LOADING ALL BATHROOMS", "Calculated $calculatedAmount / 316 Bathrooms.")
             }
-            _reviewList.postValue(reviewMap)  // Post the mapped reviews
+
 
             if (MainActivity.isInitLoading.value == true) {
                 MainActivity.isInitLoading.postValue(false) // Finish Loading for Initial Loading
@@ -357,12 +352,7 @@ class BathroomViewModel : ViewModel() {
         realm = null
         super.onCleared()
     }
-    fun getReviewsForBathroom(bathroomId: String): List<String> {
-        return _reviewList.value?.get(bathroomId) ?: emptyList()
-    }
-    fun updateQueriedBathrooms(results: List<Triple<bathroom, Double, Double>>) {
-        _queriedBathrooms.postValue(results)
-    }
+
 
     fun updateSelectedLocation(locationInfo: String) {
         _selectedLocation.value = locationInfo

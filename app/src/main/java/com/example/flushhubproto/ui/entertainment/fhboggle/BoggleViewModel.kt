@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlin.math.max
 
-class BoggleViewModel : ViewModel() {
+class BoggleViewModel : ViewModel() {//Updating score and checking for game resets
     val submittedWord = MutableLiveData<String>()
     val score = MutableLiveData<Int>().apply { value = 0 }
     var resetGameEvent = MutableLiveData<Boolean>()

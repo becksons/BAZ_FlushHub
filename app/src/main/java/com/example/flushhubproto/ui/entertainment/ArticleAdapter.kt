@@ -20,7 +20,7 @@ import com.example.tomtom.R
 
 class ArticleAdapter(
     private var articles: List<Article> = emptyList(),
-    private var fragment: com.example.flushhubproto.ui.entertainment.EntertainmentFragment
+    private var fragment: com.example.flushhubproto.ui.entertainment.NewsFragment
 ) : RecyclerView.Adapter<ArticleHolder>() {
 
     override fun onCreateViewHolder(
@@ -53,7 +53,7 @@ class ArticleAdapter(
 }
 class ArticleHolder(
     private val binding: NewsItemBinding,
-    private val fragment: com.example.flushhubproto.ui.entertainment.EntertainmentFragment
+    private val fragment: com.example.flushhubproto.ui.entertainment.NewsFragment
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(article: Article) {
         binding.titleText.text = article.title

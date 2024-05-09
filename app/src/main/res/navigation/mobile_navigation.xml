@@ -83,7 +83,7 @@
 
     <fragment
         android:id="@+id/newsListFragment"
-        android:name="com.example.flushhubproto.ui.entertainment.EntertainmentFragment"
+        android:name="com.example.flushhubproto.ui.entertainment.NewsFragment"
         tools:layout="@layout/fragmnet_entertainment">
 
         <action

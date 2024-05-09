@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tomtom.databinding.FragmnetEntertainmentBinding
 
 
-class EntertainmentFragment : Fragment() {
+class NewsFragment : Fragment() {
     private var _binding: FragmnetEntertainmentBinding? = null
     private val binding get() = checkNotNull(_binding)
 
@@ -25,7 +25,7 @@ class EntertainmentFragment : Fragment() {
 
         val articleModelFactory = ArticleModelFactory(requireContext())
         articleListAdapter = ArticleAdapter(fragment = this)
-        articleViewModel = ViewModelProvider(requireActivity(), articleModelFactory)[(ArticleViewModel::class.java)] // Instantiate ViewModel
+        articleViewModel = ViewModelProvider(requireActivity(), articleModelFactory)[(ArticleViewModel::class.java)]
 
     }
 
