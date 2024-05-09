@@ -62,7 +62,8 @@
     <string name="miles_away">ไมล์จากคุณ</string>
     <string name="stars">ดาว</string>
     <string name="your_restrooms">ห้องน้ำของคุณ:</string>
-    <string name="cute_animals">สัตว์น่ารัก</string>
+    <string name="cute_animals">สัตว์น่ารัก!</string>
+    <string name="cute_animals_menu">สัตว์น่ารัก</string>
     <string name="play_boggle">เล่น Boggle</string>
     <string name="play_hangman">เล่น Hangman</string>
     <string name="elevate_your_restroom_experience_with">เพิ่มเติมประสบการณ์การเข้าห้องน้ำ</string>
@@ -105,4 +106,7 @@
     <string name="title_">หัวข้อ</string>
     <string name="author_">ผู้เขียน</string>
     <string name="details_will_appear_here">ข้อมูลจะปรากฏที่นี่</string>
+    <string name="_0_0_stars">0.0 ดาว</string>
+    <string name="stars_review_list">ดาว</string>
+    <string name="reviews_for">ความคิกเห็นเกี่ยวกับ</string>
 </resources>

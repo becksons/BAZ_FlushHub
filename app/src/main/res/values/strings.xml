@@ -124,8 +124,8 @@
     <string name="details_will_appear_here">Details will appear here</string>
     <string name="_0_0_stars">0.0 stars</string>
     <string name="stars_review_list">stars</string>
-    <string name="_0_0">0.0</string>
-    <string name="_1">#1</string>
+    <string name="_0_0" translatable="false">0.0</string>
+    <string name="_1" translatable="false">#1</string>
     <string name="reviews_for">Reviews for</string>
 
 </resources>
