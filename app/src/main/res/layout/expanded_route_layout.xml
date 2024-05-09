@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:elevation="15dp"
-    android:translationY="300dp"
+    android:translationY="280dp"
     >
 
 
@@ -41,7 +41,9 @@
             android:layout_column="0"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:translationY="100dp"
+            android:translationY="-255dp"
+            android:layout_marginBottom="30dp"
+            android:elevation="15dp"
             android:src="@drawable/collapse_arrow"
             android:translationX="20dp">
 
@@ -138,7 +140,7 @@
             android:background="@color/fh_tool_bar"
             android:elevation="20dp"
             android:translationX="-150dp"
-            android:translationY="-220dp">
+            android:translationY="-200dp">
             <TextView
                 android:id="@+id/Best_Review"
                 android:elevation="22dp"
