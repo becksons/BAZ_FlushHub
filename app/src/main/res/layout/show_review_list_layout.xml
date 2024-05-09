@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:translationY="-65dp"
 
     >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="570dp"
         android:layout_margin="15dp"
 
         android:layout_marginTop="100dp"
@@ -17,6 +18,7 @@
         app:cardBackgroundColor="@color/fh_background"
         app:cardCornerRadius="10dp"
         app:cardElevation="20dp"
+        android:paddingBottom="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,10 +27,10 @@
         <LinearLayout
             android:id="@+id/showReview"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="600dp"
 
 
-            android:background="@color/fh_background"
+            android:background="#A1A0A0"
 
 
             android:elevation="18dp"
@@ -37,10 +39,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/review_list_building_avg_rank"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
+                android:translationY="101dp"
+                android:translationX="292dp"
+                android:fontFamily="@font/ruda_black"
+                android:textColor="@color/black"
+                android:text="@string/_0_0"
+                android:textSize="16sp"
+
+                >
+
+            </TextView>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:translationY="-10dp"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -49,9 +68,12 @@
                     android:layout_height="70dp"
 
 
+
                     android:background="@android:color/transparent"
 
-                    android:elevation="10dp"
+                    android:elevation="20dp"
+                    android:shadowRadius="3"
+                    android:shadowColor="#4E1010"
 
                     android:fontFamily="@font/ruda_regular"
                     android:scaleType="fitCenter"
@@ -68,27 +90,84 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     android:fontFamily="@font/ruda_black"
-                    android:text="@string/_reviews"
+                    android:text="@string/reviews_for"
                     android:textAlignment="center"
                     android:textColor="@color/purple_500"
+                    android:elevation="20dp"
+                    android:shadowRadius="2"
+                    android:shadowColor="#4E1010"
+                    android:translationX="-20dp"
 
-                    android:textSize="35sp"
-                    android:translationX="20dp">
+                    android:textSize="38sp"
+                    android:translationY="-10dp">
 
                 </TextView>
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:translationX="-28dp"
+                    android:translationY="0dp"
+
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/cool_toilet_icon">
+
+                </ImageView>
+                <TextView
+                    android:id="@+id/review_list_building_name"
+                    android:layout_width="220dp"
+                    android:layout_height="50dp"
+                    android:translationX="-330dp"
+                    android:translationY="40dp"
+                    android:fontFamily="@font/ruda_bold"
+                    android:textColor="@color/black"
+                    android:text="@string/placeholder"
+                    android:textSize="18sp"
+                    android:textAlignment="textStart"
+
+                    >
+
+                </TextView>
+                <View
+                    android:layout_width="340dp"
+                    android:layout_height="1.5dp"
+                    android:background="@color/black"
+                    android:elevation="150dp"
+                    android:translationX="-602dp"
+                    android:translationY="110dp"
+                    >
+
+                </View>
+                <RatingBar
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:numStars="1"
+                    android:scaleY=".45"
+
+                    android:scaleX=".45"
+                    android:rating="1"
+                    android:elevation="200dp"
+                    android:shadowRadius="2.5"
+                    android:translationY="75.5dp"
+                    android:shadowColor="#4E1010"
+                    android:translationX="-645dp"
+                    android:progressTint="#931616">
+
+                </RatingBar>
 
 
             </LinearLayout>
 
+
             <ListView
                 android:id="@+id/individual_review_list_view"
-                android:layout_width="320dp"
-                android:layout_height="330dp"
+                android:layout_width="355dp"
+                android:layout_height="420dp"
                 android:layout_gravity="center"
                 android:layout_margin="15dp"
+
                 android:fitsSystemWindows="true"
                 android:background="@color/white"
-                android:translationY="-340dp"
+                android:translationY="-480dp"
 
                 >
 

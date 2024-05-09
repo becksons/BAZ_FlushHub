@@ -56,7 +56,7 @@ class LocationInfoAdapter(private var locationList: List<Triple<bathroom, Double
                     val bathroom: Triple<bathroom, Double, Double>? = bathroomList?.get(position)
                     if (bathroom != null) {
                         MainActivity.currentBathroom = bathroom
-                        navController.navigate(R.id.bathroomPage) // We Navigate for More Info
+
                     }
                 }
             }

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    android:elevation="15dp"
-    android:translationY="280dp"
+    android:elevation="25dp"
+    android:translationY="260dp"
     >
 
 
@@ -22,6 +22,7 @@
         android:layout_height="match_parent"
         android:background="@color/fh_tool_bar"
         android:columnCount="5"
+        android:elevation="20dp"
         android:rowCount="5"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,11 +42,10 @@
             android:layout_column="0"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:translationY="-255dp"
-            android:layout_marginBottom="30dp"
-            android:elevation="15dp"
+            android:translationY="70dp"
+
             android:src="@drawable/collapse_arrow"
-            android:translationX="20dp">
+            android:translationX="0dp">
 
         </ImageButton>
 
@@ -65,13 +65,13 @@
 
         <View
             android:layout_width="380dp"
-            android:layout_height="1dp"
+            android:layout_height="1.5dp"
             android:layout_row="0"
             android:layout_column="1"
 
             android:background="@color/black"
-            android:translationX="-135dp"
-            android:translationY="65dp">
+            android:translationX="-145dp"
+            android:translationY="55dp">
 
         </View>
 
@@ -94,14 +94,15 @@
             android:layout_height="39dp"
             android:layout_row="1"
             android:layout_column="1"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
             android:fontFamily="@font/ruda_regular"
             android:text="@string/building"
 
 
             android:textColor="@color/black"
             android:textSize="18dp"
-            android:translationX="-20dp" />
+            android:translationY="-5dp"
+            android:translationX="-40dp" />
 
         <TextView
             android:layout_width="130dp"
@@ -120,15 +121,15 @@
 
         <TextView
             android:id="@+id/Bathroom_Description"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="220dp"
+            android:layout_height="60dp"
             android:layout_column="1"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
             android:fontFamily="@font/ruda_regular"
             android:text="@string/placeholder"
             android:textColor="@color/black"
-            android:textSize="14dp"
-            android:translationX="10dp"
+            android:textSize="12sp"
+            android:translationX="-5dp"
             android:translationY="-30dp" />
 
         <androidx.cardview.widget.CardView
@@ -139,17 +140,19 @@
             android:layout_gravity="center"
             android:background="@color/fh_tool_bar"
             android:elevation="20dp"
-            android:translationX="-150dp"
-            android:translationY="-200dp">
+            android:translationX="-145dp"
+            android:translationY="-205dp">
             <TextView
                 android:id="@+id/Best_Review"
                 android:elevation="22dp"
-                android:layout_width="150dp"
+                android:layout_width="250dp"
                 android:layout_height="111dp"
                 android:layout_margin="10dp"
                 android:text="@string/placeholder" />
 
         </androidx.cardview.widget.CardView>
+
+
 
         <TextView
             android:id="@+id/Top_Review"
@@ -162,7 +165,7 @@
             android:text="@string/top_review"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:translationX="-125dp"
+            android:translationX="-25dp"
             android:translationY="-50dp" />
 
         <RatingBar
@@ -171,12 +174,13 @@
             android:layout_height="50dp"
             android:layout_row="3"
             android:layout_column="1"
-            android:layout_margin="10dp"
+            android:layout_margin="25dp"
             android:scaleX=".7"
             android:scaleY=".7"
-            android:translationX="-20dp"
+            android:isIndicator="true"
+            android:translationX="-100dp"
 
-            android:translationY="-65dp" />
+            android:translationY="-40dp" />
 
         <Button
             android:id="@+id/detail_map_button"

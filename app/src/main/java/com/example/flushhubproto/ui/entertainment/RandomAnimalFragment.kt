@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.tomtom.R
@@ -56,6 +57,10 @@ class RandomAnimalFragment : Fragment() {
 
         binding.foxButton.setOnClickListener {
             fetchJson("https://randomfox.ca/floof/", imageViewFox)
+        }
+
+        binding.animalBackButton.setOnClickListener {
+            findNavController().navigate(R.id.nav_entertainment)
         }
     }
 
