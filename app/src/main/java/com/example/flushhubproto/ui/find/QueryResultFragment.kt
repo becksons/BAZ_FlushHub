@@ -1,4 +1,4 @@
-package com.example.flushhubproto.ui.gallery
+package com.example.flushhubproto.ui.find
 
 import android.Manifest
 import android.content.Context

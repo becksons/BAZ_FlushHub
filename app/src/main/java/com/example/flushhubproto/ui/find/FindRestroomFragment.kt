@@ -1,4 +1,4 @@
-package com.example.flushhubproto.ui.gallery
+package com.example.flushhubproto.ui.find
 
 import android.os.Bundle
 import android.util.Log
@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.flushhubproto.MainActivity
 import com.example.flushhubproto.ui.home.BathroomViewModel
-import com.example.flushhubproto.ui.home.HomeFragment
 import com.example.tomtom.R
 import com.example.tomtom.databinding.FragmentFindBinding
 

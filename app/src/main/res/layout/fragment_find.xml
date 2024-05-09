@@ -10,7 +10,7 @@
     android:elevation="10dp"
 
 
-    tools:context="com.example.flushhubproto.ui.gallery.FindRestroomFragment">
+    tools:context="com.example.flushhubproto.ui.find.FindRestroomFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
