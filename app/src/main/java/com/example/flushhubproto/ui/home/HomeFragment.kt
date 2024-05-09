@@ -128,7 +128,6 @@ class HomeFragment : Fragment() {
                 swipeRefreshLayout.isRefreshing = it // Checks if its true or false
                 if (!it && refreshBool) {
                     refreshBool = false
-                    Toast.makeText(context, "Bathrooms Refreshed!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

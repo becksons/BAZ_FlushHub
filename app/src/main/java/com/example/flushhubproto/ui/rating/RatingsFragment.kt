@@ -115,7 +115,6 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
                 swipeRefreshLayout.isRefreshing = it // Checks if its true or false
                 if (!it && refreshBool) {
                     refreshBool = false
-                    Toast.makeText(context, "Reviews Refreshed!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
