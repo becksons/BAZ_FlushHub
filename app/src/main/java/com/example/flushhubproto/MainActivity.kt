@@ -38,7 +38,8 @@ import io.realm.Realm
 class MainActivity : AppCompatActivity() {
     companion object {
         var isInitLoading = MutableLiveData(true)
-        var swipeLoading = MutableLiveData(false)
+        var swipeReviewLoading = MutableLiveData(false)
+        var swipeBathroomLoading = MutableLiveData(false)
         var isQueryLoading = MutableLiveData(false)
         var isRealmInit = MutableLiveData(false)
         var queryEmpty = true
@@ -277,7 +278,6 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.nav_gallery -> {
                     updateBannerText(getString(R.string.find_your_restroom))
-//                    greetingTextView.visibility = View.GONE
                 }
 
                 R.id.nav_slideshow -> {

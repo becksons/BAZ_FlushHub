@@ -141,11 +141,9 @@ class HomeFragment : Fragment() {
         }
         binding.nearestLocationRecycler.nearestLocationRecyclerView.adapter = adapter
         recyclerView.adapter = adapter
-        //Nearest location review swipe refresh
         swipeRefreshLayout.setOnRefreshListener {
-//            bathroomViewModel.loadAllBathrooms()
             Toast.makeText(context, "View refreshed", Toast.LENGTH_SHORT).show()
-            swipeRefreshLayout.isRefreshing = (MainActivity.swipeLoading.value == true)
+            swipeRefreshLayout.isRefreshing = true
         }
     }
 
