@@ -46,19 +46,11 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
             Log.d("Ratings Fragment", "Getting review data...")
             if (bathrooms != null) {
                 val reviewDataList = bathrooms.map {
-                    val reviews = it.first.Reviews.split("=")
-
+                    val reviews = it.first.Reviews.dropLast(1).split("=") // Drops the last equal sign
                     val ratings = reviews.mapNotNull { review ->
-                        Log.d("Rating review list data","Searching for null review: ${review}")
-                        if(review == ""){
-
-                            null
-                        }else{
-                            review.split("$").firstOrNull()?.toFloatOrNull()
-
-                        }
-
-                    }.dropLast(1)
+                        Log.d("Rating review list data","Searching for null review: $review")
+                        review.split("$").firstOrNull()?.toFloatOrNull()
+                    }
                     val averageRating = if (ratings.isNotEmpty()) ratings.average().toFloat() else 0F
 
                     BathroomReviewData(

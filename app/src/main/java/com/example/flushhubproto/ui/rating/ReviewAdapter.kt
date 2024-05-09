@@ -1,4 +1,5 @@
 package com.example.flushhubproto.ui.rating
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.VISIBLE
@@ -27,10 +28,10 @@ class ReviewAdapter( //Adapter for the recycler list view in the ratings fragmen
     }
 
     override fun getItemCount(): Int = data.size
+    @SuppressLint("NotifyDataSetChanged")
     fun updateData(newData: List<BathroomReviewData>) {
         this.data = newData
         notifyDataSetChanged()
-
     }
 
 

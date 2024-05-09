@@ -252,7 +252,6 @@ class QueryResultFragment: Fragment() {
     }
     private fun initializeMapWithLocation() {
         mapFragment.getMapAsync { tomtomMap ->
-
             //setting up location provider (gps)
             androidLocationProvider = AndroidLocationProvider(
                 context = requireContext(),
