@@ -1,7 +1,6 @@
 package com.example.flushhubproto.ui.home
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -203,7 +202,8 @@ class BathroomViewModel : ViewModel() {
                 MainActivity.isInitLoading.postValue(false) // Finish Loading for Initial Loading
             } else if (MainActivity.swipeReviewLoading.value == true) {
                 MainActivity.swipeReviewLoading.postValue(false) // Finished Review Swipe Loading
-                Log.d("REVIEW", "FETCHED THE DATA!")
+            } else if (MainActivity.swipeBathroomLoading.value == true) {
+                MainActivity.swipeBathroomLoading.postValue(false) // Finished Bathroom (Home) Swipe Loading
             }
         }
     }

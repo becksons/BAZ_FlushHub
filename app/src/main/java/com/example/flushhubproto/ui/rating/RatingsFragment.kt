@@ -83,7 +83,6 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
 
     //The review list layout is visible when a user clicks on a reviews button in a recycler view item
     override fun onShowReviewsRequested(reviews: BathroomReviewData) {
-
         val reviewsAdapter = IndividualReviewsListAdapter(requireContext(), reviews.reviews)
         binding.showIndividualReviewList.individualReviewListView.adapter = reviewsAdapter
         binding.showIndividualReviewList.root.visibility = View.VISIBLE
@@ -112,6 +111,7 @@ class RatingsFragment : Fragment() , ReviewAdapter.ReviewInteractionListener {
             refreshBool = true
             bathroomViewModel.loadAllBathrooms() // sets this to false after computation
             MainActivity.swipeReviewLoading.observe(viewLifecycleOwner) {
+                Log.d("REVIEW", "Triggered REVIEW!")
                 swipeRefreshLayout.isRefreshing = it // Checks if its true or false
                 if (!it && refreshBool) {
                     refreshBool = false
