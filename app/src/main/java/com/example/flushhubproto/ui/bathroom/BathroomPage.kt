@@ -47,19 +47,18 @@ class BathroomPage: Fragment() {
             ratings.rating = 0.0F
         }
 
-//        val rawReviewList = MainActivity.currentBathroom?.first?.Reviews?.split("=")
-//        if (rawReviewList != null) {
-//            val ratingReviewMasterList: MutableList<List<String>> = mutableListOf()
-//            rawReviewList.forEach {rev ->
-//                if(!rev.contains("=")){
-//                    val ratingAndReview = rev.split("$")
-//                    ratingReviewMasterList.add(listOf(ratingAndReview[0], ratingAndReview[1])) // Rating | Review
-//
-//                }
-//
-//            }
-//
-//        }
+        val topRatingAndReview: MutableList<String> = mutableListOf("0.0", "")
+        MainActivity.currentBathroom?.first?.Reviews?.split("=")?.forEach { rev ->
+            if (rev != "") {
+                val ratingAndReview = rev.split("$")
+                val candidateRating: Double = ratingAndReview[0].toDouble()
+                if (candidateRating > topRatingAndReview[0].toDouble()) {
+                    topRatingAndReview[0] = candidateRating.toString()
+                    topRatingAndReview[1] = ratingAndReview[1]
+                }
+            }
+        }
+        bestReview.text =  "Rating: " + topRatingAndReview[0] + "\n" + topRatingAndReview[1] // Need to translate this
     }
 
 }
