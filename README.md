@@ -1,6 +1,8 @@
-![screenshot](./fhbu_updated_logo.png)
-
-Find bathrooms easily on Boston University's campus with custom bathroom searches,reviews, ratings, and entertainment options. Developed in Kotlin, Android Studio
+<p align="center">
+  <img src="./fhbu_updated_logo.png" alt="FH Logo">
+</p>
+Find bathrooms easily on Boston University's campus with custom bathroom searches,reviews, ratings, and entertainment options!
+Developed in Kotlin, Android Studio
 
 ## Motivation
 - **Problem**: Finding the locations and information about bathrooms at Boston University 
