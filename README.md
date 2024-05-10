@@ -1,12 +1,10 @@
-![screenshot](./img/fhbu_logo.png)
-# FlushHub
+![screenshot](./fhbu_logo.png)
 
-Find bathrooms easily on Boston University's campus with reviews, ratings, and entertainment options.
+Find bathrooms easily on Boston University's campus with custom bathroom searches,reviews, ratings, and entertainment options. Developed in Kotlin, Android Studio
 
-## General Information
-- **Problem**: Finding conveniently located bathrooms at Boston University.
-- **Purpose**: To provide locations and user reviews of bathrooms to assist students, faculty, and visitors.
-- **Inspiration**: TerrierTransit, tailored to assist in bathroom location.
+## Motivation
+- **Problem**: Finding the locations and information about bathrooms at Boston University 
+- **Purpose**: To provide locations and user reviews of bathrooms to assist students, faculty, and visitors, allowing users to search for bathrooms by gender, campus area, and rating
 
 
 ## Features
@@ -15,12 +13,12 @@ Find bathrooms easily on Boston University's campus with reviews, ratings, and e
 - Entertainment options including Boggle, cute animal pictures, and categorized news articles
 - Multi-language support: Available in English and Thai
 
-## Screenshots
-![screenshot](./img/screenshot.png)
+## Page Screenshots
+![screenshot](./fh_pages.jpg)
 
 ## Acknowledgements
-- Developed by Beck Sonstein, Aran Pattarachanyakul, and Zachary Gou.
-- Documentation: 
+- Developed by Beck Sonstein, Aran Pattarachanyakul, and Zachary Gou
+- Documentation: [FlushHub Documentation PDF](./FlushHub_Documentation.pdf)
   ### Technologies Used
   - TomTom Maps API
   - News API
