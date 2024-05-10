@@ -1,4 +1,4 @@
-![screenshot](./fhbu_logo.png)
+![screenshot](./fhbu_updated_logo.png)
 
 Find bathrooms easily on Boston University's campus with custom bathroom searches,reviews, ratings, and entertainment options. Developed in Kotlin, Android Studio
 
