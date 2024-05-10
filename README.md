@@ -20,7 +20,7 @@ Developed in Kotlin, Android Studio
 
 ## Acknowledgements
 - Developed by Beck Sonstein, Aran Pattarachanyakul, and Zachary Gou
-- Documentation: [FlushHub Documentation PDF](./FlushHub_Documentation.pdf)
+- Documentation: [FlushHub Documentation PDF](./FlushHub Documentation.pdf)
   ### Technologies Used
   - TomTom Maps API
   - News API
