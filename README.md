@@ -6,7 +6,7 @@ Developed in Kotlin, Android Studio
 
 ## Motivation
 - **Problem**: Finding the locations and information about bathrooms at Boston University 
-- **Purpose**: To provide locations and user reviews of bathrooms to assist students, faculty, and visitors, allowing users to search for bathrooms by gender, campus area, and rating
+- **Our Solution and Purpose**: To provide locations and user reviews of bathrooms to assist students, faculty, and visitors, allowing users to search for bathrooms by gender, campus area, and rating
 
 
 ## Features
