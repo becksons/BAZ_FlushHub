@@ -1,4 +1,9 @@
 <p align="center">
+  <picture>
+  <source media="(prefers-color-scheme: dark)" src="./fhbu_logo_dark.png" alt="FH Logo">
+  <source media="(prefers-color-scheme: light)" src="./fhbu_logo_light.png" alt="FH Logo">
+  <img alt="Shows a black logo in light color mode and a white one in dark color mode." src="https://user-images.githubusercontent.com/25423296/163456779-a8556205-d0a5-45e2-ac17-42d089e3c3f8.png">
+</picture>
   <img src="./fhbu_updated_logo.png" alt="FH Logo">
 </p>
 Find bathrooms easily with Boston University's #1 campus restroom locater, with custom bathroom searches,restroom reviews,ratings, and entertainment options!
