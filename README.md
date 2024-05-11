@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./fhbu_logo_dark.png" alt="FH Logo">
-    <source media="(prefers-color-scheme: light)" srcset="./fhbu_logo_light.png" alt="FH Logo">
+    <source media="(prefers-color-scheme: light)" srcset="./fhbu__logo_light.png" alt="FH Logo">
     <img alt="FH Logo" src="./bufh_logo_default.png"> <!-- Fallback image if sources are not supported -->
   </picture>
 </p>
